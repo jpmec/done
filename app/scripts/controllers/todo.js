@@ -2,7 +2,16 @@ function TodoCtrl($scope, localStorageService) {
   $scope.todos = []
 
   $scope.init = function() {
-    $scope.todos = [{text:'build an angular app', done:false}];
+    keys = localStorageService.keys()
+
+    for (var i in keys) {
+
+      var key = keys[i]
+      var todo_str = localStorageService.get(key)
+      var todo = JSON.parse(todo_str)
+
+      $scope.todos.push(todo)
+    }
   }
 
   $scope.addTodo = function() {
@@ -19,6 +28,11 @@ function TodoCtrl($scope, localStorageService) {
     $scope.todos.push(todo);
     $scope.todoText = '';
   };
+
+  $scope.clearTodos = function () {
+    localStorageService.clearAll();
+    $scope.todos = [];
+  }
 
   $scope.remaining = function() {
     var count = 0;
