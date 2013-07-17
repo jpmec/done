@@ -12,6 +12,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/todo.css">
     <!-- endbuild -->
   </head>
   <body ng-app="doneApp">
@@ -25,7 +26,21 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-view></div>
+    <h2>Todo</h2>
+    <div ng-controller="TodoCtrl">
+      <span>{{remaining()}} of {{todos.length}} remaining</span>
+      [ <a href="" ng-click="archive()">archive</a> ]
+      <ul class="unstyled">
+        <li ng-repeat="todo in todos">
+          <input type="checkbox" ng-model="todo.done">
+          <span class="done-{{todo.done}}">{{todo.text}}</span>
+        </li>
+      </ul>
+      <form ng-submit="addTodo()">
+        <input type="text" ng-model="todoText" size="30" placeholder="add new todo here">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
 
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
@@ -35,6 +50,7 @@
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/todo.js"></script>
     <!-- endbuild -->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
