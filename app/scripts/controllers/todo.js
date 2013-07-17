@@ -18,12 +18,13 @@ function TodoCtrl($scope, localStorageService) {
     var date = new Date();
 
     var todo = {
+      key: date.toJSON(),
       text:$scope.todoText,
       done:false,
       created: date.toString()
     }
 
-    localStorageService.add(date.toJSON(), JSON.stringify(todo));
+    localStorageService.add(todo.key, JSON.stringify(todo));
 
     $scope.todos.push(todo);
     $scope.todoText = '';
@@ -46,7 +47,12 @@ function TodoCtrl($scope, localStorageService) {
     var oldTodos = $scope.todos;
     $scope.todos = [];
     angular.forEach(oldTodos, function(todo) {
-    if (!todo.done) $scope.todos.push(todo);
+    if (!todo.done) {
+      $scope.todos.push(todo);
+    }
+    else {
+      localStorageService.remove(todo.key);
+    }
     });
   };
 }

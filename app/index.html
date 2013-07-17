@@ -30,12 +30,13 @@
       <h2>Todo</h2>
       <div data-ng-controller="TodoCtrl", data-ng-init="init()">
         <span>{{remaining()}} of {{todos.length}} remaining</span>
-        [ <a href="" ng-click="archive()">archive</a> ]
+        [ <a href="" ng-click="archive()">done</a> ]
         [ <a href="" ng-click="clearTodos()">clear</a> ]
         <ul class="unstyled">
           <li ng-repeat="todo in todos">
             <input type="checkbox" ng-model="todo.done">
             <span class="done-{{todo.done}}">{{todo.text}}</span>
+            <span class="created-date">{{todo.created}}</span>
           </li>
         </ul>
         <form ng-submit="addTodo()">
