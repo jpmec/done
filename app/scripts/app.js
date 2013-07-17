@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('doneApp', [])
+angular.module('doneApp', ['LocalStorageModule'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
