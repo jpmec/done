@@ -13,6 +13,7 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/todo.css">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
     <!-- endbuild -->
   </head>
   <body ng-app="doneApp">
@@ -33,25 +34,22 @@
           <input type="text" ng-model="todoText" size="30" placeholder="add new todo here">
           <input class="btn-primary" type="submit" value="add">
         </form>
+
         <span>{{remaining()}} of {{todos.length}} remaining</span>
         [ <a href="" ng-click="archive()">done</a> ]
         [ <a href="" ng-click="clearTodos()">clear</a> ]
-        <ul class="unstyled">
-          <li ng-repeat="todo in todos | orderBy:'priority':true">
-            <div ng-mouseover="mouseoverTodo(todo)" ng-click="clickTodo(todo)">
-            <input type="checkbox" ng-model="todo.done">
-            <span class="done-{{todo.done}}">{{todo.text}}</span>
-              <span class="todo-stats" ng-show="todo.key == over.key">
-                <span>{{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em>
-              </span>
-              <div class="todo-details" ng-show="todo.key == clicked.key">
-                <div class="well">
-                  <span class="created-date">Created {{todo.created}}</span>
-                <div>
-              </div>
-            </div>
-          </li>
-        </ul>
+
+        <accordion close-others="oneAtATime">
+           <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
+             <accordion-heading>
+               <span class="done-{{todo.done}}">{{todo.text}}</span>
+             </accordion-heading>
+             <div><span>Done <input type="checkbox" ng-model="todo.done"></span></div>
+             <div><span>Priority {{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em></div>
+             <div><span>Created {{todo.created}}<span></div>
+           </accordion-group>
+        </accordion>
+
       </div>
     </div>
 
@@ -60,6 +58,8 @@
     <script src="components/angular-cookies/angular-cookies.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.js"></script>
     <script src="components/angular-local-storage/angular-local-storage.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>

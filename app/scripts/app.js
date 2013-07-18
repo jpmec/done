@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('doneApp', ['LocalStorageModule'])
+angular.module('doneApp', ['LocalStorageModule', 'ui.bootstrap'])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
