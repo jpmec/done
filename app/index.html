@@ -29,20 +29,29 @@
     <div class='hero-unit'>
       <h2>Todo</h2>
       <div data-ng-controller="TodoCtrl", data-ng-init="init()">
-        <span>{{remaining()}} of {{todos.length}} remaining</span>
-        [ <a href="" ng-click="archive()">done</a> ]
-        [ <a href="" ng-click="clearTodos()">clear</a> ]
-        <ul class="unstyled">
-          <li ng-repeat="todo in todos">
-            <input type="checkbox" ng-model="todo.done">
-            <span class="done-{{todo.done}}">{{todo.text}}</span>
-            <span class="created-date">{{todo.created}}</span>
-          </li>
-        </ul>
         <form ng-submit="addTodo()">
           <input type="text" ng-model="todoText" size="30" placeholder="add new todo here">
           <input class="btn-primary" type="submit" value="add">
         </form>
+        <span>{{remaining()}} of {{todos.length}} remaining</span>
+        [ <a href="" ng-click="archive()">done</a> ]
+        [ <a href="" ng-click="clearTodos()">clear</a> ]
+        <ul class="unstyled">
+          <li ng-repeat="todo in todos | orderBy:'priority':true">
+            <div ng-mouseover="mouseoverTodo(todo)" ng-click="clickTodo(todo)">
+            <input type="checkbox" ng-model="todo.done">
+            <span class="done-{{todo.done}}">{{todo.text}}</span>
+              <span class="todo-stats" ng-show="todo.key == over.key">
+                <span>{{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em>
+              </span>
+              <div class="todo-details" ng-show="todo.key == clicked.key">
+                <div class="well">
+                  <span class="created-date">Created {{todo.created}}</span>
+                <div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
 

@@ -1,4 +1,4 @@
-@import "compass_twitter_bootstrap";
+$iconSpritePath:          "../images/glyphicons-halflings.png";
+$iconWhiteSpritePath:     "../images/glyphicons-halflings-white.png";
 
-$FontAwesomePath: "/bower_components/font-awesome/font";
-@import "font-awesome/scss/font-awesome";
+@import "compass_twitter_bootstrap";

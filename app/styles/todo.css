@@ -5,5 +5,15 @@
 
 
 .created-date {
-  font-size: xx-small
+  font-size: small
+}
+
+
+.todo-stats {
+  font-size: small
+}
+
+
+.todo-details {
+  font-size: small
 }
