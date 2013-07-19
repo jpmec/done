@@ -4,6 +4,7 @@ function TodoCtrl($scope, localStorageService) {
   $scope.todos = [];
   $scope.over = null;
   $scope.clicked = null;
+  $scope.positiveMessage = 'You did it!'
 
   $scope.init = function() {
     var keys = localStorageService.keys();
@@ -19,6 +20,10 @@ function TodoCtrl($scope, localStorageService) {
   };
 
   $scope.addTodo = function() {
+
+    if ($scope.newTodoText.length === 0) {
+      return
+    }
     var date = new Date();
 
     var todo = {
@@ -33,7 +38,7 @@ function TodoCtrl($scope, localStorageService) {
     $scope.saveTodo(todo)
 
     $scope.todos.push(todo);
-    $scope.todoText = '';
+    $scope.newTodoText = '';
   };
 
   $scope.saveTodo = function(todo) {
@@ -90,5 +95,4 @@ function TodoCtrl($scope, localStorageService) {
     }
     todo.priority = todo.priority - 1;
   }
-
 }

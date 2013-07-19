@@ -27,37 +27,56 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class='hero-unit'>
-      <h2>Todo</h2>
-      <div data-ng-controller="TodoCtrl", data-ng-init="init()">
-        <form class="form-inline" ng-submit="addTodo()">
-            <input class="input-new-todo-text input-xxlarge" type="text" ng-model="newTodoText" size="80" placeholder="add new todo here"></input>
-            <input class="btn-primary btn-large" type="submit" value="Add"></input>
-        </form>
-
-        <span>{{remaining()}} of {{todos.length}} remaining</span>
-        [ <a href="" ng-click="archive()">done</a> ]
-        [ <a href="" ng-click="clearTodos()">clear</a> ]
-
-        <accordion close-others="oneAtATime">
-           <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
-              <accordion-heading>
-                <span class="done-{{todo.done}}">{{todo.text}}</span>
-              </accordion-heading>
-              <button type="button" class="btn btn-primary" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
-                  Done
-              </button>
-              <div><span>Priority {{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em></div>
-              <div class="well"><form name="form_todo_notes">
-                Notes
-                <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="10" ng-change="saveTodo(todo)"></textarea>
-              </form>
-              </div>
-              <div><span>Created {{todo.created}}<span></div>
-           </accordion-group>
-        </accordion>
-
+    <div data-ng-controller="TodoCtrl", data-ng-init="init()">
+      <div class="navbar">
+        <div class="navbar-inner">
+        <a class="brand" href="#">Done! - a motivational app for getting things done.</a>
+        <ul class="nav pull-right">
+          <li ng-show="0 < todos.length"><span class="label label-info">{{remaining()}} of {{todos.length}} remaining</span></li>
+        </ul>
+        </div>
       </div>
+
+      <div class="text-center">
+        <form class="form-inline" ng-submit="addTodo()">
+            <input class="btn-primary btn-large" type="submit" value="Add"></input>
+            <input class="input-new-todo-text input-xxlarge" type="text" ng-model="newTodoText" size="80" placeholder="new todo"></input>
+        </form>
+      </div>
+
+      <div class='well' ng-show="0 < todos.length">
+        <div class="pull-left">
+          <a class="btn" href="" ng-show="remaining() < todos.length" ng-click="archive()">Archive</a>
+        </div>
+        <div class="pull-right">
+          <a class="btn btn-warning" href="" ng-click="clearTodos()">Delete All</a>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+        <div>
+          <accordion close-others="oneAtATime">
+             <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
+                <accordion-heading>
+                  <p class="lead done-{{todo.done}}">{{todo.text}}</p>
+                </accordion-heading>
+                <button type="button" class="btn btn-primary" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                    Done
+                </button>
+                <rating class="pull-right" value="todo.priority" max="5" readonly="false"></rating>
+                <hr>
+                <div ng-show="todo.done">
+                <alert type="'success'">{{positiveMessage}}</alert>
+                </div>
+                <div class="well"><form name="form_todo_notes">
+                  Notes
+                  <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)"></textarea>
+                </form>
+                </div>
+                <div><span>Created {{todo.created}}<span></div>
+             </accordion-group>
+          </accordion>
+
+        </div>
     </div>
 
     <script src="components/angular/angular.js"></script>
