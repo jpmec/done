@@ -30,9 +30,9 @@
     <div class='hero-unit'>
       <h2>Todo</h2>
       <div data-ng-controller="TodoCtrl", data-ng-init="init()">
-        <form ng-submit="addTodo()">
-          <input type="text" ng-model="todoText" size="30" placeholder="add new todo here">
-          <input class="btn-primary" type="submit" value="add">
+        <form class="form-inline" ng-submit="addTodo()">
+            <input class="input-new-todo-text input-xxlarge" type="text" ng-model="newTodoText" size="80" placeholder="add new todo here"></input>
+            <input class="btn-primary btn-large" type="submit" value="Add"></input>
         </form>
 
         <span>{{remaining()}} of {{todos.length}} remaining</span>
@@ -41,12 +41,19 @@
 
         <accordion close-others="oneAtATime">
            <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
-             <accordion-heading>
-               <span class="done-{{todo.done}}">{{todo.text}}</span>
-             </accordion-heading>
-             <div><span>Done <input type="checkbox" ng-model="todo.done"></span></div>
-             <div><span>Priority {{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em></div>
-             <div><span>Created {{todo.created}}<span></div>
+              <accordion-heading>
+                <span class="done-{{todo.done}}">{{todo.text}}</span>
+              </accordion-heading>
+              <button type="button" class="btn btn-primary" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                  Done
+              </button>
+              <div><span>Priority {{todo.priority}}</span><em class="icon-chevron-up" ng-click="priorityUp(todo)"></em><em class="icon-chevron-down" ng-click="priorityDown(todo)"></em></div>
+              <div class="well"><form name="form_todo_notes">
+                Notes
+                <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="10" ng-change="saveTodo(todo)"></textarea>
+              </form>
+              </div>
+              <div><span>Created {{todo.created}}<span></div>
            </accordion-group>
         </accordion>
 

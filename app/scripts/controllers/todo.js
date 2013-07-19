@@ -23,17 +23,22 @@ function TodoCtrl($scope, localStorageService) {
 
     var todo = {
       key: date.toJSON(),
-      text:$scope.todoText,
+      text:$scope.newTodoText,
+      notes: "",
       done:false,
       priority: 0,
       created: date.toString()
     };
 
-    localStorageService.add(todo.key, JSON.stringify(todo));
+    $scope.saveTodo(todo)
 
     $scope.todos.push(todo);
     $scope.todoText = '';
   };
+
+  $scope.saveTodo = function(todo) {
+    localStorageService.add(todo.key, JSON.stringify(todo));
+  }
 
   $scope.clearTodos = function () {
     localStorageService.clearAll();

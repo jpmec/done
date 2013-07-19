@@ -5,15 +5,34 @@
 
 
 .created-date {
-  font-size: small
+  font-size: small;
 }
 
 
 .todo-stats {
-  font-size: small
+  font-size: small;
 }
 
 
 .todo-details {
-  font-size: small
+  font-size: small;
+}
+
+
+.todo-notes {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+
+.form-add-todo {
+  vertical-align: middle;
+}
+
+
+.input-new-todo-text {
+  height: 1.5em !important;
+  font-size: 1.5em !important;
 }
