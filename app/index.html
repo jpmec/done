@@ -27,7 +27,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div data-ng-controller="TodoCtrl", data-ng-init="init()">
+    <div data-ng-controller="TodoCtrl" data-ng-init="init()" ng-cloak>
       <div class="navbar">
         <div class="navbar-inner">
         <a class="brand" href="#">Done! - a motivational app for getting things done.</a>
@@ -54,25 +54,37 @@
         <div class="clearfix"></div>
         <hr>
         <div>
-          <accordion close-others="oneAtATime">
+          <accordion close-others="true">
              <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
                 <accordion-heading>
                   <p class="lead done-{{todo.done}}">{{todo.text}}</p>
                 </accordion-heading>
-                <button type="button" class="btn btn-primary" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                <button type="button" class="btn btn-primary" ng-click="setFinishedDate(todo)" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
                     Done
                 </button>
+
+                <button type="button" class="btn btn-success" ng-click="setStartedDate(todo)" ng-hide="todo.startedDate || todo.done">
+                    Start
+                </button>
+
                 <rating class="pull-right" value="todo.priority" max="5" readonly="false"></rating>
                 <hr>
                 <div ng-show="todo.done">
-                <alert type="'success'">{{positiveMessage}}</alert>
+                  <alert type="'success'">{{positiveMessage}}</alert>
                 </div>
-                <div class="well"><form name="form_todo_notes">
-                  Notes
-                  <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)"></textarea>
-                </form>
+                <div collapse="false">
+                  <datepicker ng-model="todo.due" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
+                  <timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
                 </div>
-                <div><span>Created {{todo.created}}<span></div>
+                <div class="well">
+                  <form name="form_todo_notes">
+                    Notes
+                    <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)"></textarea>
+                  </form>
+                </div>
+                <div><span>Created {{todo.createdDate}}<span></div>
+                <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
+                <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
              </accordion-group>
           </accordion>
 
