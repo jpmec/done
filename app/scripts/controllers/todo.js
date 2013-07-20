@@ -51,10 +51,29 @@ function TodoCtrl($scope, localStorageService) {
 
   $scope.setStartedDate = function(todo) {
     todo.startedDate = new Date().toString();
+    $scope.saveTodo(todo);
   };
 
   $scope.setFinishedDate = function(todo) {
     todo.finishedDate = new Date().toString();
+    $scope.saveTodo(todo);
+  };
+
+  $scope.setDone = function(todo, done) {
+    if(done) {
+      $scope.setFinishedDate(todo);
+      todo.done = true;
+      $scope.saveTodo(todo);
+    }
+    else {
+      todo.finishedDate = null;
+      todo.done = false;
+      $scope.saveTodo(todo);
+    }
+  }
+
+  $scope.hasNotes = function(todo) {
+    return (todo.notes && todo.notes.length !== 0)
   }
 
   $scope.clearTodos = function () {

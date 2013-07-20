@@ -57,9 +57,13 @@
           <accordion close-others="true">
              <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
                 <accordion-heading>
-                  <p class="lead done-{{todo.done}}">{{todo.text}}</p>
+                  <span class="lead done-{{todo.done}}">{{todo.text}}</span>
+                  <span class="pull-right">
+                  <span class="label label-info" ng-show="todo.startedDate && !todo.done">Started on {{todo.startedDate}}</span>
+                  <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
+                  </span>
                 </accordion-heading>
-                <button type="button" class="btn btn-primary" ng-click="setFinishedDate(todo)" ng-model="todo.done" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                <button type="button" class="btn btn-primary" ng-click="setDone(todo, true)" ng-hide="todo.done">
                     Done
                 </button>
 
@@ -72,22 +76,24 @@
                 <div ng-show="todo.done">
                   <alert type="'success'">{{positiveMessage}}</alert>
                 </div>
-                <div collapse="false">
-                  <datepicker ng-model="todo.due" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
-                  <timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <div collapse="false" ng-hide="todo.done">
+                  <datepicker ng-model="userDate" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
+                  <timepicker ng-model="userTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
                 </div>
-                <div class="well">
-                  <form name="form_todo_notes">
+                <div class="well" ng-hide="todo.done">
+                  <form name="form_todo_notes" ng-hide="todo.done">
                     Notes
-                    <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)"></textarea>
+                    <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)" ></textarea>
                   </form>
+                </div>
+                <div class="well" ng-show="hasNotes(todo)">
+                  <p>{{todo.notes}}</p>
                 </div>
                 <div><span>Created {{todo.createdDate}}<span></div>
                 <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
                 <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
              </accordion-group>
           </accordion>
-
         </div>
     </div>
 
