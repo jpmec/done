@@ -1,0 +1,10 @@
+<div data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
+  <div class="navbar">
+    <div class="navbar-inner">
+    <a class="brand" href="#">Done! - a motivational app for getting things done.</a>
+    <ul class="nav pull-right">
+      <li ng-show="0 < todos.length"><span class="label label-info">{{remaining()}} of {{todos.length}} remaining</span></li>
+    </ul>
+    </div>
+  </div>
+</div>

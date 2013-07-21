@@ -1,0 +1,13 @@
+<div data-ng-controller="TodoCtrl" data-ng-init="init()" ng-cloak>
+    <p>{{todo.text}}</p>
+    <div ng-show="todo">
+        <rating class="pull-right" value="todo.priority" max="5" readonly="true"></rating>
+
+        <div ng-show="hasNotes(todo)">
+          <p>{{todo.notes}}</p>
+        </div>
+        <div><span>Created {{createdDate}}<span></div>
+        <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
+        <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
+    </div>
+<div>
