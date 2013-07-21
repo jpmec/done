@@ -55,7 +55,7 @@
         <hr>
         <div>
           <accordion close-others="true">
-             <accordion-group ng-repeat="todo in todos | orderBy:'priority':true">
+             <accordion-group ng-repeat="todo in todos | orderBy:'priority':true | filter:!'done'">
                 <accordion-heading>
                   <span class="lead done-{{todo.done}}">{{todo.text}}</span>
                   <span class="pull-right">
@@ -95,6 +95,30 @@
              </accordion-group>
           </accordion>
         </div>
+
+        <div>
+          <accordion close-others="true">
+             <accordion-group ng-repeat="todo in todos | orderBy:'finishedDate':true | filter:!!'done'">
+                <accordion-heading>
+                  <span class="lead done-{{todo.done}}">{{todo.text}}</span>
+                  <span class="pull-right">
+                  <span class="label label-info" ng-show="todo.startedDate && !todo.done">Started on {{todo.startedDate}}</span>
+                  <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
+                  </span>
+                </accordion-heading>
+
+                <rating class="pull-right" value="todo.priority" max="5" readonly="true"></rating>
+                <hr>
+                <div ng-show="hasNotes(todo)">
+                  <p>{{todo.notes}}</p>
+                </div>
+                <div><span>Created {{todo.createdDate}}<span></div>
+                <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
+                <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
+             </accordion-group>
+          </accordion>
+        </div>
+
     </div>
 
     <script src="components/angular/angular.js"></script>
