@@ -1,13 +1,38 @@
 <div data-ng-controller="TodoCtrl" data-ng-init="init()" ng-cloak>
-    <p>{{todo.text}}</p>
-    <div ng-show="todo">
-        <rating class="pull-right" value="todo.priority" max="5" readonly="true"></rating>
 
-        <div ng-show="hasNotes(todo)">
-          <p>{{todo.notes}}</p>
-        </div>
-        <div><span>Created {{createdDate}}<span></div>
-        <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
-        <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
-    </div>
+  <div ng-include="'views/navbar.html'"></div>
+
+  <h1>{{todo.text}}</h1>
+
+  <input class="todo-text" type="text" name="text" ng-model="todo.text" required></input>
+
+  <div>
+    <h2>Priority</h2>
+    <rating value="todo.priority" max="5" readonly="false"></rating>
+  </div>
+
+  <div>
+    <h2>Notes</h2>
+    <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)" ></textarea>
+  </div>
+
+  <div>
+    <h2>Due</h2>
+    <datepicker ng-model="todo.dueDate" show-weeks="showWeeks" starting-day="1"></datepicker>
+    <timepicker ng-model="todo.dueDate" hour-step="1" minute-step="1" show-meridian="true"></timepicker>
+  </div>
+
+  <div>
+    <div><span>Created {{createdDate}}<span></div>
+    <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
+    <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
+  </div>
+
+  <button type="button" class="btn-primary btn-large" ng-click="save()">
+      Save
+  </button>
+
+  <button type="button" class="btn btn-large" ng-click="cancel()">
+      Cancel
+  </button>
 <div>

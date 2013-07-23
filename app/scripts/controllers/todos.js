@@ -2,25 +2,17 @@
 
 var exports = {}
 
-function TodosCtrl($scope, localStorageService) {
+function TodosCtrl($scope, $location, localStorageService, todoFactory, todosService) {
 
   $scope.todos = [];
-  $scope.selectedTodo = null;
-  $scope.over = null;
-  $scope.clicked = null;
   $scope.positiveMessage = 'You did it!'
 
   $scope.init = function() {
-    var keys = localStorageService.keys();
+    $scope.todos = todosService.loadFromLocalStorageService();
+  };
 
-    for (var i in keys) {
-
-      var key = keys[i];
-      var todoStr = localStorageService.get(key);
-      var todo = JSON.parse(todoStr);
-
-      $scope.todos.push(todo);
-    }
+  $scope.count = function() {
+    return todosService.count();
   };
 
   $scope.addTodo = function() {
@@ -28,52 +20,39 @@ function TodosCtrl($scope, localStorageService) {
     if ($scope.newTodoText.length === 0) {
       return
     }
-    var date = new Date();
 
-    var id = CryptoJS.SHA256(date.toJSON());
+    var todo = todoFactory.create();
+    todo.text = $scope.newTodoText;
 
-    var todo = {
-      key: id,
-      text:$scope.newTodoText,
-      notes: "",
-      done:false,
-      priority: 0,
-      createdDate: date.toString(),
-      dueDate: null,
-      startedDate: null,
-      finishedDate: null
-    };
-
-    $scope.saveTodo(todo)
-
-    $scope.todos.push(todo);
+    todosService.addTodo(todo);
     $scope.newTodoText = '';
   };
 
-  $scope.saveTodo = function(todo) {
-    localStorageService.add(todo.key, JSON.stringify(todo));
-  };
+  $scope.editTodo = function(todo) {
+    console.log(todo.id);
+    $location.path('/todo/' + todo.id.toString());
+  }
 
   $scope.setStartedDate = function(todo) {
     todo.startedDate = new Date().toString();
-    $scope.saveTodo(todo);
+    todosService.saveTodo(todo);
   };
 
   $scope.setFinishedDate = function(todo) {
     todo.finishedDate = new Date().toString();
-    $scope.saveTodo(todo);
+    todosService.saveTodo(todo);
   };
 
   $scope.setDone = function(todo, done) {
     if(done) {
       $scope.setFinishedDate(todo);
       todo.done = true;
-      $scope.saveTodo(todo);
+      todosService.saveTodo(todo);
     }
     else {
       todo.finishedDate = null;
       todo.done = false;
-      $scope.saveTodo(todo);
+      todosService.saveTodo(todo);
     }
   }
 
@@ -82,8 +61,7 @@ function TodosCtrl($scope, localStorageService) {
   }
 
   $scope.clearTodos = function () {
-    localStorageService.clearAll();
-    $scope.todos = [];
+    $scope.todos = todosService.deleteAll();
   };
 
   $scope.remaining = function() {
@@ -106,33 +84,4 @@ function TodosCtrl($scope, localStorageService) {
       }
     });
   };
-
-  $scope.mouseoverTodo = function(todo) {
-    $scope.over = todo;
-  };
-
-  $scope.clickTodo = function(todo) {
-    $scope.clicked = todo;
-  };
-
-  $scope.reset = function() {
-    console.log('reset');
-    $scope.over = null;
-    $scope.clicked = null;
-  };
-
-  $scope.priorityUp = function(todo) {
-    todo.priority = todo.priority + 1;
-  }
-
-  $scope.priorityDown = function(todo) {
-    if (todo.priority == 0) {
-      return;
-    }
-    todo.priority = todo.priority - 1;
-  }
-
-  $scope.alertme = function() {
-    alert('me!');
-  }
 }

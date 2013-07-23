@@ -2,15 +2,25 @@
 
 
 
-function TodoCtrl($scope, $routeParams, localStorageService) {
+function TodoCtrl($scope, $routeParams, $location, todosService) {
 
   $scope.todoId = $routeParams.todoId
 
   $scope.init = function() {
-    $scope.todo = $scope.getFromLocalStorage();
+    $scope.todo = todosService.getTodo($scope.todoId);
   };
 
-  $scope.getFromLocalStorage = function() {
-    return JSON.parse(localStorageService.get($scope.todoId));
+  $scope.save = function() {
+    todosService.saveTodo($scope.todo);
+    $location.path('/');
   };
+
+  $scope.cancel = function() {
+    $location.path('/');
+  };
+
+  $scope.hasNotes = function() {
+    return ($scope.todo.notes && $scope.todo.notes.length !== 0)
+  };
+
 };

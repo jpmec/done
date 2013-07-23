@@ -1,5 +1,7 @@
 <div data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
 
+  <div ng-include="'views/navbar.html'"></div>
+
   <div class="text-center">
     <form class="form-inline" ng-submit="addTodo()">
         <input class="btn-primary btn-large" type="submit" value="Add"></input>
@@ -35,7 +37,9 @@
                 Start
             </button>
 
-            <rating class="pull-right" value="todo.priority" max="5" readonly="false"></rating>
+            <button type="button" class="btn" ng-click="editTodo(todo)">
+                Edit
+            </button>
             <hr>
             <div>
               <div class="pull-right">
@@ -48,13 +52,7 @@
                 <timepicker ng-model="todo.dueDate" hour-step="1" minute-step="1" show-meridian="true"></timepicker>
               </div>
             </div>
-            <div class="well" ng-hide="todo.done">
-              <form name="form_todo_notes" ng-hide="todo.done">
-                Notes
-                <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)" ></textarea>
-              </form>
-            </div>
-            <div class="well" ng-show="hasNotes(todo)">
+            <div ng-show="hasNotes(todo)">
               <p>{{todo.notes}}</p>
             </div>
             <div><span>Created {{todo.createdDate}}<span></div>
