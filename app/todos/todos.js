@@ -43,6 +43,18 @@ angular.module('todosModule', ['LocalStorageModule'])
       return this.todos;
     };
 
+    this.todoToString = function(todo) {
+      return JSON.stringify(todo);
+    }
+
+    this.todoFromString = function(todoStr) {
+      var todo = JSON.parse(todoStr);
+      if(todo.dueDate) {
+        todo.dueDate = new Date(todo.dueDate);
+      }
+      return todo;
+    }
+
     this.loadFromLocalStorageService = function() {
 
       this.todos = []
@@ -52,7 +64,7 @@ angular.module('todosModule', ['LocalStorageModule'])
 
         var key = keys[i];
         var todoStr = localStorageService.get(key);
-        var todo = JSON.parse(todoStr);
+        var todo = this.todoFromString(todoStr);
 
         this.todos.push(todo);
       }
@@ -61,7 +73,10 @@ angular.module('todosModule', ['LocalStorageModule'])
     };
 
     this.saveTodo = function(todo) {
-      localStorageService.add(todo.id, JSON.stringify(todo));
+      var id = todo.id;
+      var todoStr = this.todoToString(todo);
+
+      localStorageService.add(id, todoStr);
     };
 
     this.addTodo = function(todo) {
@@ -163,11 +178,12 @@ function TodosCtrl($scope, $location, localStorageService, todoFactory, todosSer
 
 
 
-function TodoCtrl($scope, $routeParams, $location, todosService) {
+function TodoCtrl($scope, $routeParams, $location, $log, todosService) {
 
   $scope.todoId = $routeParams.todoId
 
   $scope.init = function() {
+    todosService.loadFromLocalStorageService();
     $scope.todo = todosService.getTodo($scope.todoId);
   };
 
@@ -185,4 +201,3 @@ function TodoCtrl($scope, $routeParams, $location, todosService) {
   };
 
 };
-
