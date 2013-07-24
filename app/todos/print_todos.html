@@ -1,0 +1,52 @@
+<div data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
+
+  <div ng-include="'views/navbar.html'"></div>
+
+  <div ng-show="0 < todos.length">
+    <div>
+      <accordion close-others="false">
+         <accordion-group ng-repeat="todo in todos | orderBy:'priority':true | filter:!'done'" is-open="true">
+            <accordion-heading>
+              <span class="lead done-{{todo.done}}">{{todo.text}}</span>
+              <span class="pull-right">
+              <rating value="todo.priority" max="5" readonly="true"></rating>
+              <span class="label label-info" ng-show="todo.startedDate && !todo.done">Started on {{todo.startedDate}}</span>
+              <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
+              </span>
+            </accordion-heading>
+            <div ng-show="hasNotes(todo)">
+              <p>{{todo.notes}}</p>
+            </div>
+            <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
+            <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
+            <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
+            <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>
+        </accordion-group>
+      </accordion>
+    </div>
+
+    <div>
+      <accordion close-others="false">
+        <accordion-group ng-repeat="todo in todos | orderBy:'finishedDate':true | filter:!!'done'" is-open="true">
+          <accordion-heading>
+            <span class="lead done-{{todo.done}}">{{todo.text}}</span>
+            <span class="pull-right">
+            <rating class="pull-right" value="todo.priority" max="5" readonly="true"></rating>
+            <span class="label label-info" ng-show="todo.startedDate && !todo.done">Started on {{todo.startedDate}}</span>
+            <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
+            </span>
+          </accordion-heading>
+
+
+          <div ng-show="hasNotes(todo)">
+            <p>{{todo.notes}}</p>
+          </div>
+          <div><span>Created {{todo.createdDate}}<span></div>
+          <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
+          <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
+
+        </accordion-group>
+      </accordion>
+    </div>
+
+</div>

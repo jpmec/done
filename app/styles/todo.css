@@ -43,3 +43,12 @@
   height: 1.5em !important;
   font-size: 1.5em !important;
 }
+
+
+@media all {
+	.todo-page-break	{ display: none; }
+}
+
+@media print {
+	.todo-page-break	{ display: block; page-break-before: always; }
+}

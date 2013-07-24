@@ -23,9 +23,9 @@
   </div>
 
   <div>
-    <div><span>Created {{createdDate}}<span></div>
-    <div><span ng-show="todo.startedDate">Started {{todo.startedDate}}<span></div>
-    <div><span ng-show="todo.finishedDate">Finished {{todo.finishedDate}}<span></div>
+    <div><p ng-show=todo.createdDate>Created {{todo.createdDate}}</p></div>
+    <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
+    <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>
   </div>
 
   <button type="button" class="btn-primary btn-large" ng-click="save()">
