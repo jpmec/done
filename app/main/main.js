@@ -3,7 +3,7 @@
 
 
 
-angular.module('doneApp', ['userModule', 'todosModule', 'ui.bootstrap'])
+angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
   .directive('doneAppNavbar', function () {
     return {
       restrict: 'A',
