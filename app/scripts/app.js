@@ -3,4 +3,4 @@
 
 
 
-angular.module('doneApp', ['mainModule', 'userModule', 'todosModule', 'ui.bootstrap'])
+angular.module('doneApp', ['mainModule', 'userModule', 'todosModule', 'helpModule', 'ui.bootstrap'])

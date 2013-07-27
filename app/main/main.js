@@ -49,6 +49,9 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         templateUrl: 'todos/print_todo.html',
         controller: 'TodoCtrl'
       })
+      .when('/help/about', {
+        templateUrl: 'help/help_about.html'
+      })
       .otherwise({
         redirectTo: '/signin'
       });
