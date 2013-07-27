@@ -3,9 +3,19 @@
 
 
 
-angular.module('doneApp', ['todosModule', 'ui.bootstrap'])
+angular.module('doneApp', ['userModule', 'todosModule', 'ui.bootstrap'])
+  .directive('doneAppNavbar', function () {
+    return {
+      restrict: 'A',
+      templateUrl: 'navbar/navbar.html'
+    };
+  })
   .config(function ($routeProvider) {
     $routeProvider
+      .when('/signin', {
+        templateUrl: 'user/user_signin.html',
+        controller: 'UserCtrl'
+      })
       .when('/todos', {
         templateUrl: 'todos/todos.html',
         controller: 'TodosCtrl'
@@ -26,6 +36,6 @@ angular.module('doneApp', ['todosModule', 'ui.bootstrap'])
         controller: 'TodoCtrl'
       })
       .otherwise({
-        redirectTo: '/todos'
+        redirectTo: '/signin'
       });
   });

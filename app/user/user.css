@@ -1,0 +1,9 @@
+.user-input-username, .user-input-userpassword {
+  height: 1.5em !important;
+  font-size: 1.5em !important;
+}
+
+
+.user-navbar {
+  padding-top: 10px
+}

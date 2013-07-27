@@ -1,0 +1,13 @@
+<div class="text-center" data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak>
+  <form class="form-horizontal" ng-submit="signin('/todos')">
+    <div class="control-group">
+      <input class="user-input-username input-large" type="text" ng-model="userName" placeholder="Name" autofocus="true"></input>
+    </div>
+    <div class="control-group">
+      <input class="user-input-userpassword input-large" type="password" ng-model="userPassword" placeholder="Password"></input>
+    </div>
+    <div class="control-group">
+      <input class="btn-primary btn-large" type="submit" value="Sign in"></input>
+    </div>
+  </form>
+</div>

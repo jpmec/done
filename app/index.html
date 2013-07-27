@@ -11,9 +11,14 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/main.css -->
+
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="todos/todos.css">
+    <link rel="stylesheet" href="user/user.css">
+
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="navbar/navbar.css">
+
     <!-- endbuild -->
   </head>
   <body ng-app="doneApp">
@@ -28,7 +33,10 @@
 
     <!-- Add your site or application content here -->
 
+    <div done-app-navbar></div>
+
     <div class="container" ng-view></div>
+
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-cookies/angular-cookies.js"></script>
@@ -42,6 +50,7 @@
     <script src="components/requirejs/require.js" data-main="scripts/app.js"></script>
 
     <!-- build:js scripts/scripts.js -->
+    <script src="user/user.js"></script>
     <script src="todos/todos.js"></script>
     <script src="scripts/app.js"></script>
     <!-- endbuild -->

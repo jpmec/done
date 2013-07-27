@@ -1,7 +1,5 @@
 <div data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
 
-  <div ng-include="'views/navbar.html'"></div>
-
   <div class="text-center">
     <form class="form-inline" ng-submit="addTodo()">
         <input class="btn-primary btn-large" type="submit" value="Add"></input>
@@ -54,6 +52,7 @@
               <p>{{todo.notes}}</p>
             </div>
             <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
+            <div><p ng-show="todo.createdBy">Created by {{todo.createdBy}}</p></div>
             <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
             <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
             <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('todosModule', ['LocalStorageModule'])
+angular.module('todosModule', ['LocalStorageModule', 'userModule'])
   .factory('todoFactory', function() {
     return {
       create: function() {
@@ -10,10 +10,11 @@ angular.module('todosModule', ['LocalStorageModule'])
 
         return {
           id: id,
-          text: "",
-          notes: "",
+          text: '',
+          notes: '',
           done:false,
           priority: 0,
+          createdBy: '',
           createdDate: date.toString(),
           dueDate: null,
           startedDate: null,
@@ -83,18 +84,31 @@ angular.module('todosModule', ['LocalStorageModule'])
       this.todos.push(todo);
       this.saveTodo(todo);
     };
+  })
+  .directive('todosNavbarStats', function () {
+    return {
+      restrict: 'A',
+      templateUrl: 'todos/todos_navbar_stats.html'
+    };
   });
 
 
-
-
-function TodosCtrl($scope, $location, localStorageService, todoFactory, todosService) {
+function TodosCtrl($scope, $location, localStorageService, userService, todoFactory, todosService) {
 
   $scope.todos = [];
   $scope.positiveMessage = 'You did it!'
 
   $scope.init = function() {
+    if (userService.userIsNull()) {
+      $location.path('/');
+      return;
+    }
+
     $scope.todos = todosService.loadFromLocalStorageService();
+  };
+
+  $scope.isUser = function() {
+    return userService.name();
   };
 
   $scope.count = function() {
@@ -109,6 +123,7 @@ function TodosCtrl($scope, $location, localStorageService, todoFactory, todosSer
 
     var todo = todoFactory.create();
     todo.text = $scope.newTodoText;
+    todo.createdBy = userService.name();
 
     todosService.addTodo(todo);
     $scope.newTodoText = '';
