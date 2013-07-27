@@ -38,6 +38,14 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
       return this.todos.length;
     };
 
+    this.countDone = function() {
+      var count = 0;
+      angular.forEach(this.todos, function(todo) {
+        count += todo.done ? 1 : 0;
+      });
+      return count;
+    };
+
     this.deleteAll = function() {
       localStorageService.clearAll();
       this.todos = [];
@@ -84,16 +92,20 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
       this.todos.push(todo);
       this.saveTodo(todo);
     };
+
+    this.removeTodo = function(todo) {
+      localStorageService.remove(todo.key);
+    }
   })
-  .directive('todosNavbarStats', function () {
+  .directive('todosNavbar', function () {
     return {
       restrict: 'A',
-      templateUrl: 'todos/todos_navbar_stats.html'
+      templateUrl: 'todos/todos_navbar.html'
     };
   });
 
 
-function TodosCtrl($scope, $location, localStorageService, userService, todoFactory, todosService) {
+function TodosCtrl($scope, $location, userService, todoFactory, todosService) {
 
   $scope.todos = [];
   $scope.positiveMessage = 'You did it!'
@@ -169,11 +181,7 @@ function TodosCtrl($scope, $location, localStorageService, userService, todoFact
   };
 
   $scope.remaining = function() {
-    var count = 0;
-    angular.forEach($scope.todos, function(todo) {
-      count += todo.done ? 0 : 1;
-    });
-    return count;
+    return todosService.count() - todosService.countDone();
   };
 
   $scope.archive = function() {
@@ -184,7 +192,7 @@ function TodosCtrl($scope, $location, localStorageService, userService, todoFact
         $scope.todos.push(todo);
       }
       else {
-        localStorageService.remove(todo.key);
+        todosService.removeTodo(todo);
       }
     });
   };
@@ -204,11 +212,11 @@ function TodoCtrl($scope, $routeParams, $location, $log, todosService) {
 
   $scope.save = function() {
     todosService.saveTodo($scope.todo);
-    $location.path('/');
+    $location.path('/todos');
   };
 
   $scope.cancel = function() {
-    $location.path('/');
+    $location.path('/todos');
   };
 
   $scope.hasNotes = function() {

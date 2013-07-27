@@ -13,6 +13,9 @@
   font-size: small;
 }
 
+.todos-navbar-stats {
+  padding-top: 10px;
+}
 
 .todo-details {
   font-size: small;

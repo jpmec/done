@@ -10,6 +10,20 @@ angular.module('doneApp', ['userModule', 'todosModule', 'ui.bootstrap'])
       templateUrl: 'navbar/navbar.html'
     };
   })
+  .directive('mainBrand', function () {
+    return {
+      restrict: 'A',
+      templateUrl: 'main/main_navbar.html'
+    };
+  })
+  .controller('MainCtrl', ['$scope', function($scope){
+    $scope.init = function() {
+    };
+
+    $scope.brand = function() {
+      return 'Done! - a motivational app for getting things done.';
+    };
+  }])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/signin', {
