@@ -11,8 +11,14 @@ files = [
   'app/components/angular-mocks/angular-mocks.js',
   'app/scripts/*.js',
   'app/scripts/**/*.js',
-  'test/mock/**/*.js',
-  'test/spec/**/*.js'
+  'app/help/**/*.js',
+  'app/main/**/*.js',
+  'app/todos/**/*.js',
+  'app/user/**/*.js',
+  'test/spec/**/*.js',
+  'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js',
+  'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js',
+  'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js'
 ];
 
 // list of files to exclude
@@ -46,10 +52,10 @@ autoWatch = false;
 // - Safari (only Mac)
 // - PhantomJS
 // - IE (only Windows)
-browsers = ['Chrome'];
+browsers = ['Firefox'];
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 5000;
+captureTimeout = 10000;
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit
