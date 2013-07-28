@@ -7,6 +7,10 @@ angular.module('userModule', [])
   .service('userService', function() {
     this.user = null;
 
+    this.getUser = function() {
+      return this.user;
+    };
+
     this.userIsNull = function() {
       return (this.user === null);
     };
@@ -71,10 +75,23 @@ angular.module('userModule', [])
 
     $scope.userName = '';
     $scope.userPassword = '';
-    $scope.user = null;
 
     $scope.init = function() {
-      $scope.user = null;
+      if ($location.path() == '/signin') {
+        userService.signout();
+      }
+    };
+
+    $scope.validNameAndPassword = function() {
+      if ($scope.userName.length == 0) {
+        return false;
+      }
+
+      if ($scope.userPassword.length == 0) {
+        return false;
+      }
+
+      return true;
     };
 
     $scope.signin = function(location_path) {
@@ -87,17 +104,21 @@ angular.module('userModule', [])
         return;
       }
 
-      $scope.user = userService.signin($scope.userName, $scope.userPassword);
-      if ($scope.user) {
+      var user = userService.signin($scope.userName, $scope.userPassword);
+      if (user) {
+
+        if (location_path) {
+          $location.path(location_path);
+        }
+
         $scope.userName = '';
         $scope.userPassword = '';
       }
-
-      $location.path(location_path);
     };
 
     $scope.signout = function(location_path) {
-      $scope.user = userService.signout();
+      userService.signout();
+
       $scope.userName = '';
       $scope.userPassword = '';
 
@@ -118,6 +139,10 @@ angular.module('userModule', [])
 
     $scope.showUser = function() {
       $location.path("/user");
+    };
+
+    $scope.user = function() {
+      return userService.getUser();
     };
 
   }]);
