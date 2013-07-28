@@ -24,7 +24,10 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
       return 'Done! - a motivational app for getting things done.';
     };
   }])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, $locationProvider) {
+
+//    $locationProvider.html5Mode(true);
+
     $routeProvider
       .when('/signin', {
         templateUrl: 'user/user_signin.html',
@@ -51,6 +54,10 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
       })
       .when('/help/about', {
         templateUrl: 'help/help_about.html'
+      })
+      .when('/user', {
+        templateUrl: 'user/user_profile.html',
+        controller: 'UserCtrl'
       })
       .otherwise({
         redirectTo: '/signin'
