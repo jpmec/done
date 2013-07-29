@@ -13,13 +13,24 @@ angular.module('helpModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         topic = path.substr(1, path.length);
       }
 
+      this.topic = topic;
+      this.topicUrl = 'help/topics/help_' + topic + '.html';
+
+      var item = {
+        title: this.topic,
+        url: this.topicUrl
+      };
+
       var opts = {
         backdrop: true,
         keyboard: true,
         backdropClick: true,
-        templateUrl: 'help/help_' + topic + '.html',
-        controller: 'helpDialogCtrl'
+        templateUrl: 'help/help_dialog.html',
+        controller: 'helpDialogCtrl',
+        resolve: {item: function() { return angular.copy(item) } }
       };
+
+      console.log(opts);
 
       this.dialog = $dialog.dialog(opts);
       this.dialog.open().then(function(result){
@@ -46,7 +57,9 @@ angular.module('helpModule', ['userModule', 'todosModule', 'ui.bootstrap'])
 
 
 // Helper controller to close the help dialog
-function helpDialogCtrl($scope, dialog, helpService){
+function helpDialogCtrl($scope, dialog, item, helpService){
+  $scope.item = item;
+
   $scope.close = function(result) {
     dialog.close(result);
   };
