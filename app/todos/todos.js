@@ -57,7 +57,12 @@ angular.module('todosModule', ['obscureLocalStorageModule', 'userModule'])
     }
 
     this.todoFromString = function(todoStr) {
-      var todo = JSON.parse(todoStr);
+      var todo = todoStr;
+
+      if ('string' === typeof todoStr) {
+        todo = JSON.parse(todoStr);
+      }
+
       if(todo.dueDate) {
         todo.dueDate = new Date(todo.dueDate);
       }
