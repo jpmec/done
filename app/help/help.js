@@ -13,12 +13,8 @@ angular.module('helpModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         topic = path.substr(1, path.length);
       }
 
-      this.topic = topic;
-      this.topicUrl = 'help/topics/help_' + topic + '.html';
-
       var item = {
-        title: this.topic,
-        url: this.topicUrl
+        url: 'help/topics/help_' + topic + '.html'
       };
 
       var opts = {
