@@ -4,7 +4,24 @@
 
 
 angular.module('userModule', [])
-  .service('userService', function() {
+  .factory('userFactory', function() {
+    return {
+      create: function(name, password) {
+
+        var public_id = CryptoJS.SHA1(name).toString();
+        var private_id = CryptoJS.SHA256(name + password).toString();
+
+        var user = {
+          name: name,
+          publicId: public_id,
+          privateId: private_id
+        };
+
+        return user;
+      }
+    }
+  })
+  .service('userService', function(userFactory) {
     this.user = null;
 
     this.getUser = function() {
@@ -25,7 +42,7 @@ angular.module('userModule', [])
     };
 
     this.publicId = function() {
-      if (this.user && this.user.publicId) {
+      if (this.user) {
         return this.user.publicId;
       }
       else {
@@ -35,15 +52,7 @@ angular.module('userModule', [])
 
     this.signin = function(name, password) {
 
-      var public_id = CryptoJS.SHA1(name).toString();
-      var private_id = CryptoJS.SHA256(name + password).toString();
-
-      this.user = {
-          name: name,
-          public_id: public_id,
-          id: private_id
-      };
-
+      this.user = userFactory.create(name, password);
       return this.user;
     };
 
@@ -130,7 +139,9 @@ angular.module('userModule', [])
     };
 
     $scope.publicId = function() {
-      return userService.publicId();
+      var id = userService.publicId();
+      return id;
+
     };
 
     $scope.userIsNull = function() {
@@ -142,7 +153,8 @@ angular.module('userModule', [])
     };
 
     $scope.user = function() {
-      return userService.getUser();
+      var user = userService.getUser();
+      return user;
     };
 
   }]);
