@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('todosModule', ['LocalStorageModule', 'userModule'])
+angular.module('todosModule', ['obscureLocalStorageModule', 'userModule'])
   .factory('todoFactory', function() {
     return {
       create: function() {
@@ -23,7 +23,7 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
       }
     };
   })
-  .service('todosService', function(localStorageService) {
+  .service('todosService', function(obscureLocalStorageService) {
     this.todos = [];
 
     this.getTodos = function() {
@@ -47,7 +47,7 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
     };
 
     this.deleteAll = function() {
-      localStorageService.clearAll();
+      obscureLocalStorageService.clearAll();
       this.todos = [];
       return this.todos;
     };
@@ -68,11 +68,11 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
 
       this.todos = []
 
-      var keys = localStorageService.keys();
+      var keys = obscureLocalStorageService.keys();
       for (var i in keys) {
 
         var key = keys[i];
-        var todoStr = localStorageService.get(key);
+        var todoStr = obscureLocalStorageService.get(key);
         var todo = this.todoFromString(todoStr);
 
         this.todos.push(todo);
@@ -85,7 +85,7 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
       var id = todo.id;
       var todoStr = this.todoToString(todo);
 
-      localStorageService.add(id, todoStr);
+      obscureLocalStorageService.add(id, todoStr);
     };
 
     this.addTodo = function(todo) {
@@ -94,13 +94,19 @@ angular.module('todosModule', ['LocalStorageModule', 'userModule'])
     };
 
     this.removeTodo = function(todo) {
-      localStorageService.remove(todo.key);
+      obscureLocalStorageService.remove(todo.key);
     }
   })
   .directive('todosNavbar', function () {
     return {
       restrict: 'A',
       templateUrl: 'todos/todos_navbar.html'
+    };
+  })
+  .directive('todosAdmin', function () {
+    return {
+      restrict: 'A',
+      templateUrl: 'todos/todos_admin.html'
     };
   });
 
