@@ -16,6 +16,7 @@ files = [
   'app/todos/**/*.js',
   'app/user/**/*.js',
   'test/spec/**/*.js',
+  'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js',
   'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js',
   'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js',
   'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js'
