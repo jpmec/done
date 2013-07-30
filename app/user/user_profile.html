@@ -1,10 +1,12 @@
 <div data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak>
-  <h1>User Profile<h1>
+  <h1>User Profile</h1>
   <hr>
-  <h2>{{name()}}</h2>
-  <p>{{publicId()}}</p>
+  <div class="pull-right">
+      <div id='qrcode'></div>
+  </div>
+  <div>
+    <h2>{{name()}}</h2>
+    <p>User Id: <code>{{publicId()}}</code></p>
+  </div>
 
-  <h2>JSON</h2>
-
-  <p>{{user()}}</p>
 </div>

@@ -8,10 +8,11 @@
     "angular-local-storage": "https://github.com/jpmec/bower-angular-local.git",
     "angular-resource": "~1.0.5",
     "angular-sanitize": "~1.0.5",
-    "bootstrap": "~2.3.2",
+    "bootstrap": "~3",
     "es5-shim": "~2.0.8",
     "font-awesome": "~3.2.1",
     "json3": "~3.2.4",
+    "qrcode": "https://github.com/jpmec/qrcodejs.git",
     "requirejs": "2.1.8",
     "underscore": "~1.5.1"
   },

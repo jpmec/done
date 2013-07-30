@@ -89,6 +89,12 @@ angular.module('userModule', [])
       if ($location.path() == '/signin') {
         userService.signout();
       }
+
+      var id = $scope.publicId();
+
+      if (id) {
+        new QRCode(document.getElementById("qrcode"), id);
+      }
     };
 
     $scope.validNameAndPassword = function() {
