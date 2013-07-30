@@ -4,6 +4,8 @@
 // AT MOST IT PROVIDES OBSCURITY, IT DOES NOT PROVIDE SECURITY!!!
 // IT'S ONLY PURPOSE IS TO KEEP HONEST PEOPLE HONEST!!!
 
+'use strict';
+
 var angularObscureLocalStorage = angular.module('obscureLocalStorageModule', ['LocalStorageModule']);
 
 // You should set a random salt, this can be any random string.
@@ -16,130 +18,168 @@ angularObscureLocalStorage.service('obscureLocalStorageService', [
   'salt',
   function($rootScope, localStorageService, salt) {
 
-  // Checks the browser to see if local storage is supported
-  var browserSupportsLocalStorage = function () {
-    return localStorageService.isSupported();
-  };
+    var getSalt = function () {
+      return salt;
+    };
 
-  // Directly adds a value to local storage
-  // If local storage is not available in the browser use cookies
-  // Example use: localStorageService.add('library','angular');
-  var addToLocalStorage = function (key, value, password) {
+    var defaultPassword = function () {
+      return '';
+    };
 
-    if (typeof password === 'undefined') {
-      password = '';
-    }
+    // Checks the browser to see if local storage is supported
+    var browserSupportsLocalStorage = function () {
+      return localStorageService.isSupported();
+    };
 
-//    console.log("addToLocalStorage");
-//    console.log("key: " + key);
-//    console.log("value: " + value);
-//    console.log("password: " + password);
+    // Directly adds a value to local storage
+    // If local storage is not available in the browser use cookies
+    // Example use: localStorageService.add('library','angular');
+    var addToLocalStorage = function (key, value, password) {
 
-//    var mac = CryptoJS.HmacSHA256(value, password).toString();
-//    console.log("mac: " + mac);
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
 
-//    var obj = {key: key, value: value, mac: mac};
-//    var plaintext = JSON.stringify(obj);
-//    console.log("plaintext: " + plaintext);
+  //    console.log("addToLocalStorage");
+  //    console.log("key: " + key);
+  //    console.log("value: " + value);
+  //    console.log("password: " + password);
 
-//    var ciphertext = CryptoJS.AES.encrypt(plaintext, password);
-//    console.log("ciphertext: " + ciphertext);
+  //    var mac = CryptoJS.HmacSHA256(value, password).toString();
+  //    console.log("mac: " + mac);
 
-//    return localStorageService.add(key, ciphertext);
-    return localStorageService.add(key, value);
-  };
+  //    var obj = {key: key, value: value, mac: mac};
+  //    var plaintext = JSON.stringify(obj);
+  //    console.log("plaintext: " + plaintext);
 
-  // Directly get a value from local storage
-  // Example use: localStorageService.get('library'); // returns 'angular'
-  var getFromLocalStorage = function (key, password) {
+  //    var ciphertext = CryptoJS.AES.encrypt(plaintext, password);
+  //    console.log("ciphertext: " + ciphertext);
 
-    if (typeof password === 'undefined') {
-      password = '';
-    }
+  //    return localStorageService.add(key, ciphertext);
+      return localStorageService.add(key, value);
+    };
 
-//    console.log("getFromLocalStorage");
-//    console.log("key: " + key);
-//    console.log("password: " + password);
+    // Directly get a value from local storage
+    // Example use: localStorageService.get('library'); // returns 'angular'
+    var getFromLocalStorage = function (key, password) {
 
-//    var ciphertext = localStorageService.get(key);
-//    console.log("ciphertext:" + ciphertext);
+      if (typeof password === 'undefined') {
+        password = '';
+      }
 
-//    var plaintext = CryptoJS.AES.decrypt(ciphertext, password);
-//    console.log("plaintext:" + plaintext);
+  //    console.log("getFromLocalStorage");
+  //    console.log("key: " + key);
+  //    console.log("password: " + password);
 
-//    var obj = JSON.parse(plaintext);
+  //    var ciphertext = localStorageService.get(key);
+  //    console.log("ciphertext:" + ciphertext);
 
-//    var mac = CryptoJS.HmacSHA256(obj.value, password).toString();
+  //    var plaintext = CryptoJS.AES.decrypt(ciphertext, password);
+  //    console.log("plaintext:" + plaintext);
 
-//    if (mac === obj.mac) {
-//      return obj.value;
-//    }
-//    else {
-//      return null;
-//    }
+  //    var obj = JSON.parse(plaintext);
 
-    return localStorageService.get(key);
-  };
+  //    var mac = CryptoJS.HmacSHA256(obj.value, password).toString();
 
-  // Remove an item from local storage
-  // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
-  var removeFromLocalStorage = function (key, password) {
-    return localStorageService.remove(key);
-  };
+  //    if (mac === obj.mac) {
+  //      return obj.value;
+  //    }
+  //    else {
+  //      return null;
+  //    }
 
-  // Remove all data for this app from local storage
-  // Example use: localStorageService.clearAll();
-  // Should be used mostly for development purposes
-  var clearAllFromLocalStorage = function (password) {
-    return localStorageService.clearAll();
-  };
+      return localStorageService.get(key);
+    };
 
-  // Return array of keys for localStorage
-  var getKeysForLocalStorage = function (password) {
-    return localStorageService.keys();
-  };
+    // Remove an item from local storage
+    // Example use: localStorageService.remove('library'); // removes the key/value pair of library='angular'
+    var removeFromLocalStorage = function (key, password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
 
-  // Checks the browser to see if cookies are supported
-  var browserSupportsCookies = function() {
-    return localStorageService.cookie.isSupported();
+      return localStorageService.remove(key);
+    };
+
+    // Remove all data for this app from local storage
+    // Example use: localStorageService.clearAll();
+    // Should be used mostly for development purposes
+    var clearAllFromLocalStorage = function (password) {
+
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.clearAll();
+    };
+
+    // Return array of keys for localStorage
+    var getKeysForLocalStorage = function (password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.keys();
+    };
+
+    // Checks the browser to see if cookies are supported
+    var browserSupportsCookies = function() {
+      return localStorageService.cookie.isSupported();
+    };
+
+    // Directly adds a value to cookies
+    // Typically used as a fallback is local storage is not available in the browser
+    // Example use: localStorageService.cookie.add('library','angular');
+    var addToCookies = function (key, value, password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.cookie.add(key, value);
+    };
+
+    // Directly get a value from a cookie
+    // Example use: localStorageService.cookie.get('library'); // returns 'angular'
+    var getFromCookies = function (key, password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.cookie.get(key);
+    };
+
+    var removeFromCookies = function (key, password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.cookie.remove(key);
+    };
+
+    var clearAllFromCookies = function (password) {
+      if (typeof password === 'undefined') {
+        password = defaultPassword();
+      }
+
+      return localStorageService.cookie.clearAll();
+    };
+
+    return {
+      isSupported: browserSupportsLocalStorage,
+      add: addToLocalStorage,
+      get: getFromLocalStorage,
+      remove: removeFromLocalStorage,
+      clearAll: clearAllFromLocalStorage,
+      keys: getKeysForLocalStorage,
+      salt: getSalt,
+      cookie: {
+        isSupported: browserSupportsCookies,
+        add: addToCookies,
+        get: getFromCookies,
+        remove: removeFromCookies,
+        clearAll: clearAllFromCookies
+      }
+    };
+
   }
-
-  // Directly adds a value to cookies
-  // Typically used as a fallback is local storage is not available in the browser
-  // Example use: localStorageService.cookie.add('library','angular');
-  var addToCookies = function (key, value, password) {
-    return localStorageService.cookie.add(key, value);
-  };
-
-  // Directly get a value from a cookie
-  // Example use: localStorageService.cookie.get('library'); // returns 'angular'
-  var getFromCookies = function (key, password) {
-    return localStorageService.cookie.get(key);
-  };
-
-  var removeFromCookies = function (key, password) {
-    return localStorageService.cookie.remove(key);
-  }
-
-  var clearAllFromCookies = function (password) {
-    return localStorageService.cookie.clearAll();
-  }
-
-
-  return {
-    isSupported: browserSupportsLocalStorage,
-    add: addToLocalStorage,
-    get: getFromLocalStorage,
-    remove: removeFromLocalStorage,
-    clearAll: clearAllFromLocalStorage,
-    keys: getKeysForLocalStorage,
-    cookie: {
-      isSupported: browserSupportsCookies,
-      add: addToCookies,
-      get: getFromCookies,
-      remove: removeFromCookies,
-      clearAll: clearAllFromCookies
-    }
-  };
-
-}]);
+]);
