@@ -99,8 +99,9 @@ angular.module('todosModule', ['obscureLocalStorageModule', 'userModule'])
     };
 
     this.removeTodo = function(todo) {
-      obscureLocalStorageService.remove(todo.key);
-    }
+      obscureLocalStorageService.remove(todo.id);
+    };
+
   })
   .directive('todosNavbar', function () {
     return {
@@ -150,6 +151,17 @@ function TodosCtrl($scope, $location, userService, todoFactory, todosService) {
 
     todosService.addTodo(todo);
     $scope.newTodoText = '';
+  };
+
+  $scope.deleteTodo = function(todo) {
+
+    todosService.removeTodo(todo);
+
+    var i = _.indexOf($scope.todos, todo);
+
+    if (i != -1) {
+      $scope.todos.splice(i, 1);
+    }
   };
 
   $scope.editTodo = function(todo) {
