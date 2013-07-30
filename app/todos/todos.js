@@ -114,136 +114,133 @@ angular.module('todosModule', ['obscureLocalStorageModule', 'userModule'])
       restrict: 'A',
       templateUrl: 'todos/todos_admin.html'
     };
-  });
+  })
+  .controller('TodosCtrl', ['$scope', '$location', 'userService', 'todoFactory', 'todosService',
+    function ($scope, $location, userService, todoFactory, todosService) {
 
+      $scope.todos = [];
+      $scope.positiveMessage = 'You did it!'
 
-function TodosCtrl($scope, $location, userService, todoFactory, todosService) {
+      $scope.init = function() {
+        if (userService.userIsNull()) {
+          $location.path('/');
+          return;
+        }
 
-  $scope.todos = [];
-  $scope.positiveMessage = 'You did it!'
+        $scope.todos = todosService.loadFromLocalStorageService();
+      };
 
-  $scope.init = function() {
-    if (userService.userIsNull()) {
-      $location.path('/');
-      return;
-    }
+      $scope.isUser = function() {
+        return userService.name();
+      };
 
-    $scope.todos = todosService.loadFromLocalStorageService();
-  };
+      $scope.count = function() {
+        return todosService.count();
+      };
 
-  $scope.isUser = function() {
-    return userService.name();
-  };
+      $scope.addTodo = function() {
 
-  $scope.count = function() {
-    return todosService.count();
-  };
+        if ($scope.newTodoText.length === 0) {
+          return
+        }
 
-  $scope.addTodo = function() {
+        var todo = todoFactory.create();
+        todo.text = $scope.newTodoText;
+        todo.createdBy = userService.name();
 
-    if ($scope.newTodoText.length === 0) {
-      return
-    }
+        todosService.addTodo(todo);
+        $scope.newTodoText = '';
+      };
 
-    var todo = todoFactory.create();
-    todo.text = $scope.newTodoText;
-    todo.createdBy = userService.name();
+      $scope.deleteTodo = function(todo) {
 
-    todosService.addTodo(todo);
-    $scope.newTodoText = '';
-  };
-
-  $scope.deleteTodo = function(todo) {
-
-    todosService.removeTodo(todo);
-
-    var i = _.indexOf($scope.todos, todo);
-
-    if (i != -1) {
-      $scope.todos.splice(i, 1);
-    }
-  };
-
-  $scope.editTodo = function(todo) {
-    $location.path('/todo/' + todo.id.toString());
-  };
-
-  $scope.viewPrintTodos = function() {
-    $location.path('/print/todos');
-  };
-
-  $scope.setStartedDate = function(todo) {
-    todo.startedDate = new Date().toString();
-    todosService.saveTodo(todo);
-  };
-
-  $scope.setFinishedDate = function(todo) {
-    todo.finishedDate = new Date().toString();
-    todosService.saveTodo(todo);
-  };
-
-  $scope.setDone = function(todo, done) {
-    if(done) {
-      $scope.setFinishedDate(todo);
-      todo.done = true;
-      todosService.saveTodo(todo);
-    }
-    else {
-      todo.finishedDate = null;
-      todo.done = false;
-      todosService.saveTodo(todo);
-    }
-  }
-
-  $scope.hasNotes = function(todo) {
-    return (todo.notes && todo.notes.length !== 0)
-  }
-
-  $scope.clearTodos = function () {
-    $scope.todos = todosService.deleteAll();
-  };
-
-  $scope.remaining = function() {
-    return todosService.count() - todosService.countDone();
-  };
-
-  $scope.archive = function() {
-    var oldTodos = $scope.todos;
-    $scope.todos = [];
-    angular.forEach(oldTodos, function(todo) {
-      if (!todo.done) {
-        $scope.todos.push(todo);
-      }
-      else {
         todosService.removeTodo(todo);
+
+        var i = _.indexOf($scope.todos, todo);
+
+        if (i != -1) {
+          $scope.todos.splice(i, 1);
+        }
+      };
+
+      $scope.editTodo = function(todo) {
+        $location.path('/todo/' + todo.id.toString());
+      };
+
+      $scope.viewPrintTodos = function() {
+        $location.path('/print/todos');
+      };
+
+      $scope.setStartedDate = function(todo) {
+        todo.startedDate = new Date().toString();
+        todosService.saveTodo(todo);
+      };
+
+      $scope.setFinishedDate = function(todo) {
+        todo.finishedDate = new Date().toString();
+        todosService.saveTodo(todo);
+      };
+
+      $scope.setDone = function(todo, done) {
+        if(done) {
+          $scope.setFinishedDate(todo);
+          todo.done = true;
+          todosService.saveTodo(todo);
+        }
+        else {
+          todo.finishedDate = null;
+          todo.done = false;
+          todosService.saveTodo(todo);
+        }
       }
-    });
-  };
-}
 
+      $scope.hasNotes = function(todo) {
+        return (todo.notes && todo.notes.length !== 0)
+      }
 
+      $scope.clearTodos = function () {
+        $scope.todos = todosService.deleteAll();
+      };
 
+      $scope.remaining = function() {
+        return todosService.count() - todosService.countDone();
+      };
 
-function TodoCtrl($scope, $routeParams, $location, $log, todosService) {
+      $scope.archive = function() {
+        var oldTodos = $scope.todos;
+        $scope.todos = [];
+        angular.forEach(oldTodos, function(todo) {
+          if (!todo.done) {
+            $scope.todos.push(todo);
+          }
+          else {
+            todosService.removeTodo(todo);
+          }
+        });
+      };
+    }
+  ])
+  .controller('TodoCtrl', ['$scope', '$routeParams', '$location', 'todosService',
+    function($scope, $routeParams, $location, todosService) {
 
-  $scope.todoId = $routeParams.todoId
+      $scope.todoId = $routeParams.todoId
 
-  $scope.init = function() {
-    todosService.loadFromLocalStorageService();
-    $scope.todo = todosService.getTodo($scope.todoId);
-  };
+      $scope.init = function() {
+        todosService.loadFromLocalStorageService();
+        $scope.todo = todosService.getTodo($scope.todoId);
+      };
 
-  $scope.save = function() {
-    todosService.saveTodo($scope.todo);
-    $location.path('/todos');
-  };
+      $scope.save = function() {
+        todosService.saveTodo($scope.todo);
+        $location.path('/todos');
+      };
 
-  $scope.cancel = function() {
-    $location.path('/todos');
-  };
+      $scope.cancel = function() {
+        $location.path('/todos');
+      };
 
-  $scope.hasNotes = function() {
-    return ($scope.todo.notes && $scope.todo.notes.length !== 0)
-  };
-
-};
+      $scope.hasNotes = function() {
+        return ($scope.todo.notes && $scope.todo.notes.length !== 0)
+      };
+    }
+  ])
