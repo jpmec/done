@@ -15,4 +15,5 @@ How to install and use the app:
     $ cd done
     $ npm install
     $ bower update
+    $ grunt coffee
     $ grunt server
