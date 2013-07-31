@@ -1,12 +1,25 @@
 <div data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak>
   <h1>User Profile</h1>
+  <button class="btn" ng-click="editUser()">Edit</button>
   <hr>
-  <div class="pull-right">
-      <div id='qrcode'></div>
-  </div>
+
   <div>
     <h2>{{name()}}</h2>
     <p>User Id: <code>{{publicId()}}</code></p>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <figure class="well pull-left text-center" ng-show="email()">
+        <gravatar-image data-css-class="img-rounded" data-email="email()" data-size="256" data-default="identicon"></gravatar-image>
+        <hr>
+        <figcaption>{{email()}}</figcaption>
+      </figure>
+
+      <div class="pull-right">
+          <div id='qrcode'></div>
+      </div>
+    </div>
   </div>
 
 </div>

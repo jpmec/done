@@ -59,6 +59,10 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         templateUrl: 'user/user_profile.html',
         controller: 'UserCtrl'
       })
+      .when('/user/preferences', {
+        templateUrl: 'user/user_preferences.html',
+        controller: 'UserEditCtrl'
+      })
       .otherwise({
         redirectTo: '/signin'
       });

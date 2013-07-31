@@ -8,4 +8,6 @@ angular.module( 'doneApp',
                 'userModule',
                 'todosModule',
                 'helpModule',
-                'ui.bootstrap']);
+                'md5',
+                'ui.bootstrap',
+                'ui-gravatar']);

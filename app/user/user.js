@@ -14,7 +14,12 @@ angular.module('userModule', [])
         var user = {
           name: name,
           publicId: public_id,
-          privateId: private_id
+          privateId: private_id,
+          email: '',
+          preferences: {
+            emailIsPrivate: false,
+            useGravatar: true
+          }
         };
 
         return user;
@@ -26,6 +31,10 @@ angular.module('userModule', [])
 
     this.getUser = function() {
       return this.user;
+    };
+
+    this.setUser = function(user) {
+      this.user = user;
     };
 
     this.userIsNull = function() {
@@ -49,6 +58,42 @@ angular.module('userModule', [])
         return '';
       }
     };
+
+    this.email = function() {
+      if (this.user) {
+        return this.user.email;
+      }
+      else {
+        return '';
+      }
+    };
+
+    this.preferences = function() {
+      if (this.user) {
+        return this.user.preferences;
+      }
+      else {
+        return '';
+      }
+    };
+
+    this.emailIsPrivate = function() {
+      if (this.user) {
+        return this.user.preferences.emailIsPrivate;
+      }
+      else {
+        return true;
+      }
+    }
+
+    this.useGravatar = function() {
+      if (this.user) {
+        return this.user.preferences.useGravatar;
+      }
+      else {
+        return true;
+      }
+    }
 
     this.signin = function(name, password) {
 
@@ -122,6 +167,8 @@ angular.module('userModule', [])
       var user = userService.signin($scope.userName, $scope.userPassword);
       if (user) {
 
+        $scope.user = user;
+
         if (location_path) {
           $location.path(location_path);
         }
@@ -134,6 +181,7 @@ angular.module('userModule', [])
     $scope.signout = function(location_path) {
       userService.signout();
 
+      $scope.user = null;
       $scope.userName = '';
       $scope.userPassword = '';
 
@@ -150,6 +198,22 @@ angular.module('userModule', [])
 
     };
 
+    $scope.email = function() {
+      return userService.email();
+    }
+
+    $scope.emailIsPrivate = function() {
+      return userService.emailIsPrivate();
+    }
+
+    $scope.emailIsEmpty = function() {
+      return userService.email.length == 0;
+    }
+
+    $scope.useGravatar = function() {
+      return userService.useGravatar();
+    }
+
     $scope.userIsNull = function() {
       return userService.userIsNull();
     };
@@ -158,9 +222,29 @@ angular.module('userModule', [])
       $location.path("/user");
     };
 
+    $scope.editUser = function() {
+      $location.path("/user/preferences");
+    };
+
     $scope.user = function() {
       var user = userService.getUser();
       return user;
+    };
+
+  }])
+  .controller('UserEditCtrl', ['$scope', '$location', 'userService', function($scope, $location, userService){
+
+    $scope.init = function() {
+      $scope.user = userService.getUser();
+    };
+
+    $scope.save = function() {
+      userService.setUser($scope.user);
+      $location.path("/user");
+    };
+
+    $scope.cancel = function() {
+      $scope.init();
     };
 
   }]);

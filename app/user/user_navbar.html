@@ -1,5 +1,8 @@
 <span class="user-navbar pull-right" data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak ng-hide="userIsNull()">
   <a href="" ng-click="showUser()">{{name()}}</a>
-  <em class="icon-user"></em>
+  <span ng-show="useGravatar() && !emailIsEmpty()" ng-click="showUser()">
+    <gravatar-image data-css-class="img-circle" data-email="email()" data-size="32" data-default="identicon"></gravatar-image>
+  </span>
+  <em class="icon-user" ng-show="!useGravatar() || emailIsEmpty()"></em>
   <span user-signout></span></li>
 </span>
