@@ -292,7 +292,7 @@ angular.module('userModule', ['obscureLocalStorageModule'])
     }
 
     $scope.emailIsEmpty = function() {
-      return userService.email.length == 0;
+      return userService.email().length === 0;
     }
 
     $scope.useGravatar = function() {
