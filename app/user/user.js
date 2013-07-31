@@ -4,6 +4,7 @@
 
 
 angular.module('userModule', ['obscureLocalStorageModule'])
+
   .factory('userFactory', function() {
     return {
       create: function(name, password) {
@@ -28,16 +29,10 @@ angular.module('userModule', ['obscureLocalStorageModule'])
     }
   })
   .service('userCrudService', function(userFactory, obscureLocalStorageService) {
-    this.create = function(obj) {
-      var item = _.extend(userFactory.create(obj.name, obj.password), obj);
-      item = _.omit(item, 'password');
 
-      obscureLocalStorageService.add(item.id, item);
+    this.prefix = 'user.';
 
-      return item;
-    }
-
-    this.retrieve = function(obj) {
+    this.keyFor = function(obj) {
       if (!obj) {
         return null;
       }
@@ -46,7 +41,28 @@ angular.module('userModule', ['obscureLocalStorageModule'])
         return null;
       }
 
-      var item = obscureLocalStorageService.get(obj.id);
+      return this.prefix + obj.id;
+    }
+
+    this.create = function(obj) {
+      var item = _.extend(userFactory.create(obj.name, obj.password), obj);
+      item = _.omit(item, 'password');
+
+      obscureLocalStorageService.add(this.keyFor(item), item);
+
+      return item;
+    }
+
+    this.retrieve = function(obj) {
+
+      var k = this.keyFor(obj);
+
+      if (!k) {
+        return null;
+      }
+
+      var item = obscureLocalStorageService.get(k);
+
       return item;
     }
 
@@ -55,12 +71,14 @@ angular.module('userModule', ['obscureLocalStorageModule'])
         return null;
       }
 
-      var item = obscureLocalStorageService.get(obj.id);
+      var item = obscureLocalStorageService.get(this.keyFor(obj));
       if (!item) {
         return null;
       }
 
       item = _.extend(item, obj);
+
+      obscureLocalStorageService.add(this.keyFor(item), item);
 
       return item;
     }
@@ -70,8 +88,8 @@ angular.module('userModule', ['obscureLocalStorageModule'])
         return null;
       }
 
-      var item = obscureLocalStorageService.get(obj.id);
-      obscureLocalStorageService.remove(obj.id);
+      var item = obscureLocalStorageService.get(this.keyFor(obj));
+      obscureLocalStorageService.remove(this.keyFor(obj));
 
       return item;
     }
@@ -154,8 +172,13 @@ angular.module('userModule', ['obscureLocalStorageModule'])
     }
 
     this.signin = function(name, password) {
+      var user = userFactory.create(name, password);
+      this.user = userCrudService.retrieve(user);
 
-      this.user = userFactory.create(name, password);
+      if (!this.user) {
+        this.user = userCrudService.create(user);
+      }
+
       return this.user;
     };
 
@@ -163,6 +186,10 @@ angular.module('userModule', ['obscureLocalStorageModule'])
       this.user = null;
       return this.user;
     };
+
+    this.saveUser = function() {
+      userCrudService.update(this.user);
+    }
 
   })
   .directive('userSignout', function () {
@@ -298,6 +325,7 @@ angular.module('userModule', ['obscureLocalStorageModule'])
 
     $scope.save = function() {
       userService.setUser($scope.user);
+      userService.saveUser();
       $location.path("/user");
     };
 
