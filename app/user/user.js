@@ -3,7 +3,7 @@
 
 
 
-angular.module('userModule', [])
+angular.module('userModule', ['obscureLocalStorageModule'])
   .factory('userFactory', function() {
     return {
       create: function(name, password) {
@@ -12,6 +12,7 @@ angular.module('userModule', [])
         var private_id = CryptoJS.SHA256(name + password).toString();
 
         var user = {
+          id: private_id,
           name: name,
           publicId: public_id,
           privateId: private_id,
@@ -26,7 +27,64 @@ angular.module('userModule', [])
       }
     }
   })
-  .service('userService', function(userFactory) {
+  .service('userCrudService', function(userFactory, obscureLocalStorageService) {
+    this.create = function(obj) {
+      var item = _.extend(userFactory.create(obj.name, obj.password), obj);
+      item = _.omit(item, 'password');
+
+      obscureLocalStorageService.add(item.id, item);
+
+      return item;
+    }
+
+    this.retrieve = function(obj) {
+      if (!obj) {
+        return null;
+      }
+
+      if (!obj.id) {
+        return null;
+      }
+
+      var item = obscureLocalStorageService.get(obj.id);
+      return item;
+    }
+
+    this.update = function(obj) {
+      if (!obj) {
+        return null;
+      }
+
+      var item = obscureLocalStorageService.get(obj.id);
+      if (!item) {
+        return null;
+      }
+
+      item = _.extend(item, obj);
+
+      return item;
+    }
+
+    this.destroy = function(obj) {
+      if (!obj) {
+        return null;
+      }
+
+      var item = obscureLocalStorageService.get(obj.id);
+      obscureLocalStorageService.remove(obj.id);
+
+      return item;
+    }
+
+    this.count = function() {
+      return obscureLocalStorageService.keys().length
+    }
+
+    this.empty = function() {
+      return obscureLocalStorageService.clearAll();
+    }
+  })
+  .service('userService', function(userFactory, userCrudService) {
     this.user = null;
 
     this.getUser = function() {
