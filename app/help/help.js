@@ -26,8 +26,6 @@ angular.module('helpModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         resolve: {item: function() { return angular.copy(item) } }
       };
 
-      console.log(opts);
-
       this.dialog = $dialog.dialog(opts);
       this.dialog.open().then(function(result){
           // do nothing
