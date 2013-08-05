@@ -7,6 +7,7 @@
 'use strict';
 
 var angularObscureLocalStorage = angular.module('obscureLocalStorageModule', ['LocalStorageModule']);
+angularObscureLocalStorage.value('prefix', 'ols');
 
 // You should set a random salt, this can be any random string.
 // e.g. angularObscureLocalStorage.constant('salt', 'BD8EA8C785B0928291F0E46205EA110F490303D6F45E70919C2197F1F997F5BF');
