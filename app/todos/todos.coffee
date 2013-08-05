@@ -15,6 +15,7 @@ todosModule.factory "todoFactory", ->
     dueDate: null
     startedDate: null
     finishedDate: null
+    assignedTo: null
 
 
 todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService) ->
@@ -118,7 +119,7 @@ todosModule.service "todosService", (todosCrudService) ->
     @todos.push todo
     @saveTodo todo
 
-  @removeTodo = (todo) ->
+  @destroyTodo = (todo) ->
     todosCrudService.destroy(todo)
 
 
@@ -187,7 +188,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "userService", "todo
     todo.notes and todo.notes.length isnt 0
 
   $scope.clearTodos = ->
-    $scope.todos = todosService.deleteAll()
+    $scope.todos = todosService.destroyAll()
 
   $scope.remaining = ->
     todosService.count() - todosService.countDone()
@@ -199,7 +200,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "userService", "todo
       unless todo.done
         $scope.todos.push todo
       else
-        todosService.removeTodo todo
+        todosService.destroyTodo todo
 ]
 
 

@@ -60,6 +60,15 @@ describe 'service: todosCrudService', ->
       todo2 = todosCrudService.update(todo1)
       expect(todo2.text).toBe('do it')
 
+  describe 'destroy', ->
+    it 'destroys', ->
+      todo1 = todosCrudService.create({text: 'get it done'})
+      expect(todosCrudService.count()).toBe 1
+
+      todo2 = todosCrudService.destroy(todo1)
+      expect(todosCrudService.count()).toBe 0
+      expect(todo2.text).toBe('get it done')
+
 
 
 
