@@ -134,24 +134,24 @@ todosModule.directive "todosAdmin", ->
   templateUrl: "todos/todos_admin.html"
 
 
-todosModule.controller "TodosCtrl", ["$scope", "$location", "userService", "todoFactory", "todosService", ($scope, $location, userService, todoFactory, todosService) ->
+todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService", "todoFactory", "todosService", ($scope, $location, activeUserService, todoFactory, todosService) ->
   $scope.todos = []
   $scope.positiveMessage = "You did it!"
   $scope.init = ->
-    if userService.userIsNull()
+    if activeUserService.userIsNull()
       $location.path "/"
       return
     $scope.todos = todosService.retrieveAll()
 
   $scope.isUser = ->
-    userService.name()
+    activeUserService.name()
 
   $scope.count = ->
     todosService.count()
 
   $scope.addTodo = ->
     return if $scope.newTodoText.length is 0
-    todo = todosService.create({ text: $scope.newTodoText, createdBy: userService.name() })
+    todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.name() })
 
     $scope.newTodoText = ""
 

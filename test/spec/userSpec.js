@@ -5,7 +5,7 @@
 
 
 
-describe('service: userService', function(){
+describe('service: activeUserService', function(){
 
   beforeEach(function() {
     module('userModule');
@@ -87,6 +87,8 @@ describe('service: userCrudService', function(){
 
   describe("empty", function() {
     it("emptys the crud service", function() {
+      var user1 = userCrudService.create({name: "ali", password: "seseme"});
+
       userCrudService.empty();
       expect(userCrudService.count()).toBe(0);
     })
@@ -103,12 +105,12 @@ describe('service: userCrudService', function(){
 //  });
 //
 //  // Initialize the controller and a mock scope
-//  beforeEach(inject(function ($controller, $rootScope, $location, userService) {
+//  beforeEach(inject(function ($controller, $rootScope, $location, activeUserService) {
 //    this.scope = $rootScope.$new();
 //    $controller('UserCtrl', {
 //      $scope: this.scope,
 //      $location: $location,
-//      userService: userService
+//      activeUserService: activeUserService
 //    });
 //  }));
 //

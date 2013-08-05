@@ -59,7 +59,7 @@ userModule.service "userCrudService", (userFactory, obscureLocalStorageService) 
     obscureLocalStorageService.clearAll()
 
 
-userModule.service "userService", (userFactory, userCrudService) ->
+userModule.service "activeUserService", (userFactory, userCrudService) ->
   @user = null
   @getUser = ->
     @user
@@ -133,11 +133,11 @@ userModule.directive "userProfile", ->
   templateUrl: "user/user_profile.html"
 
 
-userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope, $location, userService) ->
+userModule.controller "UserCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
   $scope.userName = ""
   $scope.userPassword = ""
   $scope.init = ->
-    userService.signout() if $location.path() is "/signin"
+    activeUserService.signout() if $location.path() is "/signin"
     id = $scope.publicId()
     new QRCode(document.getElementById("qrcode"), id)  if id
 
@@ -149,7 +149,7 @@ userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope
   $scope.signin = (location_path) ->
     return  if $scope.userName.length is 0
     return  if $scope.userPassword.length is 0
-    user = userService.signin($scope.userName, $scope.userPassword)
+    user = activeUserService.signin($scope.userName, $scope.userPassword)
     if user
       $scope.user = user
       $location.path location_path  if location_path
@@ -157,33 +157,33 @@ userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope
       $scope.userPassword = ""
 
   $scope.signout = (location_path) ->
-    userService.signout()
+    activeUserService.signout()
     $scope.user = null
     $scope.userName = ""
     $scope.userPassword = ""
     $location.path location_path
 
   $scope.name = ->
-    userService.name()
+    activeUserService.name()
 
   $scope.publicId = ->
-    id = userService.publicId()
+    id = activeUserService.publicId()
     id
 
   $scope.email = ->
-    userService.email()
+    activeUserService.email()
 
   $scope.emailIsPrivate = ->
-    userService.emailIsPrivate()
+    activeUserService.emailIsPrivate()
 
   $scope.emailIsEmpty = ->
-    userService.email().length is 0
+    activeUserService.email().length is 0
 
   $scope.useGravatar = ->
-    userService.useGravatar()
+    activeUserService.useGravatar()
 
   $scope.userIsNull = ->
-    userService.userIsNull()
+    activeUserService.userIsNull()
 
   $scope.showUser = ->
     $location.path "/user"
@@ -192,18 +192,18 @@ userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope
     $location.path "/user/preferences"
 
   $scope.user = ->
-    user = userService.getUser()
+    user = activeUserService.getUser()
     user
 ]
 
 
-userModule.controller "UserEditCtrl", ["$scope", "$location", "userService", ($scope, $location, userService) ->
+userModule.controller "UserEditCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
   $scope.init = ->
-    $scope.user = userService.getUser()
+    $scope.user = activeUserService.getUser()
 
   $scope.save = ->
-    userService.setUser $scope.user
-    userService.saveUser()
+    activeUserService.setUser $scope.user
+    activeUserService.saveUser()
     $location.path "/user"
 
   $scope.cancel = ->
