@@ -11,6 +11,7 @@ angular.module('helpModule', ['userModule', 'todosModule', 'ui.bootstrap'])
       if (!topic) {
         var path = $location.path();
         topic = path.substr(1, path.length);
+        topic = topic.replace('/', '_');
       }
 
       var item = {
