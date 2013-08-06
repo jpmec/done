@@ -3,10 +3,7 @@
 <div data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
 
   <div class="text-center">
-    <form class="form-inline" ng-submit="addTodo()">
-        <input class="btn-primary btn-large" type="submit" value="Add"></input>
-        <input class="input-new-todo-text input-xxlarge" type="text" ng-model="newTodoText" size="80" placeholder="new todo" autofocus="true"></input>
-    </form>
+    <div data-todos-add-form></div>
   </div>
 
   <div class='well' ng-show="0 < todos.length">
@@ -18,11 +15,17 @@
     <div class="pull-right">
       <button class="btn btn-small btn-warning" ng-click="clearTodos()"><span tooltip="Delete all"><em class="icon-trash icon-white"></em></span></button>
     </div>
+
+    <div style="display: table; margin: 0 auto">
+      <div todos-search></div>
+    </div>
+
+
     <div class="clearfix"></div>
     <hr>
     <div>
       <accordion close-others="true">
-         <accordion-group ng-repeat="todo in todos | orderBy:'priority':true | filter:!'done'">
+         <accordion-group ng-repeat="todo in todos | orderBy:'priority':true | filter:filterTodosNotDone">
             <accordion-heading>
               <span class="lead done-{{todo.done}}">{{todo.text}}</span>
               <span class="pull-right">
@@ -64,7 +67,7 @@
 
     <div>
       <accordion close-others="true">
-         <accordion-group ng-repeat="todo in todos | orderBy:'finishedDate':true | filter:!!'done'">
+         <accordion-group ng-repeat="todo in todos | orderBy:'finishedDate':true | filter:filterTodosDone">
             <accordion-heading>
               <span class="lead done-{{todo.done}}">{{todo.text}}</span>
               <span class="pull-right">

@@ -134,6 +134,18 @@ todosModule.directive "todosAdmin", ->
   templateUrl: "todos/todos_admin.html"
 
 
+todosModule.directive "todosSearch", ->
+  restrict: "A"
+  templateUrl: "todos/todos_search.html"
+
+
+todosModule.directive "todosAddForm", ->
+  restrict: "A"
+  templateUrl: "todos/todos_add_form.html"
+
+
+
+
 todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService", "todoFactory", "todosService", ($scope, $location, activeUserService, todoFactory, todosService) ->
   $scope.todos = []
   $scope.positiveMessage = "You did it!"
@@ -201,6 +213,29 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
         $scope.todos.push todo
       else
         todosService.destroyTodo todo
+
+  $scope.filterTodosNotDone = (todo) ->
+    console.log($scope.searchText)
+
+    if todo.done
+      return null
+
+    if $scope.searchText && $scope.searchText.length != 0
+      return null if todo.text.indexOf($scope.searchText) == -1
+
+    return todo
+
+  $scope.filterTodosDone = (todo) ->
+    console.log($scope.searchText)
+
+    if !todo.done
+      return null
+
+    if $scope.searchText && $scope.searchText.length != 0
+      return null if todo.text.indexOf($scope.searchText) == -1
+
+    return todo
+
 ]
 
 
