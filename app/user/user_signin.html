@@ -1,26 +1,28 @@
-<div class="user-signin-div text-center" data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak>
+<div class="user-signin-div text-center" data-ng-controller="UserSigninCtrl" data-ng-init="init()" ng-cloak>
 
   <legend>Please sign in</legend>
 
   <form class="form-horizontal" ng-submit="signin('/todos')" ng-collapse="!userIsNull()">
 
     <div class="control-group">
-      <input type="text" class="user-input-username input-large" ng-model="userName" placeholder="Name" autofocus="true"></input>
+      <input type="text" class="user-input-username input-large" ng-model="userSigninName" placeholder="Name" autofocus="true"></input>
     </div>
 
     <div class="control-group">
-      <input type="password" class="user-input-userpassword input-large" ng-model="userPassword" placeholder="Password"></input>
+      <input type="password" class="user-input-userpassword input-large" ng-model="userSigninPassword" placeholder="Password"></input>
     </div>
 
     <div class="control-group">
       <input type="submit" class="btn-primary btn-large" value="Sign in" ng-disabled="!validNameAndPassword()"></input>
     </div>
+
     <hr>
+
     <div class="control-group">
       Automatically sign in next visit
       <div class="">
         <label>
-          <input type="checkbox" name="autoSignIn" value="autoSignIn" ng-disabled="!validNameAndPassword()"></input>
+          <input type="checkbox" name="autoSignIn" value="autoSignIn" ng-model="userSigninAutomatic" ng-disabled="!validNameAndPassword()"></input>
         </label>
       </div>
     </div>

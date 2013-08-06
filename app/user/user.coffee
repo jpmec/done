@@ -1,4 +1,4 @@
-userModule = angular.module "userModule", ["obscureLocalStorageModule"]
+userModule = angular.module "userModule", ["ngCookies", "obscureLocalStorageModule"]
 
 
 userModule.factory "userFactory", ->
@@ -14,6 +14,7 @@ userModule.factory "userFactory", ->
       preferences:
         emailIsPrivate: false
         useGravatar: true
+        autoSignin: false
 
     user
 
@@ -57,6 +58,15 @@ userModule.service "userCrudService", (userFactory, obscureLocalStorageService) 
 
   @empty = ->
     obscureLocalStorageService.clearAll()
+
+
+
+
+userModule.service "userService", (userFactory, userCrudService) ->
+  @retrieve = (obj) ->
+    userCrudService.retrieve(obj)
+
+
 
 
 userModule.service "activeUserService", (userFactory, userCrudService) ->
@@ -112,12 +122,22 @@ userModule.service "activeUserService", (userFactory, userCrudService) ->
     @user = userCrudService.create(user)  unless @user
     @user
 
+  @signinById = (id) ->
+    @user = userCrudService.retrieve({id: id})
+    @user
+
   @signout = ->
     @user = null
     @user
 
   @saveUser = ->
     userCrudService.update @user
+
+  @setAutoSignin = (automatic) ->
+    return if not @user
+    @user.preferences.autoSignin = automatic
+
+
 
 
 userModule.directive "userSignout", ->
@@ -132,36 +152,83 @@ userModule.directive "userProfile", ->
   restrict: "A"
   templateUrl: "user/user_profile.html"
 
+userModule.directive "userName", ->
+  restrict: "A"
+  templateUrl: "user/user_name.html"
 
-userModule.controller "UserCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
-  $scope.userName = ""
-  $scope.userPassword = ""
+
+
+
+userModule.controller "UserSigninCtrl", ["$scope", "$location", "$cookies", "activeUserService", ($scope, $location, $cookies, activeUserService) ->
+  $scope.userSigninName = ""
+  $scope.userSigninPassword = ""
+
   $scope.init = ->
     activeUserService.signout() if $location.path() is "/signin"
-    id = $scope.publicId()
-    new QRCode(document.getElementById("qrcode"), id)  if id
+    userId = $cookies.userId
+    if userId
+      user = activeUserService.signinById(userId)
+      if user
+        $scope.user = user
+        $location.path("/todos")
+
 
   $scope.validNameAndPassword = ->
-    return false  if $scope.userName.length is 0
-    return false  if $scope.userPassword.length is 0
+    return false if $scope.userSigninName.length is 0
+    return false if $scope.userSigninPassword.length is 0
     true
 
   $scope.signin = (location_path) ->
-    return  if $scope.userName.length is 0
-    return  if $scope.userPassword.length is 0
-    user = activeUserService.signin($scope.userName, $scope.userPassword)
+    return if $scope.userSigninName.length is 0
+    return if $scope.userSigninPassword.length is 0
+    user = activeUserService.signin($scope.userSigninName, $scope.userSigninPassword)
     if user
       $scope.user = user
+      if $scope.userSigninAutomatic
+        $cookies.userId = user.id
+      else
+        $cookies.userId = ''
+
+      activeUserService.setAutoSignin($scope.userSigninAutomatic);
+
       $location.path location_path  if location_path
-      $scope.userName = ""
-      $scope.userPassword = ""
 
   $scope.signout = (location_path) ->
     activeUserService.signout()
     $scope.user = null
-    $scope.userName = ""
-    $scope.userPassword = ""
     $location.path location_path
+]
+
+
+
+
+userModule.controller "UserSignoutCtrl", ["$scope", "$location", "$cookies", "activeUserService", ($scope, $location, $cookies, activeUserService) ->
+
+  $scope.init = ->
+    activeUserService.signout() if $location.path() is "/signin"
+
+  $scope.signout = (location_path) ->
+    activeUserService.signout()
+    $scope.user = null
+    $location.path location_path
+    $cookies.userId = ''
+]
+
+
+
+
+userModule.controller "UserCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
+  $scope.userSigninName = ""
+  $scope.userSigninPassword = ""
+  $scope.init = ->
+    activeUserService.signout() if $location.path() is "/signin"
+#    id = $scope.publicId()
+#    new QRCode(document.getElementById("qrcode"), id)  if id
+
+  $scope.validNameAndPassword = ->
+    return false  if $scope.userSigninName.length is 0
+    return false  if $scope.userSigninPassword.length is 0
+    true
 
   $scope.name = ->
     activeUserService.name()

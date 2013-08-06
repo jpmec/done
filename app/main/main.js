@@ -31,7 +31,7 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
     $routeProvider
       .when('/signin', {
         templateUrl: 'user/user_signin.html',
-        controller: 'UserCtrl'
+        controller: 'UserSigninCtrl'
       })
       .when('/todos', {
         templateUrl: 'todos/todos.html',
