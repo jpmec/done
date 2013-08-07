@@ -46,7 +46,7 @@ todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService
     item = obscureLocalStorageService.get(k)
     item
 
-  @retrieveAll = () ->
+  @retrieveAll = (where) ->
     todos = []
     prefixLength = @prefix.length
     keys = obscureLocalStorageService.keys()
@@ -56,7 +56,11 @@ todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService
         todoStr = obscureLocalStorageService.get(key)
         todo = @fromString(todoStr)
         todos.push todo
-    todos
+
+    if where
+      return _.where(todos, where)
+    else
+      todos
 
   @update = (obj) ->
     return null unless obj
@@ -75,9 +79,21 @@ todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService
   @count = ->
     obscureLocalStorageService.keys().length
 
-  @destroyAll = ->
-    obscureLocalStorageService.clearAll()
+  @destroyAll = (where) ->
+    if where
+      console.log(where)
 
+      keys = obscureLocalStorageService.keys()
+      for i of keys
+        key = keys[i]
+
+        todoStr = obscureLocalStorageService.get(key)
+        todo = _.where([@fromString(todoStr)], where)[0]
+
+        if todo
+          @destroy(todo)
+    else
+      obscureLocalStorageService.clearAll()
 
 
 todosModule.service "todosService", (todosCrudService) ->
@@ -103,13 +119,13 @@ todosModule.service "todosService", (todosCrudService) ->
     todo = todosCrudService.create(obj)
     @todos.push(todo) if todo
 
-  @destroyAll = ->
-    todosCrudService.destroyAll()
+  @destroyAll = (where) ->
+    todosCrudService.destroyAll(where)
     @todos = []
     @todos
 
-  @retrieveAll = ->
-    @todos = todosCrudService.retrieveAll()
+  @retrieveAll = (where) ->
+    @todos = todosCrudService.retrieveAll(where)
     @todos
 
   @saveTodo = (todo) ->
@@ -153,7 +169,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     if activeUserService.userIsNull()
       $location.path "/"
       return
-    $scope.todos = todosService.retrieveAll()
+    $scope.todos = todosService.retrieveAll({createdBy: activeUserService.id()})
 
   $scope.isUser = ->
     activeUserService.name()
@@ -163,7 +179,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
 
   $scope.addTodo = ->
     return if $scope.newTodoText.length is 0
-    todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.name() })
+    todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.id() })
 
     $scope.newTodoText = ""
 
@@ -177,6 +193,10 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
 
   $scope.viewPrintTodos = ->
     $location.path "/print/todos"
+
+  $scope.createdByName = (todo) ->
+    #user = userService.
+    ''
 
   $scope.setStartedDate = (todo) ->
     todo.startedDate = new Date().toString()
@@ -200,7 +220,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     todo.notes and todo.notes.length isnt 0
 
   $scope.clearTodos = ->
-    $scope.todos = todosService.destroyAll()
+    $scope.todos = todosService.destroyAll({createdBy: activeUserService.id()})
 
   $scope.remaining = ->
     todosService.count() - todosService.countDone()
@@ -215,7 +235,6 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
         todosService.destroyTodo todo
 
   $scope.filterTodosNotDone = (todo) ->
-    console.log($scope.searchText)
 
     if todo.done
       return null
@@ -226,7 +245,6 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     return todo
 
   $scope.filterTodosDone = (todo) ->
-    console.log($scope.searchText)
 
     if !todo.done
       return null

@@ -57,7 +57,7 @@
               <p>{{todo.notes}}</p>
             </div>
             <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
-            <div><p ng-show="todo.createdBy">Created by {{todo.createdBy}}</p></div>
+            <div><p ng-show="todo.createdBy">Created by <span user-name id=todo.createdBy></span></p></div>
             <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
             <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
             <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>

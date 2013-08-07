@@ -86,6 +86,12 @@ userModule.service "activeUserService", (userFactory, userCrudService) ->
     else
       ""
 
+  @id = ->
+    if @user
+      @user.id
+    else
+      ''
+
   @publicId = ->
     if @user
       @user.publicId
@@ -140,9 +146,17 @@ userModule.service "activeUserService", (userFactory, userCrudService) ->
 
 
 
-userModule.directive "userSignout", ->
+userModule.directive "activeUserName", ->
   restrict: "A"
-  templateUrl: "user/user_signout.html"
+  templateUrl: "user/active_user_name.html"
+
+userModule.directive "activeUserGravatar", ->
+  restrict: "A"
+  templateUrl: "user/active_user_gravatar.html"
+
+userModule.directive "activeUserSignout", ->
+  restrict: "A"
+  templateUrl: "user/active_user_signout.html"
 
 userModule.directive "userNavbar", ->
   restrict: "A"
@@ -155,7 +169,6 @@ userModule.directive "userProfile", ->
 userModule.directive "userName", ->
   restrict: "A"
   templateUrl: "user/user_name.html"
-
 
 
 
@@ -217,25 +230,23 @@ userModule.controller "UserSignoutCtrl", ["$scope", "$location", "$cookies", "ac
 
 
 
-userModule.controller "UserCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
-  $scope.userSigninName = ""
-  $scope.userSigninPassword = ""
+
+
+userModule.controller "ActiveUserCtrl", ["$scope", "$location", "activeUserService", ($scope, $location, activeUserService) ->
   $scope.init = ->
     activeUserService.signout() if $location.path() is "/signin"
 #    id = $scope.publicId()
 #    new QRCode(document.getElementById("qrcode"), id)  if id
 
-  $scope.validNameAndPassword = ->
-    return false  if $scope.userSigninName.length is 0
-    return false  if $scope.userSigninPassword.length is 0
-    true
 
   $scope.name = ->
     activeUserService.name()
 
+  $scope.id = ->
+    activeUserService.id()
+
   $scope.publicId = ->
-    id = activeUserService.publicId()
-    id
+    activeUserService.publicId()
 
   $scope.email = ->
     activeUserService.email()
@@ -260,6 +271,22 @@ userModule.controller "UserCtrl", ["$scope", "$location", "activeUserService", (
 
   $scope.user = ->
     user = activeUserService.getUser()
+    user
+]
+
+
+
+
+userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope, $location, userService) ->
+
+  $scope.init = ->
+    return
+
+  $scope.showUser = (id) ->
+    $location.path "/user/:id"
+
+  $scope.user = (id) ->
+    user = userService.getUser(id)
     user
 ]
 
