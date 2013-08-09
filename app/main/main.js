@@ -56,11 +56,11 @@ angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
         templateUrl: 'help/help_about.html'
       })
       .when('/user', {
-        templateUrl: 'user/user_profile.html',
+        templateUrl: 'user/user_view.html',
         controller: 'UserCtrl'
       })
-      .when('/user/preferences', {
-        templateUrl: 'user/user_preferences.html',
+      .when('/user/edit', {
+        templateUrl: 'user/user_edit.html',
         controller: 'UserEditCtrl'
       })
       .otherwise({

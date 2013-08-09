@@ -8,12 +8,12 @@
 
   <div class='well' ng-show="0 < todos.length">
     <div class="pull-left">
-      <button class="btn btn-small" ng-click="viewPrintTodos()"><span tooltip="Printer-friendly view"><em class="icon-print"></em></span></button>
-      <button class="btn btn-small" ng-click="archive()" ng-show="remaining() < todos.length"><span tooltip="Archive completed todos"><em class="icon-book"></em></span></button>
+      <span tooltip="Printer-friendly view"><button class="btn" ng-click="viewPrintTodos()"><i class="icon-print"></i></button></span>
+      <span tooltip="Archive completed todos"><button class="btn" ng-click="archive()" ng-show="remaining() < todos.length"><i class="icon-archive"></i></button></span>
     </div>
 
     <div class="pull-right">
-      <button class="btn btn-small btn-warning" ng-click="clearTodos()"><span tooltip="Delete all"><em class="icon-trash icon-white"></em></span></button>
+      <span tooltip="Delete all"><button class="btn btn-warning" ng-click="clearTodos()"><i class="icon-trash icon-white"></i></button></span>
     </div>
 
     <div style="display: table; margin: 0 auto">
@@ -29,17 +29,17 @@
             <accordion-heading>
               <span class="lead done-{{todo.done}}">{{todo.text}}</span>
               <span class="pull-right">
-              <rating value="todo.priority" max="5" readonly="true"></rating>
+              <span ng-show="todo.priority > 0"><rating value="todo.priority" max="5" readonly="true"></rating></span>
               <span class="label label-info" ng-show="todo.startedDate && !todo.done">Started on {{todo.startedDate}}</span>
               <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
               </span>
             </accordion-heading>
             <div class="pull-left">
-              <button class="btn btn-small btn-success" ng-click="setDone(todo, true)"><span tooltip="Done" tooltip-placement="bottom"><em class="icon-ok icon-white"></em></span></button>
-              <button class="btn btn-small" ng-click="editTodo(todo)"><span tooltip="Edit" tooltip-placement="bottom"><em class="icon-edit"></em></span></button>
+              <span tooltip="Done" tooltip-placement="bottom"><button class="btn btn-small btn-success" ng-click="setDone(todo, true)"><em class="icon-ok icon-white"></em></button></span>
+              <span tooltip="Edit" tooltip-placement="bottom"><button class="btn btn-small" ng-click="editTodo(todo)"><em class="icon-edit"></em></button></span>
 
-              <button class="btn btn-small" ng-click="setStartedDate(todo)"><span tooltip="Start" tooltip-placement="bottom"><em class="icon-play"></em></span></button>
-              <button class="btn btn-small" ng-click="setStartedDate(todo)"><span tooltip="Stop" tooltip-placement="bottom"><em class="icon-stop"></em></span></button>
+              <span tooltip="Start" tooltip-placement="bottom"><button class="btn btn-small" ng-click="setStartedDate(todo)"><em class="icon-play"></em></button></span>
+              <span tooltip="Stop" tooltip-placement="bottom"><button class="btn btn-small" ng-click="setStartedDate(todo)"><em class="icon-stop"></em></button></span>
 
 
               <button type="button" class="btn btn-success" ng-click="setStartedDate(todo)" ng-hide="todo.startedDate || todo.done">
@@ -48,7 +48,7 @@
             </div>
 
             <div class="pull-right">
-              <button class="btn btn-small btn-warning" ng-click="deleteTodo(todo)"><span tooltip="Delete" tooltip-placement="bottom"><em class="icon-remove icon-white"></em></span></button>
+              <span tooltip="Delete" tooltip-placement="bottom"><button class="btn btn-small btn-warning" ng-click="deleteTodo(todo)"><em class="icon-remove icon-white"></em></button></span>
             </div>
 
             <div class="clearfix"></div>

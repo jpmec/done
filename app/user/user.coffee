@@ -267,7 +267,7 @@ userModule.controller "ActiveUserCtrl", ["$scope", "$location", "activeUserServi
     $location.path "/user"
 
   $scope.editUser = ->
-    $location.path "/user/preferences"
+    $location.path "/user/edit"
 
   $scope.user = ->
     user = activeUserService.getUser()
