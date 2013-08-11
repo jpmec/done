@@ -205,6 +205,8 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
   $scope.createdByName = (todo) ->
     #user = userService.
     ''
+  $scope.createdBy = (todo) ->
+    todo.createdBy
 
   $scope.setStartedDate = (todo) ->
     todo.startedDate = new Date().toString()
@@ -261,6 +263,9 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
       return null if todo.text.indexOf($scope.searchText) == -1
 
     return todo
+
+  $scope.prettyPrintTodo = (todo) ->
+    JSON.stringify(todo, null, '\t')
 
 ]
 

@@ -3,7 +3,7 @@
   <tabset type="'pills'" style="text-align:center; display: table; margin: 0 auto">
 
     <tab>
-      <tab-heading tooltip="Actions">
+      <tab-heading tooltip="Actions" tooltip-placement="left">
         <i class="icon-fixed-width icon-rocket icon-2x"></i>
       </tab-heading>
 
@@ -14,29 +14,29 @@
     </tab>
 
     <tab>
-      <tab-heading tooltip="Calendar">
+      <tab-heading tooltip="Calendar" tooltip-placement="left">
         <i class="icon-fixed-width icon-calendar icon-2x"></i>
       </tab-heading>
 
       <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
-      <div><p ng-show="todo.createdBy">Created by <span user-name id=todo.createdBy></span></p></div>
+      <div><p ng-show="todo.createdBy">Created by <span user-name id="todo.createdBy"></span></p></div>
       <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
     </tab>
 
     <tab>
-      <tab-heading tooltip="Time-tracking">
+      <tab-heading tooltip="Time-tracking" tooltip-placement="left">
         <i class="icon-fixed-width icon-time icon-2x"></i>
       </tab-heading>
 
-      <span tooltip="Start tracking time"><button class="btn btn-small" ng-click="setStartedDate(todo)"><i class="icon-fixed-width icon-play"></i>Start</button></span>
-      <span tooltip="Stop tracking time"><button class="btn btn-small" ng-click="setStartedDate(todo)"><i class="icon-fixed-width icon-stop"></i>Stop</button></span>
+      <button class="btn btn-large btn-block btn-primary" ng-click="setStartedDate(todo)" tooltip="Start tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-play"></i>Start</button></span><br>
+      <button class="btn btn-large btn-block" ng-click="setStoppedDate(todo)" tooltip="Stop tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-stop"></i>Stop</button></span>
 
       <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
       <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>
     </tab>
 
     <tab>
-      <tab-heading tooltip="Notes">
+      <tab-heading tooltip="Notes" tooltip-placement="left">
         <i class="icon-fixed-width icon-pencil icon-2x"></i>
       </tab-heading>
       <div ng-show="hasNotes(todo)">
@@ -45,8 +45,19 @@
       <div ng-hide="hasNotes(todo)">
         <button class="btn btn-large" ng-click="editTodo(todo)">Add Notes</button>
       </div>
-
     </tab>
+
+    <tab>
+      <tab-heading tooltip="Code" tooltip-placement="left">
+        <i class="icon-fixed-width icon-code icon-2x"></i>
+      </tab-heading>
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <pre style="text-align:left">{{prettyPrintTodo(todo)}}</pre>
+        </div>
+      </div>
+    </tab>
+
   </tabset>
 
 </div>

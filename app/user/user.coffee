@@ -173,10 +173,14 @@ userModule.directive "userProfile", ->
   restrict: "A"
   templateUrl: "user/user_profile.html"
 
-userModule.directive "userName", ->
+userModule.directive "userName", ['userService', (userService) ->
   restrict: "A"
   templateUrl: "user/user_name.html"
-
+  link: (scope, elm, attrs) ->
+    scope.$watch attrs.id, (value) ->
+      user = userService.retrieve({id: value})
+      elm.append user.name
+]
 
 
 userModule.controller "UserSigninCtrl", ["$scope", "$location", "$cookies", "activeUserService", ($scope, $location, $cookies, activeUserService) ->
@@ -279,6 +283,10 @@ userModule.controller "ActiveUserCtrl", ["$scope", "$location", "activeUserServi
   $scope.user = ->
     user = activeUserService.getUser()
     user
+
+  $scope.prettyPrintUser = ->
+    user = activeUserService.getUser()
+    JSON.stringify(user, null, '\t')
 ]
 
 
