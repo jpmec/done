@@ -16,13 +16,15 @@
       <span tooltip="Delete all"><button class="btn btn-warning" ng-click="clearTodos()"><i class="icon-trash icon-white"></i></button></span>
     </div>
 
-    <div style="display: table; margin: 0 auto">
-      <div todos-search></div>
+    <div class="form-inline" style="display: table; margin: 0 auto">
+      <span todos-search></span>
+      <span todos-filter></span>
     </div>
 
 
     <div class="clearfix"></div>
     <hr>
+
     <div>
       <accordion close-others="true">
          <accordion-group ng-repeat="todo in todos | orderBy:'priority':true | filter:filterTodosNotDone">

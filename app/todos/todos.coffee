@@ -155,6 +155,11 @@ todosModule.directive "todosSearch", ->
   templateUrl: "todos/todos_search.html"
 
 
+todosModule.directive "todosFilter", ->
+  restrict: "A"
+  templateUrl: "todos/todos_filter.html"
+
+
 todosModule.directive "todosAddForm", ->
   restrict: "A"
   templateUrl: "todos/todos_add_form.html"
@@ -171,6 +176,8 @@ todosModule.directive "todoListView", ->
 todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService", "todoFactory", "todosService", ($scope, $location, activeUserService, todoFactory, todosService) ->
   $scope.todos = []
   $scope.positiveMessage = "You did it!"
+  $scope.todosListFilter = "all"
+
   $scope.init = ->
     if activeUserService.userIsNull()
       $location.path "/"
@@ -249,6 +256,9 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     if todo.done
       return null
 
+    if $scope.todosListFilter == 'done'
+      return null
+
     if $scope.searchText && $scope.searchText.length != 0
       return null if todo.text.indexOf($scope.searchText) == -1
 
@@ -257,6 +267,9 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
   $scope.filterTodosDone = (todo) ->
 
     if !todo.done
+      return null
+
+    if $scope.todosListFilter == 'notDone'
       return null
 
     if $scope.searchText && $scope.searchText.length != 0
