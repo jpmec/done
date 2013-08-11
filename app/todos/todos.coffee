@@ -160,6 +160,12 @@ todosModule.directive "todosAddForm", ->
   templateUrl: "todos/todos_add_form.html"
 
 
+todosModule.directive "todoListView", ->
+  restrict: "A"
+  templateUrl: "todos/todo_list_view.html"
+
+
+
 
 
 todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService", "todoFactory", "todosService", ($scope, $location, activeUserService, todoFactory, todosService) ->
@@ -178,13 +184,15 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     todosService.count()
 
   $scope.addTodo = ->
+    return if !$scope.newTodoText
     return if $scope.newTodoText.length is 0
+
     todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.id() })
 
     $scope.newTodoText = ""
 
   $scope.deleteTodo = (todo) ->
-    todosService.removeTodo todo
+    todosService.destroyTodo todo
     i = _.indexOf($scope.todos, todo)
     $scope.todos.splice i, 1  unless i is -1
 

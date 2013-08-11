@@ -1,0 +1,52 @@
+<div class="todo-list-view">
+
+  <tabset type="'pills'" style="text-align:center; display: table; margin: 0 auto">
+
+    <tab>
+      <tab-heading tooltip="Actions">
+        <i class="icon-fixed-width icon-rocket icon-2x"></i>
+      </tab-heading>
+
+      <button class="btn btn-large btn-block btn-success" ng-click="setDone(todo, true)" tooltip="Done with task" tooltip-placement="right"><i class="icon-fixed-width icon-ok"></i>Done with task</button><br>
+      <button class="btn btn-large btn-block " ng-click="editTodo(todo)" tooltip="Edit task" tooltip-placement="right"><i class="icon-fixed-width icon-edit"></i>Edit this task</button><br>
+      <button class="btn btn-large btn-block btn-warning" ng-click="deleteTodo(todo)" tooltip="Delete" tooltip-placement="right"><i class="icon-fixed-width icon-remove"></i>Delete this task</button>
+
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Calendar">
+        <i class="icon-fixed-width icon-calendar icon-2x"></i>
+      </tab-heading>
+
+      <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
+      <div><p ng-show="todo.createdBy">Created by <span user-name id=todo.createdBy></span></p></div>
+      <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Time-tracking">
+        <i class="icon-fixed-width icon-time icon-2x"></i>
+      </tab-heading>
+
+      <span tooltip="Start tracking time"><button class="btn btn-small" ng-click="setStartedDate(todo)"><i class="icon-fixed-width icon-play"></i>Start</button></span>
+      <span tooltip="Stop tracking time"><button class="btn btn-small" ng-click="setStartedDate(todo)"><i class="icon-fixed-width icon-stop"></i>Stop</button></span>
+
+      <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
+      <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Notes">
+        <i class="icon-fixed-width icon-pencil icon-2x"></i>
+      </tab-heading>
+      <div ng-show="hasNotes(todo)">
+        <p>{{todo.notes}}</p>
+      </div>
+      <div ng-hide="hasNotes(todo)">
+        <button class="btn btn-large" ng-click="editTodo(todo)">Add Notes</button>
+      </div>
+
+    </tab>
+  </tabset>
+
+</div>

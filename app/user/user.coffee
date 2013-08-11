@@ -154,13 +154,20 @@ userModule.directive "activeUserGravatar", ->
   restrict: "A"
   templateUrl: "user/active_user_gravatar.html"
 
-userModule.directive "activeUserSignout", ->
+userModule.directive "activeUserNavbar", ->
   restrict: "A"
-  templateUrl: "user/active_user_signout.html"
+  templateUrl: "user/active_user_navbar.html"
 
-userModule.directive "userNavbar", ->
+userModule.directive "activeUserNavbarOptions", ->
   restrict: "A"
-  templateUrl: "user/user_navbar.html"
+  templateUrl: "user/active_user_navbar_options.html"
+
+userModule.directive "activeUserNavbarSignout", ->
+  restrict: "A"
+  templateUrl: "user/active_user_navbar_signout.html"
+
+
+
 
 userModule.directive "userProfile", ->
   restrict: "A"
@@ -215,7 +222,7 @@ userModule.controller "UserSigninCtrl", ["$scope", "$location", "$cookies", "act
 
 
 
-userModule.controller "UserSignoutCtrl", ["$scope", "$location", "$cookies", "activeUserService", ($scope, $location, $cookies, activeUserService) ->
+userModule.controller "ActiveUserSignoutCtrl", ["$scope", "$location", "$cookies", "activeUserService", ($scope, $location, $cookies, activeUserService) ->
 
   $scope.init = ->
     activeUserService.signout() if $location.path() is "/signin"

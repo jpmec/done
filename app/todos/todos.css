@@ -55,3 +55,26 @@
 @media print {
 	.todo-page-break	{ display: block; page-break-before: always; }
 }
+
+
+.todo-title-must {
+  background-color: #F00;
+}
+
+
+
+.todo-title-may {
+  background-color: #FF0;
+}
+
+
+
+.todo-titled-want {
+  background-color: #00F;
+}
+
+.todo-list-view {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

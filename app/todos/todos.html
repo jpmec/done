@@ -6,7 +6,7 @@
     <div data-todos-add-form></div>
   </div>
 
-  <div class='well' ng-show="0 < todos.length">
+  <div class="well" ng-show="0 < todos.length">
     <div class="pull-left">
       <span tooltip="Printer-friendly view"><button class="btn" ng-click="viewPrintTodos()"><i class="icon-print"></i></button></span>
       <span tooltip="Archive completed todos"><button class="btn" ng-click="archive()" ng-show="remaining() < todos.length"><i class="icon-archive"></i></button></span>
@@ -34,33 +34,7 @@
               <span class="label label-success" ng-show="todo.done">Done on {{todo.finishedDate}}</span>
               </span>
             </accordion-heading>
-            <div class="pull-left">
-              <span tooltip="Done" tooltip-placement="bottom"><button class="btn btn-small btn-success" ng-click="setDone(todo, true)"><em class="icon-ok icon-white"></em></button></span>
-              <span tooltip="Edit" tooltip-placement="bottom"><button class="btn btn-small" ng-click="editTodo(todo)"><em class="icon-edit"></em></button></span>
-
-              <span tooltip="Start" tooltip-placement="bottom"><button class="btn btn-small" ng-click="setStartedDate(todo)"><em class="icon-play"></em></button></span>
-              <span tooltip="Stop" tooltip-placement="bottom"><button class="btn btn-small" ng-click="setStartedDate(todo)"><em class="icon-stop"></em></button></span>
-
-
-              <button type="button" class="btn btn-success" ng-click="setStartedDate(todo)" ng-hide="todo.startedDate || todo.done">
-                  Start
-              </button>
-            </div>
-
-            <div class="pull-right">
-              <span tooltip="Delete" tooltip-placement="bottom"><button class="btn btn-small btn-warning" ng-click="deleteTodo(todo)"><em class="icon-remove icon-white"></em></button></span>
-            </div>
-
-            <div class="clearfix"></div>
-            <hr>
-            <div ng-show="hasNotes(todo)">
-              <p>{{todo.notes}}</p>
-            </div>
-            <div><p ng-show="todo.dueDate">Due {{todo.dueDate.toString()}}</p></div>
-            <div><p ng-show="todo.createdBy">Created by <span user-name id=todo.createdBy></span></p></div>
-            <div><p ng-show="todo.createdDate">Created {{todo.createdDate}}</p></div>
-            <div><p ng-show="todo.startedDate">Started {{todo.startedDate}}</p></div>
-            <div><p ng-show="todo.finishedDate">Finished {{todo.finishedDate}}</p></div>
+            <div todo-list-view></div>
          </accordion-group>
       </accordion>
     </div>

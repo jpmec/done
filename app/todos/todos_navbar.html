@@ -1,7 +1,7 @@
-<div data-ng-controller="UserCtrl" data-ng-init="init()" ng-cloak ng-hide="userIsNull()">
-  <div class="todos-navbar-stats pull-right" data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
+<span data-ng-controller="ActiveUserCtrl" data-ng-init="init()" ng-cloak ng-hide="userIsNull()">
+  <span class="todos-navbar-stats" data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
     <ul class="nav">
       <li ng-show="0 < count()"><span class="label label-info">{{remaining()}} of {{count()}} remaining</span></li>
     </ul>
-  </div>
-</div>
+  </span>
+</span>

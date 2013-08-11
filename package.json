@@ -25,7 +25,8 @@
     "matchdep": "~0.1.1",
     "grunt-google-cdn": "~0.1.1",
     "grunt-ngmin": "~0.0.2",
-    "grunt-install-dependencies": "~0.1.0"
+    "grunt-install-dependencies": "~0.1.0",
+    "grunt-html2js": "~0.1.6"
   },
   "engines": {
     "node": ">=0.8.0"
