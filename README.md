@@ -12,7 +12,7 @@ How to install and use the app:
 -------------------------------
 
     $ git clone https://github.com/jpmec/done
-    $ cd done
+    $ cd done/client
     $ npm install
     $ bower update
     $ grunt coffee
