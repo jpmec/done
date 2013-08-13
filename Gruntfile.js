@@ -22,7 +22,11 @@ module.exports = function (grunt) {
     yeoman: yeomanConfig,
     watch: {
       coffee: {
-        files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
+        files: [
+          '<%= yeoman.app %>/scripts/{,*/}*.coffee',
+          '<%= yeoman.app %>/todos/{,*/}*.coffee',
+          '<%= yeoman.app %>/user/{,*/}*.coffee',
+        ],
         tasks: ['coffee:dist']
       },
       coffeeTest: {
@@ -47,7 +51,7 @@ module.exports = function (grunt) {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost'
+        hostname: '0.0.0.0'
       },
       livereload: {
         options: {
