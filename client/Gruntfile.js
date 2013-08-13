@@ -25,6 +25,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/scripts/{,*/}*.coffee',
           '<%= yeoman.app %>/todos/{,*/}*.coffee',
+          '<%= yeoman.app %>/help/{,*/}*.coffee',
           '<%= yeoman.app %>/user/{,*/}*.coffee',
         ],
         tasks: ['coffee:dist']
@@ -119,9 +120,9 @@ module.exports = function (grunt) {
         },
         {
           expand: true,
-          cwd: '<%= yeoman.app %>/user',
+          cwd: '<%= yeoman.app %>/help',
           src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/scripts/from_coffee/user',
+          dest: '<%= yeoman.app %>/scripts/from_coffee/help',
           ext: '.js'
         },
         {
@@ -129,6 +130,13 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>/todos',
           src: '{,*/}*.coffee',
           dest: '<%= yeoman.app %>/scripts/from_coffee/todos',
+          ext: '.js'
+        },
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>/user',
+          src: '{,*/}*.coffee',
+          dest: '<%= yeoman.app %>/scripts/from_coffee/user',
           ext: '.js'
         },
         {
