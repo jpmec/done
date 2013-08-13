@@ -203,11 +203,17 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     i = _.indexOf($scope.todos, todo)
     $scope.todos.splice i, 1  unless i is -1
 
+  $scope.saveTodo = (todo) ->
+    todosService.saveTodo todo
+
   $scope.editTodo = (todo) ->
     $location.path "/todo/" + todo.id.toString()
 
   $scope.viewPrintTodos = ->
     $location.path "/print/todos"
+
+  $scope.viewTodos = ->
+    $location.path "/todos"
 
   $scope.createdByName = (todo) ->
     #user = userService.

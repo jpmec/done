@@ -1,7 +1,9 @@
-<span data-ng-controller="ActiveUserCtrl" data-ng-init="init()" ng-cloak ng-hide="userIsNull()">
-  <span class="todos-navbar-stats" data-ng-controller="TodosCtrl" data-ng-init="init()" ng-cloak>
-    <ul class="nav">
-      <li ng-show="0 < count()"><span class="label label-info">{{remaining()}} of {{count()}} remaining</span></li>
-    </ul>
-  </span>
-</span>
+<a data-ng-controller="TodosCtrl"
+   data-ng-init="init()"
+   ng-cloak href=""
+   ng-click="viewTodos()"
+   tooltip="View To Do list"
+   tooltip-placement="bottom"
+>
+  <i class="icon-tasks"></i>
+</a>

@@ -40,10 +40,10 @@
         <i class="icon-fixed-width icon-pencil icon-2x"></i>
       </tab-heading>
       <div ng-show="hasNotes(todo)">
-        <p>{{todo.notes}}</p>
+        <textarea class="todo-notes" name="todo_notes" ng-model="todo.notes" ng-maxlength="255" ng-change="saveTodo(todo)"></textarea>
       </div>
       <div ng-hide="hasNotes(todo)">
-        <button class="btn btn-large" ng-click="editTodo(todo)">Add Notes</button>
+        <button class="btn btn-large" ng-click="todo.notes = 'Notes'">Add Notes</button>
       </div>
     </tab>
 
