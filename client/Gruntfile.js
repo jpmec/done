@@ -336,6 +336,12 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/scripts/scripts.js'
           ]
         }
+      },
+      angularjsGravatarDirective: {
+        files: {
+          '<%= yeoman.app %>/components/angularjs-gravatardirective/src/gravatar-directive.min.js':['<%= yeoman.app %>/components/angularjs-gravatardirective/src/gravatar-directive.js'],
+          '<%= yeoman.app %>/components/angularjs-gravatardirective/src/md5-service.min.js':['<%= yeoman.app %>/components/angularjs-gravatardirective/src/md5-service.js']
+        }
       }
     },
     usemin: {
