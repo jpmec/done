@@ -19,7 +19,7 @@ userModule.factory "userFactory", ->
     user
 
 
-userModule.service "userCrudService", (userFactory, obscureLocalStorageService) ->
+userModule.service "userCrudService", ["userFactory", "obscureLocalStorageService", (userFactory, obscureLocalStorageService) ->
   @prefix = "user."
 
   @keyFor = (obj) ->
@@ -58,18 +58,18 @@ userModule.service "userCrudService", (userFactory, obscureLocalStorageService) 
 
   @empty = ->
     obscureLocalStorageService.clearAll()
+]
 
 
 
-
-userModule.service "userService", (userFactory, userCrudService) ->
+userModule.service "userService", ["userFactory", "userCrudService", (userFactory, userCrudService) ->
   @retrieve = (obj) ->
     userCrudService.retrieve(obj)
+]
 
 
 
-
-userModule.service "activeUserService", (userFactory, userCrudService) ->
+userModule.service "activeUserService", ["userFactory", "userCrudService", (userFactory, userCrudService) ->
   @user = null
   @getUser = ->
     @user
@@ -142,7 +142,7 @@ userModule.service "activeUserService", (userFactory, userCrudService) ->
   @setAutoSignin = (automatic) ->
     return if not @user
     @user.preferences.autoSignin = automatic
-
+]
 
 
 
@@ -288,8 +288,6 @@ userModule.controller "ActiveUserCtrl", ["$scope", "$location", "activeUserServi
     user = activeUserService.getUser()
     JSON.stringify(user, null, '\t')
 ]
-
-
 
 
 userModule.controller "UserCtrl", ["$scope", "$location", "userService", ($scope, $location, userService) ->

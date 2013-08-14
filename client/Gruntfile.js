@@ -11,7 +11,8 @@ module.exports = function (grunt) {
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    heroku: '../heroku/dist'
   };
 
   try {
@@ -23,9 +24,10 @@ module.exports = function (grunt) {
     watch: {
       coffee: {
         files: [
+          '<%= yeoman.app %>/help/{,*/}*.coffee',
+          '<%= yeoman.app %>/main/{,*/}*.coffee',
           '<%= yeoman.app %>/scripts/{,*/}*.coffee',
           '<%= yeoman.app %>/todos/{,*/}*.coffee',
-          '<%= yeoman.app %>/help/{,*/}*.coffee',
           '<%= yeoman.app %>/user/{,*/}*.coffee',
         ],
         tasks: ['coffee:dist']
@@ -123,6 +125,13 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>/help',
           src: '{,*/}*.coffee',
           dest: '<%= yeoman.app %>/scripts/from_coffee/help',
+          ext: '.js'
+        },
+        {
+          expand: true,
+          cwd: '<%= yeoman.app %>/main',
+          src: '{,*/}*.coffee',
+          dest: '<%= yeoman.app %>/scripts/from_coffee/main',
           ext: '.js'
         },
         {
@@ -288,9 +297,28 @@ module.exports = function (grunt) {
           src: [
             '*.{ico,txt}',
             '.htaccess',
+            'app/**/*',
             'components/**/*',
+            'help/**/*',
             'images/{,*/}*.{gif,webp}',
-            'styles/fonts/*'
+            'l10n/**/*',
+            'main/**/*',
+            'navbar/**/*',
+            'scripts/**/*',
+            'styles/fonts/*',
+            'todos/**/*',
+            'user/**/*'
+          ]
+        }]
+      },
+      deployHeroku: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.dist %>',
+          dest: '<%= yeoman.heroku %>',
+          src: [
+            '**/*'
           ]
         }]
       }
@@ -328,12 +356,17 @@ module.exports = function (grunt) {
     'cssmin',
     'htmlmin',
     'concat',
-    'copy',
+    'copy:dist',
     'cdnify',
     'ngmin',
     'uglify',
     'rev',
     'usemin'
+  ]);
+
+
+  grunt.registerTask('deployHeroku', [
+    'copy:deployHeroku'
   ]);
 
   grunt.registerTask('default', ['build']);

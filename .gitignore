@@ -1,7 +1,9 @@
 .DS_Store
+heroku
 client/.DS_Store
 client/node_modules
 client/dist
 client/.tmp
 client/.sass-cache
 client/app/components
+client/app/scripts/from_coffee

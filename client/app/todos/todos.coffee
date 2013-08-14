@@ -18,7 +18,7 @@ todosModule.factory "todoFactory", ->
     assignedTo: null
 
 
-todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService) ->
+todosModule.service "todosCrudService", ["todoFactory", "obscureLocalStorageService", (todoFactory, obscureLocalStorageService) ->
   @prefix = "todos."
 
   @keyFor = (obj) ->
@@ -94,9 +94,10 @@ todosModule.service "todosCrudService", (todoFactory, obscureLocalStorageService
           @destroy(todo)
     else
       obscureLocalStorageService.clearAll()
+]
 
 
-todosModule.service "todosService", (todosCrudService) ->
+todosModule.service "todosService", ["todosCrudService", (todosCrudService) ->
   @todos = []
   @getTodos = ->
     @todos
@@ -137,7 +138,7 @@ todosModule.service "todosService", (todosCrudService) ->
 
   @destroyTodo = (todo) ->
     todosCrudService.destroy(todo)
-
+]
 
 
 todosModule.directive "todosNavbar", ->
