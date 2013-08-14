@@ -7,3 +7,4 @@ client/.tmp
 client/.sass-cache
 client/app/components
 client/app/scripts/from_coffee
+client/app/scripts/from_html

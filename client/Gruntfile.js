@@ -241,7 +241,9 @@ module.exports = function (grunt) {
     html2js: {
       options: {
         base: 'app',
-        module: 'templatesModule'
+        fileHeaderString: '\'use strict\';',
+        module: 'templatesModule',
+        quoteChar: '\''
       },
       main: {
         src: [
@@ -414,6 +416,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'html2js',
     'jshint',
     'test',
     'coffee',
