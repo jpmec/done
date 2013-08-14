@@ -94,6 +94,15 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      heroku: {
+        files: [{
+          dot: true,
+          cwd: '<%= yeoman.heroku %>',
+          src: [
+            '<%= yeoman.heroku %>/**/*'
+          ]
+        }]
+      },
       server: '.tmp'
     },
     jshint: {
@@ -311,6 +320,17 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      distFontAwesome: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>/components/font-awesome/font',
+          dest: '<%= yeoman.dist %>/font',
+          src: [
+            '*'
+          ]
+        }]
+      },
       deployHeroku: {
         files: [{
           expand: true,
@@ -357,16 +377,23 @@ module.exports = function (grunt) {
     'htmlmin',
     'concat',
     'copy:dist',
+    'copy:distFontAwesome',
     'cdnify',
     'ngmin',
     'uglify',
     'rev',
-//    'usemin'
+    'usemin'
   ]);
 
 
   grunt.registerTask('deployHeroku', [
     'copy:deployHeroku'
+  ]);
+
+  grunt.registerTask('deploy', [
+    'clean:heroku',
+    'build',
+    'deployHeroku'
   ]);
 
   grunt.registerTask('default', ['build']);
