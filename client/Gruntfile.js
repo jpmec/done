@@ -240,7 +240,8 @@ module.exports = function (grunt) {
     },
     html2js: {
       options: {
-        // custom options, see below
+        base: 'app',
+        module: 'templatesModule'
       },
       main: {
         src: [
@@ -250,7 +251,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/todos/*.html',
           '<%= yeoman.app %>/user/*.html'
         ],
-        dest: '.tmp/templates.js'
+        dest: '<%= yeoman.app %>/scripts/from_html/templates.js'
       }
     },
     htmlmin: {

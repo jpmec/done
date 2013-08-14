@@ -5,9 +5,10 @@
 
 angular.module( 'doneApp',
                ['mainModule',
-                'userModule',
-                'todosModule',
+                'templatesModule',
                 'helpModule',
+                'todosModule',
+                'userModule',
                 'md5',
                 'ui',
                 'ui.bootstrap',
