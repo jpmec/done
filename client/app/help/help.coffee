@@ -1,36 +1,40 @@
-helpModule = angular.module "helpModule", ["userModule", "todosModule", "ui.bootstrap"]
+### jshint -W093 ###
+
+'use strict'
+
+helpModule = angular.module 'helpModule', ['userModule', 'todosModule', 'ui.bootstrap']
 
 
-helpModule.service "helpService", ["$dialog", "$location", ($dialog, $location) ->
+helpModule.service 'helpService', ['$dialog', '$location', ($dialog, $location) ->
   @show = (topic) ->
     unless topic
       path = $location.path()
       topic = path.substr(1, path.length)
-      topic = topic.replace("/", "_")
+      topic = topic.replace('/', '_')
 
-    item = url: "help/topics/help_" + topic + ".html"
+    item = url: 'help/topics/help_' + topic + '.html'
 
     opts =
       backdrop: true
       keyboard: true
       backdropClick: true
-      templateUrl: "help/help_dialog.html"
-      controller: "helpDialogCtrl"
+      templateUrl: 'help/help_dialog.html'
+      controller: 'helpDialogCtrl'
       resolve:
         item: ->
           angular.copy item
 
     @dialog = $dialog.dialog(opts)
-    @dialog.open().then (result) ->
+    @dialog.open()
 ]
 
 
-helpModule.directive "helpNavbar", ->
-  restrict: "A"
-  templateUrl: "help/help_navbar.html"
+helpModule.directive 'helpNavbar', ->
+  restrict: 'A'
+  templateUrl: 'help/help_navbar.html'
 
 
-helpModule.controller "helpCtrl", ["$scope", "helpService", ($scope, helpService) ->
+helpModule.controller 'helpCtrl', ['$scope', 'helpService', ($scope, helpService) ->
   $scope.init = ->
     #do nothing
 
@@ -40,7 +44,7 @@ helpModule.controller "helpCtrl", ["$scope", "helpService", ($scope, helpService
 
 
 # Helper controller to close the help dialog
-helpModule.controller "helpDialogCtrl", ["$scope", "dialog", "item", "helpService", ($scope, dialog, item, helpService) ->
+helpModule.controller 'helpDialogCtrl', ['$scope', 'dialog', 'item', 'helpService', ($scope, dialog, item, helpService) ->
   $scope.item = item
   $scope.close = (result) ->
     dialog.close result

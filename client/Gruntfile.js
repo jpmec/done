@@ -13,6 +13,7 @@ module.exports = function (grunt) {
   var yeomanConfig = {
     app: 'app',
     dist: 'dist',
+    tmp: '.tmp',
     heroku: '../heroku/dist'
   };
 
@@ -47,7 +48,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: '<%= yeoman.tmp %>'
     },
     coffee: {
       dist: {
@@ -293,7 +294,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/{,*/}*.js'
+        '<%= yeoman.app %>/scripts/**/{,*/}*.js'
       ]
     },
     karma: {
@@ -422,10 +423,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'coffee',
     'html2js',
     'jshint',
     'test',
-    'coffee',
     'compass:dist',
     'useminPrepare',
     'imagemin',

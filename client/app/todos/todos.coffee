@@ -1,16 +1,20 @@
-todosModule = angular.module "todosModule", ["obscureLocalStorageModule", "userModule"]
+### jshint -W093 ###
+
+'use strict'
+
+todosModule = angular.module 'todosModule', ['obscureLocalStorageModule', 'userModule']
 
 
-todosModule.factory "todoFactory", ->
+todosModule.factory 'todoFactory', ->
   create: ->
     date = new Date()
     id = CryptoJS.SHA256(date.toJSON()).toString()
     id: id
-    text: ""
-    notes: ""
+    text: ''
+    notes: ''
     done: false
     priority: 0
-    createdBy: ""
+    createdBy: ''
     createdDate: date.toString()
     dueDate: null
     startedDate: null
@@ -18,8 +22,8 @@ todosModule.factory "todoFactory", ->
     assignedTo: null
 
 
-todosModule.service "todosCrudService", ["todoFactory", "obscureLocalStorageService", (todoFactory, obscureLocalStorageService) ->
-  @prefix = "todos."
+todosModule.service 'todosCrudService', ['todoFactory', 'obscureLocalStorageService', (todoFactory, obscureLocalStorageService) ->
+  @prefix = 'todos.'
 
   @keyFor = (obj) ->
     return null unless obj
@@ -31,7 +35,7 @@ todosModule.service "todosCrudService", ["todoFactory", "obscureLocalStorageServ
 
   @fromString = (str) ->
     todo = str
-    todo = JSON.parse(str) if "string" is typeof str
+    todo = JSON.parse(str) if 'string' is typeof str
     todo.dueDate = new Date(todo.dueDate)  if todo.dueDate
     todo
 
@@ -97,7 +101,7 @@ todosModule.service "todosCrudService", ["todoFactory", "obscureLocalStorageServ
 ]
 
 
-todosModule.service "todosService", ["todosCrudService", (todosCrudService) ->
+todosModule.service 'todosService', ['todosCrudService', (todosCrudService) ->
   @todos = []
   @getTodos = ->
     @todos
@@ -113,12 +117,12 @@ todosModule.service "todosService", ["todosCrudService", (todosCrudService) ->
     count = 0
     angular.forEach @todos, (todo) ->
       count += (if todo.done then 1 else 0)
-
     count
 
   @create = (obj) ->
     todo = todosCrudService.create(obj)
     @todos.push(todo) if todo
+    todo
 
   @destroyAll = (where) ->
     todosCrudService.destroyAll(where)
@@ -141,47 +145,47 @@ todosModule.service "todosService", ["todosCrudService", (todosCrudService) ->
 ]
 
 
-todosModule.directive "todosNavbar", ->
-  restrict: "A"
-  templateUrl: "todos/todos_navbar.html"
+todosModule.directive 'todosNavbar', ->
+  restrict: 'A'
+  templateUrl: 'todos/todos_navbar.html'
 
 
-todosModule.directive "todosAdmin", ->
-  restrict: "A"
-  templateUrl: "todos/todos_admin.html"
+todosModule.directive 'todosAdmin', ->
+  restrict: 'A'
+  templateUrl: 'todos/todos_admin.html'
 
 
-todosModule.directive "todosSearch", ->
-  restrict: "A"
-  templateUrl: "todos/todos_search.html"
+todosModule.directive 'todosSearch', ->
+  restrict: 'A'
+  templateUrl: 'todos/todos_search.html'
 
 
-todosModule.directive "todosFilter", ->
-  restrict: "A"
-  templateUrl: "todos/todos_filter.html"
+todosModule.directive 'todosFilter', ->
+  restrict: 'A'
+  templateUrl: 'todos/todos_filter.html'
 
 
-todosModule.directive "todosAddForm", ->
-  restrict: "A"
-  templateUrl: "todos/todos_add_form.html"
+todosModule.directive 'todosAddForm', ->
+  restrict: 'A'
+  templateUrl: 'todos/todos_add_form.html'
 
 
-todosModule.directive "todoListView", ->
-  restrict: "A"
-  templateUrl: "todos/todo_list_view.html"
+todosModule.directive 'todoListView', ->
+  restrict: 'A'
+  templateUrl: 'todos/todo_list_view.html'
 
 
 
 
 
-todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService", "todoFactory", "todosService", ($scope, $location, activeUserService, todoFactory, todosService) ->
+todosModule.controller 'TodosCtrl', ['$scope', '$location', 'activeUserService', 'todoFactory', 'todosService', ($scope, $location, activeUserService, todoFactory, todosService) ->
   $scope.todos = []
-  $scope.positiveMessage = "You did it!"
-  $scope.todosListFilter = "all"
+  $scope.positiveMessage = 'You did it!'
+  $scope.todosListFilter = 'all'
 
   $scope.init = ->
     if activeUserService.userIsNull()
-      $location.path "/"
+      $location.path '/'
       return
     $scope.todos = todosService.retrieveAll({createdBy: activeUserService.id()})
 
@@ -197,7 +201,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
 
     todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.id() })
 
-    $scope.newTodoText = ""
+    $scope.newTodoText = ''
 
   $scope.deleteTodo = (todo) ->
     todosService.destroyTodo todo
@@ -208,17 +212,14 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
     todosService.saveTodo todo
 
   $scope.editTodo = (todo) ->
-    $location.path "/todo/" + todo.id.toString()
+    $location.path '/todo/' + todo.id.toString()
 
   $scope.viewPrintTodos = ->
-    $location.path "/print/todos"
+    $location.path '/print/todos'
 
   $scope.viewTodos = ->
-    $location.path "/todos"
+    $location.path '/todos'
 
-  $scope.createdByName = (todo) ->
-    #user = userService.
-    ''
   $scope.createdBy = (todo) ->
     todo.createdBy
 
@@ -290,7 +291,7 @@ todosModule.controller "TodosCtrl", ["$scope", "$location", "activeUserService",
 ]
 
 
-todosModule.controller "TodoCtrl", ["$scope", "$routeParams", "$location", "todosService", ($scope, $routeParams, $location, todosService) ->
+todosModule.controller 'TodoCtrl', ['$scope', '$routeParams', '$location', 'todosService', ($scope, $routeParams, $location, todosService) ->
   $scope.todoId = $routeParams.todoId
   $scope.init = ->
     todosService.retrieveAll()
@@ -298,10 +299,10 @@ todosModule.controller "TodoCtrl", ["$scope", "$routeParams", "$location", "todo
 
   $scope.save = ->
     todosService.saveTodo $scope.todo
-    $location.path "/todos"
+    $location.path '/todos'
 
   $scope.cancel = ->
-    $location.path "/todos"
+    $location.path '/todos'
 
   $scope.hasNotes = ->
     $scope.todo.notes and $scope.todo.notes.length isnt 0
