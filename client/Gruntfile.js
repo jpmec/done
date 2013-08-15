@@ -92,6 +92,14 @@ module.exports = function (grunt) {
         }]
       }
     },
+    coffeelint: {
+      app: [
+        'app/help/*.coffee',
+        'app/main/*.coffee',
+        'app/todos/*.coffee',
+        'app/user/*.coffee'
+      ]
+    },
     compass: {
       options: {
         sassDir: '<%= yeoman.app %>/styles',
@@ -392,6 +400,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
+    'coffeelint',
     'coffee',
     'html2js',
     'jshint',
@@ -402,6 +411,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'coffeelint',
     'coffee',
     'html2js',
     'jshint',

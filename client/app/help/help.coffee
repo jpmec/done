@@ -2,10 +2,17 @@
 
 'use strict'
 
-helpModule = angular.module 'helpModule', ['userModule', 'todosModule', 'ui.bootstrap']
+
+helpModule = angular.module 'helpModule',
+['userModule', 'todosModule', 'ui.bootstrap']
 
 
-helpModule.service 'helpService', ['$dialog', '$location', ($dialog, $location) ->
+
+
+helpModule.service 'helpService',
+['$dialog', '$location',
+($dialog, $location) ->
+
   @show = (topic) ->
     unless topic
       path = $location.path()
@@ -34,7 +41,12 @@ helpModule.directive 'helpNavbar', ->
   templateUrl: 'help/help_navbar.html'
 
 
-helpModule.controller 'helpCtrl', ['$scope', 'helpService', ($scope, helpService) ->
+
+
+helpModule.controller 'helpCtrl',
+['$scope', 'helpService',
+($scope, helpService) ->
+
   $scope.init = ->
     #do nothing
 
@@ -43,8 +55,13 @@ helpModule.controller 'helpCtrl', ['$scope', 'helpService', ($scope, helpService
 ]
 
 
+
+
 # Helper controller to close the help dialog
-helpModule.controller 'helpDialogCtrl', ['$scope', 'dialog', 'item', 'helpService', ($scope, dialog, item, helpService) ->
+helpModule.controller 'helpDialogCtrl',
+['$scope', 'dialog', 'item', 'helpService',
+($scope, dialog, item, helpService) ->
+
   $scope.item = item
   $scope.close = (result) ->
     dialog.close result

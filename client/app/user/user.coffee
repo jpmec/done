@@ -2,7 +2,8 @@
 
 'use strict'
 
-userModule = angular.module 'userModule', ['ngCookies', 'obscureLocalStorageModule']
+userModule = angular.module 'userModule',
+['ngCookies', 'obscureLocalStorageModule']
 
 
 userModule.factory 'userFactory', ->
@@ -23,7 +24,11 @@ userModule.factory 'userFactory', ->
     user
 
 
-userModule.service 'userCrudService', ['userFactory', 'obscureLocalStorageService', (userFactory, obscureLocalStorageService) ->
+
+
+userModule.service 'userCrudService',
+['userFactory', 'obscureLocalStorageService',
+(userFactory, obscureLocalStorageService) ->
   @prefix = 'user.'
 
   @keyFor = (obj) ->
@@ -66,14 +71,20 @@ userModule.service 'userCrudService', ['userFactory', 'obscureLocalStorageServic
 
 
 
-userModule.service 'userService', ['userFactory', 'userCrudService', (userFactory, userCrudService) ->
+
+userModule.service 'userService',
+['userFactory', 'userCrudService',
+(userFactory, userCrudService) ->
   @retrieve = (obj) ->
     userCrudService.retrieve(obj)
 ]
 
 
 
-userModule.service 'activeUserService', ['userFactory', 'userCrudService', (userFactory, userCrudService) ->
+
+userModule.service 'activeUserService',
+['userFactory', 'userCrudService',
+(userFactory, userCrudService) ->
   @user = null
   @getUser = ->
     @user
@@ -150,6 +161,7 @@ userModule.service 'activeUserService', ['userFactory', 'userCrudService', (user
 
 
 
+
 userModule.directive 'activeUserName', ->
   restrict: 'A'
   templateUrl: 'user/active_user_name.html'
@@ -187,7 +199,10 @@ userModule.directive 'userName', ['userService', (userService) ->
 ]
 
 
-userModule.controller 'UserSigninCtrl', ['$scope', '$location', '$cookies', 'activeUserService', ($scope, $location, $cookies, activeUserService) ->
+userModule.controller 'UserSigninCtrl',
+['$scope', '$location', '$cookies', 'activeUserService',
+($scope, $location, $cookies, activeUserService) ->
+
   $scope.userSigninName = ''
   $scope.userSigninPassword = ''
 
@@ -209,7 +224,9 @@ userModule.controller 'UserSigninCtrl', ['$scope', '$location', '$cookies', 'act
   $scope.signin = (locationPath) ->
     return if $scope.userSigninName.length is 0
     return if $scope.userSigninPassword.length is 0
-    user = activeUserService.signin($scope.userSigninName, $scope.userSigninPassword)
+    user = activeUserService.signin($scope.userSigninName,
+    $scope.userSigninPassword)
+
     if user
       $scope.user = user
       if $scope.userSigninAutomatic
@@ -217,7 +234,7 @@ userModule.controller 'UserSigninCtrl', ['$scope', '$location', '$cookies', 'act
       else
         $cookies.userId = ''
 
-      activeUserService.setAutoSignin($scope.userSigninAutomatic);
+      activeUserService.setAutoSignin($scope.userSigninAutomatic)
 
       $location.path locationPath  if locationPath
 
@@ -230,7 +247,9 @@ userModule.controller 'UserSigninCtrl', ['$scope', '$location', '$cookies', 'act
 
 
 
-userModule.controller 'ActiveUserSignoutCtrl', ['$scope', '$location', '$cookies', 'activeUserService', ($scope, $location, $cookies, activeUserService) ->
+userModule.controller 'ActiveUserSignoutCtrl',
+['$scope', '$location', '$cookies', 'activeUserService',
+($scope, $location, $cookies, activeUserService) ->
 
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signin'
@@ -247,12 +266,14 @@ userModule.controller 'ActiveUserSignoutCtrl', ['$scope', '$location', '$cookies
 
 
 
-userModule.controller 'ActiveUserCtrl', ['$scope', '$location', 'activeUserService', ($scope, $location, activeUserService) ->
+userModule.controller 'ActiveUserCtrl',
+['$scope', '$location', 'activeUserService',
+($scope, $location, activeUserService) ->
+
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signin'
 #    id = $scope.publicId()
 #    new QRCode(document.getElementById('qrcode'), id)  if id
-
 
   $scope.name = ->
     activeUserService.name()
@@ -294,7 +315,11 @@ userModule.controller 'ActiveUserCtrl', ['$scope', '$location', 'activeUserServi
 ]
 
 
-userModule.controller 'UserCtrl', ['$scope', '$location', 'userService', ($scope, $location, userService) ->
+
+
+userModule.controller 'UserCtrl',
+['$scope', '$location', 'userService',
+($scope, $location, userService) ->
 
   $scope.init = ->
     return
@@ -308,7 +333,12 @@ userModule.controller 'UserCtrl', ['$scope', '$location', 'userService', ($scope
 ]
 
 
-userModule.controller 'UserEditCtrl', ['$scope', '$location', 'activeUserService', ($scope, $location, activeUserService) ->
+
+
+userModule.controller 'UserEditCtrl',
+['$scope', '$location', 'activeUserService',
+($scope, $location, activeUserService) ->
+
   $scope.init = ->
     $scope.user = activeUserService.getUser()
 

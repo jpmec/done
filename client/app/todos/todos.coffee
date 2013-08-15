@@ -2,7 +2,10 @@
 
 'use strict'
 
-todosModule = angular.module 'todosModule', ['obscureLocalStorageModule', 'userModule']
+todosModule = angular.module 'todosModule',
+['obscureLocalStorageModule', 'userModule']
+
+
 
 
 todosModule.factory 'todoFactory', ->
@@ -22,7 +25,12 @@ todosModule.factory 'todoFactory', ->
     assignedTo: null
 
 
-todosModule.service 'todosCrudService', ['todoFactory', 'obscureLocalStorageService', (todoFactory, obscureLocalStorageService) ->
+
+
+todosModule.service 'todosCrudService',
+['todoFactory', 'obscureLocalStorageService',
+(todoFactory, obscureLocalStorageService) ->
+
   @prefix = 'todos.'
 
   @keyFor = (obj) ->
@@ -101,8 +109,14 @@ todosModule.service 'todosCrudService', ['todoFactory', 'obscureLocalStorageServ
 ]
 
 
-todosModule.service 'todosService', ['todosCrudService', (todosCrudService) ->
+
+
+todosModule.service 'todosService',
+['todosCrudService',
+(todosCrudService) ->
+
   @todos = []
+
   @getTodos = ->
     @todos
 
@@ -134,7 +148,7 @@ todosModule.service 'todosService', ['todosCrudService', (todosCrudService) ->
     @todos
 
   @saveTodo = (todo) ->
-    todosCrudService.update(todo);
+    todosCrudService.update(todo)
 
   @addTodo = (todo) ->
     @todos.push todo
@@ -143,6 +157,8 @@ todosModule.service 'todosService', ['todosCrudService', (todosCrudService) ->
   @destroyTodo = (todo) ->
     todosCrudService.destroy(todo)
 ]
+
+
 
 
 todosModule.directive 'todosNavbar', ->
@@ -178,7 +194,10 @@ todosModule.directive 'todoListView', ->
 
 
 
-todosModule.controller 'TodosCtrl', ['$scope', '$location', 'activeUserService', 'todoFactory', 'todosService', ($scope, $location, activeUserService, todoFactory, todosService) ->
+todosModule.controller 'TodosCtrl',
+['$scope', '$location', 'activeUserService', 'todoFactory', 'todosService',
+($scope, $location, activeUserService, todoFactory, todosService) ->
+
   $scope.todos = []
   $scope.positiveMessage = 'You did it!'
   $scope.todosListFilter = 'all'
@@ -199,7 +218,8 @@ todosModule.controller 'TodosCtrl', ['$scope', '$location', 'activeUserService',
     return if !$scope.newTodoText
     return if $scope.newTodoText.length is 0
 
-    todo = todosService.create({ text: $scope.newTodoText, createdBy: activeUserService.id() })
+    todo = todosService.create({ text: $scope.newTodoText,
+    createdBy: activeUserService.id() })
 
     $scope.newTodoText = ''
 
@@ -291,8 +311,14 @@ todosModule.controller 'TodosCtrl', ['$scope', '$location', 'activeUserService',
 ]
 
 
-todosModule.controller 'TodoCtrl', ['$scope', '$routeParams', '$location', 'todosService', ($scope, $routeParams, $location, todosService) ->
+
+
+todosModule.controller 'TodoCtrl',
+['$scope', '$routeParams', '$location', 'todosService',
+($scope, $routeParams, $location, todosService) ->
+
   $scope.todoId = $routeParams.todoId
+
   $scope.init = ->
     todosService.retrieveAll()
     $scope.todo = todosService.getTodo($scope.todoId)

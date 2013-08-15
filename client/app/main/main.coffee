@@ -2,7 +2,10 @@
 
 'use strict'
 
-mainModule = angular.module('mainModule', ['userModule', 'todosModule', 'ui.bootstrap'])
+mainModule = angular.module 'mainModule',
+['userModule', 'todosModule', 'ui.bootstrap']
+
+
 
 
 mainModule.directive 'doneAppNavbar', ->
@@ -21,6 +24,8 @@ mainModule.controller 'MainCtrl', ['$scope', ($scope) ->
   $scope.brand = ->
     'Done! - a motivational app for getting things done.'
 ]
+
+
 
 
 mainModule.config ['$routeProvider', ($routeProvider) ->
