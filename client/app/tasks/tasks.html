@@ -1,0 +1,75 @@
+<div class="tasks-admin"></div>
+
+<div data-ng-controller="TasksCtrl" data-ng-init="init()" ng-cloak>
+
+  <div class="text-center">
+    <div data-tasks-add-form></div>
+  </div>
+
+  <div class="well" ng-show="0 < tasks.length">
+    <div class="pull-left">
+      <span tooltip="Printer-friendly view"><button class="btn" ng-click="viewPrintTasks()"><i class="icon-print"></i></button></span>
+      <span tooltip="Archive completed tasks"><button class="btn" ng-click="archive()" ng-show="remaining() < tasks.length"><i class="icon-archive"></i></button></span>
+    </div>
+
+    <div class="pull-right">
+      <span tooltip="Delete all"><button class="btn btn-warning" ng-click="clearTasks()"><i class="icon-trash icon-white"></i></button></span>
+    </div>
+
+    <div class="form-inline" style="display: table; margin: 0 auto">
+      <span tasks-search></span>
+      <span tasks-filter></span>
+    </div>
+
+
+    <div class="clearfix"></div>
+    <hr>
+
+    <div>
+      <accordion close-others="true">
+         <accordion-group ng-repeat="task in tasks | orderBy:'priority':true | filter:filterTasksNotDone">
+            <accordion-heading>
+              <span class="lead done-{{task.done}}">{{task.text}}</span>
+              <span class="pull-right">
+              <span ng-show="task.priority > 0"><rating value="task.priority" max="5" readonly="true"></rating></span>
+              <span class="label label-info" ng-show="task.startedDate && !task.done">Started on {{task.startedDate}}</span>
+              <span class="label label-success" ng-show="task.done">Done on {{task.finishedDate}}</span>
+              </span>
+            </accordion-heading>
+            <div task-list-view></div>
+         </accordion-group>
+      </accordion>
+    </div>
+
+    <div>
+      <accordion close-others="true">
+         <accordion-group ng-repeat="task in tasks | orderBy:'finishedDate':true | filter:filterTasksDone">
+            <accordion-heading>
+              <span class="lead done-{{task.done}}">{{task.text}}</span>
+              <span class="pull-right">
+              <span class="label label-info" ng-show="task.startedDate && !task.done">Started on {{task.startedDate}}</span>
+              <span class="label label-success" ng-show="task.done">Done on {{task.finishedDate}}</span>
+              </span>
+            </accordion-heading>
+
+            <div class="pull-left">
+              <button type="button" class="btn btn-primary" ng-click="setDone(task, false)">
+                  Undo
+              </button>
+            </div>
+
+            <rating class="pull-right" value="task.priority" max="5" readonly="true"></rating>
+
+            <div class="clearfix"></div>
+            <hr>
+            <div ng-show="hasNotes(task)">
+              <p>{{task.notes}}</p>
+            </div>
+            <div><span>Created {{task.createdDate}}<span></div>
+            <div><span ng-show="task.startedDate">Started {{task.startedDate}}<span></div>
+            <div><span ng-show="task.finishedDate">Finished {{task.finishedDate}}<span></div>
+         </accordion-group>
+      </accordion>
+    </div>
+
+</div>

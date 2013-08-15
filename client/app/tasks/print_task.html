@@ -1,0 +1,27 @@
+<div data-ng-controller="TaskCtrl" data-ng-init="init()" ng-cloak>
+
+  <div ng-include="'views/navbar.html'"></div>
+
+  <h1>{{task.text}}</h1>
+
+  <div>
+    <h2>Priority</h2>
+    <rating value="task.priority" max="5" readonly="true"></rating>
+  </div>
+
+  <div ng-show="hasNotes()">
+    <p class="lead">Notes</p>
+    <p>{{task.notes}}</p>
+  </div>
+
+  <div>
+    <h2>Due</h2>
+    <p>{{task.startedDate}}</p>
+  </div>
+
+  <div>
+    <div><span>Created {{createdDate}}<span></div>
+    <div><span ng-show="task.startedDate">Started {{task.startedDate}}<span></div>
+    <div><span ng-show="task.finishedDate">Finished {{task.finishedDate}}<span></div>
+  </div>
+<div>

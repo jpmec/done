@@ -4,7 +4,7 @@
 
 
 helpModule = angular.module 'helpModule',
-['userModule', 'todosModule', 'ui.bootstrap']
+['ui.bootstrap']
 
 
 
@@ -34,6 +34,8 @@ helpModule.service 'helpService',
     @dialog = $dialog.dialog(opts)
     @dialog.open()
 ]
+
+
 
 
 helpModule.directive 'helpNavbar', ->

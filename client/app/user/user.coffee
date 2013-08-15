@@ -213,7 +213,7 @@ userModule.controller 'UserSigninCtrl',
       user = activeUserService.signinById(userId)
       if user
         $scope.user = user
-        $location.path('/todos')
+        $location.path('/tasks')
 
 
   $scope.validNameAndPassword = ->

@@ -1,0 +1,50 @@
+<div data-ng-controller="TasksCtrl" data-ng-init="init()" ng-cloak>
+
+  <div ng-show="0 < tasks.length">
+    <div>
+      <accordion close-others="false">
+         <accordion-group ng-repeat="task in tasks | orderBy:'priority':true | filter:!'done'" is-open="true">
+            <accordion-heading>
+              <span class="lead done-{{task.done}}">{{task.text}}</span>
+              <span class="pull-right">
+              <rating value="task.priority" max="5" readonly="true"></rating>
+              <span class="label label-info" ng-show="task.startedDate && !task.done">Started on {{task.startedDate}}</span>
+              <span class="label label-success" ng-show="task.done">Done on {{task.finishedDate}}</span>
+              </span>
+            </accordion-heading>
+            <div ng-show="hasNotes(task)">
+              <p>{{task.notes}}</p>
+            </div>
+            <div><p ng-show="task.dueDate">Due {{task.dueDate.toString()}}</p></div>
+            <div><p ng-show="task.createdDate">Created {{task.createdDate}}</p></div>
+            <div><p ng-show="task.startedDate">Started {{task.startedDate}}</p></div>
+            <div><p ng-show="task.finishedDate">Finished {{task.finishedDate}}</p></div>
+        </accordion-group>
+      </accordion>
+    </div>
+
+    <div>
+      <accordion close-others="false">
+        <accordion-group ng-repeat="task in tasks | orderBy:'finishedDate':true | filter:!!'done'" is-open="true">
+          <accordion-heading>
+            <span class="lead done-{{task.done}}">{{task.text}}</span>
+            <span class="pull-right">
+            <rating class="pull-right" value="task.priority" max="5" readonly="true"></rating>
+            <span class="label label-info" ng-show="task.startedDate && !task.done">Started on {{task.startedDate}}</span>
+            <span class="label label-success" ng-show="task.done">Done on {{task.finishedDate}}</span>
+            </span>
+          </accordion-heading>
+
+
+          <div ng-show="hasNotes(task)">
+            <p>{{task.notes}}</p>
+          </div>
+          <div><span>Created {{task.createdDate}}<span></div>
+          <div><span ng-show="task.startedDate">Started {{task.startedDate}}<span></div>
+          <div><span ng-show="task.finishedDate">Finished {{task.finishedDate}}<span></div>
+
+        </accordion-group>
+      </accordion>
+    </div>
+
+</div>

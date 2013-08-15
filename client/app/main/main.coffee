@@ -3,7 +3,7 @@
 'use strict'
 
 mainModule = angular.module 'mainModule',
-['userModule', 'todosModule', 'ui.bootstrap']
+['userModule', 'tasksModule', 'ui.bootstrap']
 
 
 
@@ -33,20 +33,20 @@ mainModule.config ['$routeProvider', ($routeProvider) ->
   $routeProvider.when('/signin',
     templateUrl: 'user/user_signin.html'
     controller: 'UserSigninCtrl'
-  ).when('/todos',
-    templateUrl: 'todos/todos.html'
-    controller: 'TodosCtrl'
-  ).when('/print/todos',
-    templateUrl: 'todos/print_todos.html'
-    controller: 'TodosCtrl'
-  ).when('/todo',
+  ).when('/tasks',
+    templateUrl: 'tasks/tasks.html'
+    controller: 'TasksCtrl'
+  ).when('/print/tasks',
+    templateUrl: 'tasks/print_tasks.html'
+    controller: 'TasksCtrl'
+  ).when('/task',
     redirectTo: '/'
-  ).when('/todo/:todoId',
-    templateUrl: 'todos/todo.html'
-    controller: 'TodoCtrl'
-  ).when('/print/todo/:todoId',
-    templateUrl: 'todos/print_todo.html'
-    controller: 'TodoCtrl'
+  ).when('/task/:taskId',
+    templateUrl: 'tasks/task.html'
+    controller: 'TaskCtrl'
+  ).when('/print/task/:taskId',
+    templateUrl: 'tasks/print_task.html'
+    controller: 'TaskCtrl'
   ).when('/help/about',
     templateUrl: 'help/help_about.html'
   ).when('/user',

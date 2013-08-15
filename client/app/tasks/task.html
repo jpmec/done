@@ -1,0 +1,36 @@
+<div data-ng-controller="TaskCtrl" data-ng-init="init()" ng-cloak>
+
+  <h1>{{task.text}}</h1>
+
+  <input class="task-text" type="text" name="text" ng-model="task.text" required></input>
+
+  <div>
+    <h2>Priority</h2>
+    <rating value="task.priority" max="5" readonly="false"></rating>
+  </div>
+
+  <div>
+    <h2>Notes</h2>
+    <textarea class="task-notes" name="task_notes" ng-model="task.notes" ng-maxlength="255" ng-change="saveTask(task)" ></textarea>
+  </div>
+
+  <div>
+    <h2>Due</h2>
+    <datepicker ng-model="task.dueDate" show-weeks="showWeeks" starting-day="1"></datepicker>
+    <timepicker ng-model="task.dueDate" hour-step="1" minute-step="1" show-meridian="true"></timepicker>
+  </div>
+
+  <div>
+    <div><p ng-show=task.createdDate>Created {{task.createdDate}}</p></div>
+    <div><p ng-show="task.startedDate">Started {{task.startedDate}}</p></div>
+    <div><p ng-show="task.finishedDate">Finished {{task.finishedDate}}</p></div>
+  </div>
+
+  <button type="button" class="btn-primary btn-large" ng-click="save()">
+      Save
+  </button>
+
+  <button type="button" class="btn btn-large" ng-click="cancel()">
+      Cancel
+  </button>
+<div>

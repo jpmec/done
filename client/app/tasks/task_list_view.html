@@ -1,0 +1,63 @@
+<div class="task-list-view">
+
+  <tabset type="'pills'" style="text-align:center; display: table; margin: 0 auto">
+
+    <tab>
+      <tab-heading tooltip="Actions" tooltip-placement="left">
+        <i class="icon-fixed-width icon-rocket icon-2x"></i>
+      </tab-heading>
+
+      <button class="btn btn-large btn-block btn-success" ng-click="setDone(task, true)" tooltip="Done with task" tooltip-placement="right"><i class="icon-fixed-width icon-ok"></i>Done with task</button><br>
+      <button class="btn btn-large btn-block " ng-click="editTask(task)" tooltip="Edit task" tooltip-placement="right"><i class="icon-fixed-width icon-edit"></i>Edit this task</button><br>
+      <button class="btn btn-large btn-block btn-warning" ng-click="deleteTask(task)" tooltip="Delete" tooltip-placement="right"><i class="icon-fixed-width icon-remove"></i>Delete this task</button>
+
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Calendar" tooltip-placement="left">
+        <i class="icon-fixed-width icon-calendar icon-2x"></i>
+      </tab-heading>
+
+      <div><p ng-show="task.dueDate">Due {{task.dueDate.toString()}}</p></div>
+      <div><p ng-show="task.createdBy">Created by <span user-name id="task.createdBy"></span></p></div>
+      <div><p ng-show="task.createdDate">Created {{task.createdDate}}</p></div>
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Time-tracking" tooltip-placement="left">
+        <i class="icon-fixed-width icon-time icon-2x"></i>
+      </tab-heading>
+
+      <button class="btn btn-large btn-block btn-primary" ng-click="setStartedDate(task)" tooltip="Start tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-play"></i>Start</button></span><br>
+      <button class="btn btn-large btn-block" ng-click="setStoppedDate(task)" tooltip="Stop tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-stop"></i>Stop</button></span>
+
+      <div><p ng-show="task.startedDate">Started {{task.startedDate}}</p></div>
+      <div><p ng-show="task.finishedDate">Finished {{task.finishedDate}}</p></div>
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Notes" tooltip-placement="left">
+        <i class="icon-fixed-width icon-pencil icon-2x"></i>
+      </tab-heading>
+      <div ng-show="hasNotes(task)">
+        <textarea class="task-notes" name="task_notes" ng-model="task.notes" ng-maxlength="255" ng-change="saveTask(task)"></textarea>
+      </div>
+      <div ng-hide="hasNotes(task)">
+        <button class="btn btn-large" ng-click="task.notes = 'Notes'">Add Notes</button>
+      </div>
+    </tab>
+
+    <tab>
+      <tab-heading tooltip="Code" tooltip-placement="left">
+        <i class="icon-fixed-width icon-code icon-2x"></i>
+      </tab-heading>
+      <div class="container-fluid">
+        <div class="row-fluid">
+          <pre style="text-align:left">{{prettyPrintTask(task)}}</pre>
+        </div>
+      </div>
+    </tab>
+
+  </tabset>
+
+</div>
