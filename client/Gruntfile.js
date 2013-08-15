@@ -13,6 +13,7 @@ module.exports = function (grunt) {
   var yeomanConfig = {
     app: 'app',
     dist: 'dist',
+    test: 'test',
     tmp: '.tmp',
     heroku: '../heroku/dist'
   };
@@ -54,51 +55,37 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/scripts',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/scripts',
-          ext: '.js'
-        },
-        {
-          expand: true,
           cwd: '<%= yeoman.app %>/help',
           src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/scripts/from_coffee/help',
+          dest: '<%= yeoman.tmp %>/scripts',
           ext: '.js'
         },
         {
           expand: true,
           cwd: '<%= yeoman.app %>/main',
           src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/scripts/from_coffee/main',
+          dest: '<%= yeoman.tmp %>/scripts',
           ext: '.js'
         },
         {
           expand: true,
           cwd: '<%= yeoman.app %>/todos',
           src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/scripts/from_coffee/todos',
+          dest: '<%= yeoman.tmp %>/scripts',
           ext: '.js'
         },
         {
           expand: true,
           cwd: '<%= yeoman.app %>/user',
           src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/scripts/from_coffee/user',
+          dest: '<%= yeoman.tmp %>/scripts',
           ext: '.js'
-        },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>/../test/spec',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.app %>/../test/spec',
-          ext: '.js'
-        },]
+        }]
       },
       test: {
         files: [{
           expand: true,
-          cwd: 'test/spec',
+          cwd: '<%= yeoman.test %>/spec',
           src: '{,*/}*.coffee',
           dest: '.tmp/spec',
           ext: '.js'
@@ -174,17 +161,7 @@ module.exports = function (grunt) {
           src: [
             '*.{ico,txt}',
             '.htaccess',
-            'app/**/*',
-            'components/**/*',
-            'help/**/*',
             'images/{,*/}*.{gif,webp}',
-            'l10n/**/*',
-            'main/**/*',
-            'navbar/**/*',
-            'scripts/**/*',
-            'styles/fonts/*',
-            'todos/**/*',
-            'user/**/*'
           ]
         }]
       },
@@ -254,7 +231,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/todos/*.html',
           '<%= yeoman.app %>/user/*.html'
         ],
-        dest: '<%= yeoman.app %>/scripts/from_html/templates.js'
+        dest: '<%= yeoman.tmp %>/scripts/templates.js'
       }
     },
     htmlmin: {
@@ -294,7 +271,7 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/**/{,*/}*.js'
+        '<%= yeoman.tmp %>/scripts/*.js'
       ]
     },
     karma: {
@@ -416,6 +393,8 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'coffee',
+    'html2js',
+    'jshint',
     'compass',
     'connect:test',
     'karma'
