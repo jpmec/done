@@ -31,7 +31,8 @@
             <accordion-heading>
               <span class="lead done-{{task.done}}">{{task.text}}</span>
               <span class="pull-right">
-              <span ng-show="task.priority > 0"><rating value="task.priority" max="5" readonly="true"></rating></span>
+              <span ng-show="task.mustDo" style="color:#b94a48"><i class="icon-fixed-width icon-2x icon-fire"></i></span>
+              <span ng-show="task.priority > 0" class="icon-2x"><rating value="task.priority" max="5" readonly="true"></rating></span>
               <span class="label label-info" ng-show="task.startedDate && !task.done">Started on {{task.startedDate}}</span>
               <span class="label label-success" ng-show="task.done">Done on {{task.finishedDate}}</span>
               </span>

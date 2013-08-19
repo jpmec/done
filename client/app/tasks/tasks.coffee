@@ -17,6 +17,7 @@ tasksModule.factory 'taskFactory', ->
     notes: ''
     done: false
     priority: 0
+    mustDo: false
     createdBy: ''
     createdDate: date.toString()
     dueDate: null

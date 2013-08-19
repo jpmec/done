@@ -14,9 +14,33 @@
     </tab>
 
     <tab>
+      <tab-heading tooltip="Priority" tooltip-placement="left">
+        <i class="icon-fixed-width icon-star icon-2x"></i>
+      </tab-heading>
+
+
+      <h2>Priority</h2>
+
+      <div class="icon-2x"><rating value="task.priority" max="5" readonly="false"></rating></div>
+      <br/><br/>
+      <button class="btn btn-large btn-block"
+              ng-model="task.mustDo"
+              btn-checkbox
+              btn-checkbox-true="true"
+              btn-checkbox-false="false"
+              tooltip="This is the most important task!"
+              tooltip-placement="right">
+        <span style="color:#b94a48"><i class="icon-fixed-width icon-fire"></i>
+        Must get this done!</span>
+      </button>
+    </tab>
+
+    <tab>
       <tab-heading tooltip="Calendar" tooltip-placement="left">
         <i class="icon-fixed-width icon-calendar icon-2x"></i>
       </tab-heading>
+
+      <h2>Calendar</h2>
 
       <div><p ng-show="task.dueDate">Due {{task.dueDate.toString()}}</p></div>
       <div><p ng-show="task.createdBy">Created by <span user-name id="task.createdBy"></span></p></div>
@@ -27,6 +51,8 @@
       <tab-heading tooltip="Time-tracking" tooltip-placement="left">
         <i class="icon-fixed-width icon-time icon-2x"></i>
       </tab-heading>
+
+      <h2>Time</h2>
 
       <button class="btn btn-large btn-block btn-primary" ng-click="setStartedDate(task)" tooltip="Start tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-play"></i>Start</button></span><br>
       <button class="btn btn-large btn-block" ng-click="setStoppedDate(task)" tooltip="Stop tracking time" tooltip-placement="right"><i class="icon-fixed-width icon-stop"></i>Stop</button></span>
@@ -39,6 +65,9 @@
       <tab-heading tooltip="Notes" tooltip-placement="left">
         <i class="icon-fixed-width icon-pencil icon-2x"></i>
       </tab-heading>
+
+      <h2>Notes</h2>
+
       <div ng-show="hasNotes(task)">
         <textarea class="task-notes" name="task_notes" ng-model="task.notes" ng-maxlength="255" ng-change="saveTask(task)"></textarea>
       </div>
@@ -51,6 +80,9 @@
       <tab-heading tooltip="Code" tooltip-placement="left">
         <i class="icon-fixed-width icon-code icon-2x"></i>
       </tab-heading>
+
+      <h2>Code</h2>
+
       <div class="container-fluid">
         <div class="row-fluid">
           <pre style="text-align:left">{{prettyPrintTask(task)}}</pre>

@@ -34,7 +34,7 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            '.tmp',
+            '<%= yeoman.tmp %>/**/*',
             '<%= yeoman.dist %>/*',
             '!<%= yeoman.dist %>/.git*'
           ]
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '<%= yeoman.tmp %>'
+      server: '<%= yeoman.tmp %>/**/*'
     },
     coffee: {
       dist: {
@@ -135,14 +135,14 @@ module.exports = function (grunt) {
       options: {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: '0.0.0.0'
+        hostname: 'localhost'
       },
       livereload: {
         options: {
           middleware: function (connect) {
             return [
               lrSnippet,
-              mountFolder(connect, '.tmp'),
+              mountFolder(connect, yeomanConfig.tmp),
               mountFolder(connect, yeomanConfig.app)
             ];
           }
@@ -152,8 +152,8 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test')
+              mountFolder(connect, yeomanConfig.tmp),
+              mountFolder(connect, yeomanConfig.test)
             ];
           }
         }
@@ -369,7 +369,7 @@ module.exports = function (grunt) {
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
-        tasks: ['livereload']
+        tasks: ['html2js', 'livereload']
       }
     }
   });
@@ -390,8 +390,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
+    'coffeelint',
     'coffee:dist',
-    'compass:server',
+    'html2js',
+//    'compass:server',
     'livereload-start',
     'connect:livereload',
     'open',
