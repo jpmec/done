@@ -321,6 +321,9 @@ tasksService) ->
     JSON.stringify(task, null, '\t')
 
 
+  $scope.hasTaskSteps = (task) ->
+    task.steps.length > 0
+
   $scope.createTaskStep = (task, text) ->
     return unless text.length > 0
 
@@ -342,6 +345,19 @@ tasksService) ->
   $scope.setTaskStepDone = (task, step, done) ->
     step.done = done
     tasksService.saveTask task
+
+  $scope.taskStepsDoneCount = (task) ->
+    count = 0
+    angular.forEach task.steps, (step) ->
+      if (step.done)
+        count++
+    count
+
+  $scope.taskStepsCount = (task) ->
+    task.steps.length
+
+  $scope.taskStepsDonePercent = (task) ->
+    (100 * $scope.taskStepsDoneCount(task)) / $scope.taskStepsCount(task)
 
   $scope.setTaskMustDo = (task) ->
 
