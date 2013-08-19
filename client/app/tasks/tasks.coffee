@@ -24,6 +24,15 @@ tasksModule.factory 'taskFactory', ->
     startedDate: null
     finishedDate: null
     assignedTo: null
+    steps: []
+
+
+
+
+tasksModule.factory 'taskStepFactory', ->
+  create: (text) ->
+    text: text
+    done: false
 
 
 
@@ -196,8 +205,10 @@ tasksModule.directive 'taskListView', ->
 
 
 tasksModule.controller 'TasksCtrl',
-['$scope', '$location', 'activeUserService', 'taskFactory', 'tasksService',
-($scope, $location, activeUserService, taskFactory, tasksService) ->
+['$scope', '$location', 'activeUserService', 'taskFactory', 'taskStepFactory',
+'tasksService',
+($scope, $location, activeUserService, taskFactory, taskStepFactory,
+tasksService) ->
 
   $scope.tasks = []
   $scope.positiveMessage = 'You did it!'
@@ -308,6 +319,25 @@ tasksModule.controller 'TasksCtrl',
 
   $scope.prettyPrintTask = (task) ->
     JSON.stringify(task, null, '\t')
+
+
+  $scope.addTaskStep = (task, text) ->
+    step = taskStepFactory.create(text)
+    task.steps.push(step)
+    tasksService.saveTask task
+
+
+  $scope.setTaskMustDo = (task) ->
+
+    return if task.mustDo == true
+
+    angular.forEach $scope.tasks, (task) ->
+      if task.mustDo == true
+        task.mustDo = false
+        tasksService.saveTask task
+
+    task.mustDo = true
+    tasksService.saveTask task
 
 ]
 

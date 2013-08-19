@@ -24,10 +24,7 @@
       <div class="icon-2x"><rating value="task.priority" max="5" readonly="false"></rating></div>
       <br/><br/>
       <button class="btn btn-large btn-block"
-              ng-model="task.mustDo"
-              btn-checkbox
-              btn-checkbox-true="true"
-              btn-checkbox-false="false"
+              ng-click="setTaskMustDo(task)"
               tooltip="This is the most important task!"
               tooltip-placement="right">
         <span style="color:#b94a48"><i class="icon-fixed-width icon-fire"></i>
@@ -62,6 +59,25 @@
     </tab>
 
     <tab>
+      <tab-heading tooltip="Steps" tooltip-placement="left">
+        <i class="icon-fixed-width icon-list icon-2x"></i>
+      </tab-heading>
+
+      <h2>Steps</h2>
+      <ul ui-sortable="" ng-model="task.steps">
+        <li ng-repeat="step in task.steps"
+            style = "padding: 5px; border: 1px solid #999; background: #eee; margin: 5px; cursor: move;">
+        {{step}}
+        </li>
+      </ul>
+      <hr>
+
+      <textarea class="task-step" name="task_step" ng-model="nextStep" ng-maxlength="255"></textarea>
+      <button class="btn btn-large btn-block" ng-click="addTaskStep(task, nextStep); nextStep=''">Add Step</button>
+      <button class="btn btn-large btn-block btn-warning" ng-click="task.steps = []; nextStep=''">Delete Steps</button>
+    </tab>
+
+    <tab>
       <tab-heading tooltip="Notes" tooltip-placement="left">
         <i class="icon-fixed-width icon-pencil icon-2x"></i>
       </tab-heading>
@@ -72,7 +88,7 @@
         <textarea class="task-notes" name="task_notes" ng-model="task.notes" ng-maxlength="255" ng-change="saveTask(task)"></textarea>
       </div>
       <div ng-hide="hasNotes(task)">
-        <button class="btn btn-large" ng-click="task.notes = 'Notes'">Add Notes</button>
+        <button class="btn btn-large btn-block" ng-click="task.notes = 'Notes'">Add Notes</button>
       </div>
     </tab>
 
