@@ -321,11 +321,20 @@ tasksService) ->
     JSON.stringify(task, null, '\t')
 
 
-  $scope.addTaskStep = (task, text) ->
+  $scope.createTaskStep = (task, text) ->
+    return unless text.length > 0
+
     step = taskStepFactory.create(text)
     task.steps.push(step)
     tasksService.saveTask task
 
+  $scope.destroyTaskStep = (task, step) ->
+    # TODO IMPLEMENT THIS
+    tasksService.saveTask task
+
+  $scope.setTaskStepDone = (task, step, done) ->
+    step.done = done
+    tasksService.saveTask task
 
   $scope.setTaskMustDo = (task) ->
 

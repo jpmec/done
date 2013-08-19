@@ -64,17 +64,25 @@
       </tab-heading>
 
       <h2>Steps</h2>
-      <ul ui-sortable="" ng-model="task.steps">
-        <li ng-repeat="step in task.steps"
-            style = "padding: 5px; border: 1px solid #999; background: #eee; margin: 5px; cursor: move;">
-        {{step}}
-        </li>
-      </ul>
+      <div class="text-left">
+        <ul class="unstyled" ui-sortable="" ng-model="task.steps">
+          <li ng-repeat="step in task.steps"
+              class="well well-small"
+              style = "cursor: move;">
+          <span class="text-left">
+          <button class="btn btn-success" ng-hide="step.done" ng-click="setTaskStepDone(task, step, true)"><i class="icon-fixed-width icon-ok"></i></button>
+          <button class="btn" ng-show="step.done" ng-click="setTaskStepDone(task, step, false)"><i class="icon-fixed-width icon-undo"></i></button>
+          <span class="lead done-{{step.done}}">{{step.text}}</span>
+          <span class="pull-right"><button class="btn btn-warning" ng-hide="step.done" ng-click="destroyTaskStep(task, step)"><i class="icon-fixed-width icon-remove"></i></button><span>
+          </span>
+          </li>
+        </ul>
+      </div>
       <hr>
 
       <textarea class="task-step" name="task_step" ng-model="nextStep" ng-maxlength="255"></textarea>
-      <button class="btn btn-large btn-block" ng-click="addTaskStep(task, nextStep); nextStep=''">Add Step</button>
-      <button class="btn btn-large btn-block btn-warning" ng-click="task.steps = []; nextStep=''">Delete Steps</button>
+      <button class="btn btn-large btn-block btn-primary" ng-click="createTaskStep(task, nextStep); nextStep=''"><i class="icon-fixed-width icon-plus"></i>Add Step</button>
+      <button class="btn btn-large btn-block btn-warning" ng-click="task.steps = []; nextStep=''"><i class="icon-fixed-width icon-remove"></i>Delete Steps</button>
     </tab>
 
     <tab>
