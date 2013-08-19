@@ -246,8 +246,8 @@ tasksService) ->
   $scope.editTask = (task) ->
     $location.path '/task/' + task.id.toString()
 
-  $scope.viewPrintTasks = ->
-    $location.path '/print/tasks'
+  $scope.viewPrintTasks = (filter)->
+    $location.path '/print/tasks/' + filter
 
   $scope.viewTasks = ->
     $location.path '/tasks'
@@ -370,6 +370,126 @@ tasksService) ->
 
     task.mustDo = true
     tasksService.saveTask task
+
+]
+
+
+
+
+tasksModule.controller 'TasksPrintCtrl',
+['$scope', '$routeParams', '$location', 'activeUserService', 'tasksService',
+($scope, $routeParams, $location, activeUserService, tasksService) ->
+
+  $scope.tasks = []
+  $scope.tasksListFilter = 'all'
+  $scope.printFilter = $routeParams.printFilter || 'all'
+
+  $scope.init = ->
+    if activeUserService.userIsNull()
+      $location.path '/'
+      return
+    $scope.tasks = tasksService.retrieveAll({createdBy: activeUserService.id()})
+
+  $scope.isUser = ->
+    activeUserService.name()
+
+  $scope.count = ->
+    tasksService.count()
+
+  $scope.viewPrintTasks = ->
+    $location.path '/print/tasks'
+
+  $scope.viewTasks = ->
+    $location.path '/tasks'
+
+  $scope.createdBy = (task) ->
+    task.createdBy
+
+  $scope.setStartedDate = (task) ->
+    task.startedDate = new Date().toString()
+    tasksService.saveTask task
+
+  $scope.setFinishedDate = (task) ->
+    task.finishedDate = new Date().toString()
+    tasksService.saveTask task
+
+  $scope.setDone = (task, done) ->
+    if done
+      $scope.setFinishedDate task
+      task.done = true
+      tasksService.saveTask task
+    else
+      task.finishedDate = null
+      task.done = false
+      tasksService.saveTask task
+
+  $scope.hasNotes = (task) ->
+    task.notes and task.notes.length isnt 0
+
+  $scope.remaining = ->
+    tasksService.count() - tasksService.countDone()
+
+  $scope.filterTasksNotDone = (task) ->
+
+    if task.done
+      return null
+
+    if $scope.tasksListFilter == 'done'
+      return null
+
+    if $scope.searchText && $scope.searchText.length != 0
+      return null if task.text.indexOf($scope.searchText) == -1
+
+    return task
+
+  $scope.filterTasksDone = (task) ->
+
+    if !task.done
+      return null
+
+    if $scope.tasksListFilter == 'notDone'
+      return null
+
+    if $scope.searchText && $scope.searchText.length != 0
+      return null if task.text.indexOf($scope.searchText) == -1
+
+    return task
+
+  $scope.prettyPrintTask = (task) ->
+    JSON.stringify(task, null, '\t')
+
+
+  $scope.hasTaskSteps = (task) ->
+    task.steps.length > 0
+
+  $scope.setTaskStepDone = (task, step, done) ->
+    step.done = done
+    tasksService.saveTask task
+
+  $scope.taskStepsDoneCount = (task) ->
+    count = 0
+    angular.forEach task.steps, (step) ->
+      if (step.done)
+        count++
+    count
+
+  $scope.taskStepsCount = (task) ->
+    task.steps.length
+
+  $scope.taskStepsDonePercent = (task) ->
+    (100 * $scope.taskStepsDoneCount(task)) / $scope.taskStepsCount(task)
+
+  $scope.printDoneTasks = () ->
+    unless $scope.printFilter
+      return true
+    else
+      $scope.printFilter == 'done' || $scope.printFilter == 'all'
+
+  $scope.printNotDoneTasks = () ->
+    unless $scope.printFilter
+      return true
+    else
+      $scope.printFilter == 'not_done' || $scope.printFilter == 'all'
 
 ]
 

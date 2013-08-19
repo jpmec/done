@@ -8,7 +8,18 @@
 
   <div class="well" ng-show="0 < tasks.length">
     <div class="pull-left">
-      <span tooltip="Printer-friendly view"><button class="btn" ng-click="viewPrintTasks()"><i class="icon-print"></i></button></span>
+      <span class="btn-group" tooltip="Printer-friendly view">
+        <button class="btn" ng-click="viewPrintTasks('all')">
+          <i class="icon-print"></i>
+        </button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a ng-click="viewPrintTasks('done')">Print completed tasks</a></li>
+          <li><a ng-click="viewPrintTasks('not_done')">Print remaining tasks</a></li>
+        </ul>
+      </span>
       <span tooltip="Archive completed tasks"><button class="btn" ng-click="archive()" ng-show="remaining() < tasks.length"><i class="icon-archive"></i></button></span>
     </div>
 

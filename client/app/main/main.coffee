@@ -36,9 +36,12 @@ mainModule.config ['$routeProvider', ($routeProvider) ->
   ).when('/tasks',
     templateUrl: 'tasks/tasks.html'
     controller: 'TasksCtrl'
-  ).when('/print/tasks',
+  ).when('/print/tasks/',
     templateUrl: 'tasks/print_tasks.html'
-    controller: 'TasksCtrl'
+    controller: 'TasksPrintCtrl'
+  ).when('/print/tasks/:printFilter',
+    templateUrl: 'tasks/print_tasks.html'
+    controller: 'TasksPrintCtrl'
   ).when('/task',
     redirectTo: '/'
   ).when('/task/:taskId',
