@@ -329,8 +329,15 @@ tasksService) ->
     tasksService.saveTask task
 
   $scope.destroyTaskStep = (task, step) ->
-    # TODO IMPLEMENT THIS
-    tasksService.saveTask task
+    i = 0
+    angular.forEach task.steps, (s) ->
+      unless s == step
+        i++
+      else
+        console.log 'found step'
+        obj = task.steps.splice(i, 1)
+        tasksService.saveTask task
+        return obj
 
   $scope.setTaskStepDone = (task, step, done) ->
     step.done = done
