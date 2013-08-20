@@ -33,8 +33,11 @@ mainModule.config ['$routeProvider', ($routeProvider) ->
   $routeProvider.when('/signin',
     templateUrl: 'user/user_signin.html'
     controller: 'UserSigninCtrl'
-  ).when('/tasks',
-    templateUrl: 'tasks/tasks.html'
+  ).when('/tasks/list',
+    templateUrl: 'tasks/tasks_list.html'
+    controller: 'TasksCtrl'
+  ).when('/tasks/dashboard',
+    templateUrl: 'tasks/tasks_dashboard.html'
     controller: 'TasksCtrl'
   ).when('/print/tasks/',
     templateUrl: 'tasks/print_tasks.html'

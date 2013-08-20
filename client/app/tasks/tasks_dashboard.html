@@ -1,0 +1,19 @@
+<div data-ng-controller="TasksCtrl" data-ng-init="init()" ng-cloak>
+
+  <div class="text-center">
+    <h1><i class="icon-fixed-width icon-dashboard"></i> Dashboard</h1>
+
+    <div class="hero-unit">
+
+      <div ng-show="hasTaskMustDo()">
+        <h2>You must do this task:</h2>
+        <h2>{{getTaskMustDo().text}}</h2>
+      </div>
+
+      <progress percent="tasksDonePercent()"></progress>
+      <p>You have done <strong>{{tasksCountDone()}}</strong> tasks.</p>
+      <p>There are <strong>{{tasksCountNotDone()}}</strong> tasks that are not done.</p>
+    </div>
+
+  </div>
+</div>

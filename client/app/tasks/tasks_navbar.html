@@ -1,9 +1,21 @@
-<a data-ng-controller="TasksCtrl"
-   data-ng-init="init()"
-   ng-cloak href=""
-   ng-click="viewTasks()"
-   tooltip="View tasks list"
-   tooltip-placement="bottom"
->
-  <i class="icon-tasks"></i>
-</a>
+<li>
+  <a data-ng-controller="TasksViewCtrl"
+     href=""
+     ng-click="viewTasksDashboard()"
+     tooltip="View tasks dashboard"
+     tooltip-placement="bottom"
+  >
+    <i class="icon-dashboard"></i>
+  </a>
+</li>
+
+<li>
+  <a data-ng-controller="TasksViewCtrl"
+     href=""
+     ng-click="viewTasksList()"
+     tooltip="View tasks list"
+     tooltip-placement="bottom"
+  >
+    <i class="icon-list"></i>
+  </a>
+</li>

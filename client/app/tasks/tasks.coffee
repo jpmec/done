@@ -172,7 +172,7 @@ tasksModule.service 'tasksService',
 
 
 tasksModule.directive 'tasksNavbar', ->
-  restrict: 'A'
+  restrict: 'EA'
   templateUrl: 'tasks/tasks_navbar.html'
 
 
@@ -226,6 +226,26 @@ tasksService) ->
   $scope.count = ->
     tasksService.count()
 
+  $scope.tasksCount = () ->
+    $scope.tasks.length
+
+  $scope.tasksCountDone = () ->
+    count = 0
+    angular.forEach $scope.tasks, (task) ->
+      if (task.done)
+        count++
+    count
+
+  $scope.tasksCountNotDone = () ->
+    count = 0
+    angular.forEach $scope.tasks, (task) ->
+      if (!task.done)
+        count++
+    count
+
+  $scope.tasksDonePercent = () ->
+    (100 * $scope.tasksCountDone()) / $scope.tasksCount()
+
   $scope.addTask = ->
     return if !$scope.newTaskText
     return if $scope.newTaskText.length is 0
@@ -250,7 +270,10 @@ tasksService) ->
     $location.path '/print/tasks/' + filter
 
   $scope.viewTasks = ->
-    $location.path '/tasks'
+    $location.path '/tasks/list'
+
+  $scope.viewTasksDashboard = () ->
+    $location.path '/tasks/dashboard'
 
   $scope.createdBy = (task) ->
     task.createdBy
@@ -371,6 +394,43 @@ tasksService) ->
     task.mustDo = true
     tasksService.saveTask task
 
+
+  $scope.hasTaskMustDo = () ->
+    result = false
+    angular.forEach $scope.tasks, (task) ->
+      if task.mustDo == true
+        result = true
+    result
+
+
+  $scope.getTaskMustDo = () ->
+    task = null
+    angular.forEach $scope.tasks, (t) ->
+      if t.mustDo == true
+        task = t
+    task
+]
+
+
+
+
+tasksModule.controller 'TasksViewCtrl',
+['$scope', '$location'
+($scope, $location) ->
+
+  $scope.viewTasksList = ->
+    $location.path '/tasks/list'
+
+  $scope.viewTasksDashboard = () ->
+    $location.path '/tasks/dashboard'
+
+  $scope.viewTaskEdit = (task) ->
+    $location.path '/task/' + task.id.toString()
+
+  $scope.viewPrintTasks = (filter)->
+    $location.path '/print/tasks/' + filter
+
+
 ]
 
 
@@ -399,8 +459,8 @@ tasksModule.controller 'TasksPrintCtrl',
   $scope.viewPrintTasks = ->
     $location.path '/print/tasks'
 
-  $scope.viewTasks = ->
-    $location.path '/tasks'
+  $scope.viewTasks = () ->
+    $location.path '/tasks/list'
 
   $scope.createdBy = (task) ->
     task.createdBy
@@ -508,10 +568,10 @@ tasksModule.controller 'TaskCtrl',
 
   $scope.save = ->
     tasksService.saveTask $scope.task
-    $location.path '/tasks'
+    $location.path '/tasks/list'
 
   $scope.cancel = ->
-    $location.path '/tasks'
+    $location.path '/tasks/list'
 
   $scope.hasNotes = ->
     $scope.task.notes and $scope.task.notes.length isnt 0
