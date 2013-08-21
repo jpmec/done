@@ -17,6 +17,14 @@
       <progress percent="tasksDonePercent()"></progress>
       <p>You have done <strong>{{tasksCountDone()}}</strong> tasks.</p>
       <p>There are <strong>{{tasksCountNotDone()}}</strong> tasks that are not done.</p>
+
+      <hr>
+
+      <div data-ng-controller="TasksStatsCtrl" ng-show="tasksCount() > 0">
+        <p>The oldest task was created on {{findOldestCreatedDate()}}</p>
+        <p>The newest task was created on {{findNewestCreatedDate()}}</p>
+      </div>
+
     </div>
 
   </div>

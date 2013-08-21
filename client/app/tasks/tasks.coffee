@@ -382,6 +382,23 @@ tasksService, tasksTypeaheadService) ->
       else
         tasksService.destroyTask task
 
+  $scope.orderByTasksNotDone = (task) ->
+    if task.done
+      return 0
+
+    if task.mustDo
+      return Infinity
+
+    return task.priority
+
+
+  $scope.orderByTasksDone = (task) ->
+    if !task.done
+      return 0
+
+    return task.finishedDate
+
+
   $scope.filterTasksNotDone = (task) ->
 
     if task.done
@@ -503,6 +520,38 @@ tasksModule.controller 'TasksViewCtrl',
 
 
 
+tasksModule.controller 'TasksStatsCtrl',
+['$scope'
+($scope) ->
+
+  $scope.findOldestCreatedDate = ->
+    if $scope.tasksCount() == 0
+      return null
+
+    result = $scope.tasks[0].createdDate
+
+    angular.forEach $scope.tasks, (task) ->
+      if task.createdDate < result
+        result = task.createdDate
+
+    result
+
+
+  $scope.findNewestCreatedDate = ->
+    if $scope.tasksCount() == 0
+      return null
+
+    result = $scope.tasks[0].createdDate
+
+    angular.forEach $scope.tasks, (task) ->
+      if task.createdDate > result
+        result = task.createdDate
+
+    result
+]
+
+
+
 tasksModule.controller 'TasksPrintCtrl',
 ['$scope', '$routeParams', '$location', 'activeUserService', 'tasksService',
 ($scope, $routeParams, $location, activeUserService, tasksService) ->
@@ -555,6 +604,23 @@ tasksModule.controller 'TasksPrintCtrl',
 
   $scope.remaining = ->
     tasksService.count() - tasksService.countDone()
+
+  $scope.orderByTasksNotDone = (task) ->
+    if task.done
+      return 0
+
+    if task.mustDo
+      return Infinity
+
+    return task.priority
+
+
+  $scope.orderByTasksDone = (task) ->
+    if !task.done
+      return 0
+
+    return task.finishedDate
+
 
   $scope.filterTasksNotDone = (task) ->
 

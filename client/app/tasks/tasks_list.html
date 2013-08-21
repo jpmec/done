@@ -39,7 +39,7 @@
 
     <div>
       <accordion close-others="true">
-         <accordion-group ng-repeat="task in tasks | orderBy:'priority':true | filter:filterTasksNotDone">
+         <accordion-group ng-repeat="task in tasks | orderBy:orderByTasksNotDone:true | filter:filterTasksNotDone">
             <accordion-heading>
               <span class="lead done-{{task.done}}">{{task.text}}</span>
               <span class="pull-right">
@@ -56,7 +56,7 @@
 
     <div>
       <accordion close-others="true">
-         <accordion-group ng-repeat="task in tasks | orderBy:'finishedDate':true | filter:filterTasksDone">
+         <accordion-group ng-repeat="task in tasks | orderBy:orderByTasksDone:false | filter:filterTasksDone">
             <accordion-heading>
               <span class="lead done-{{task.done}}">{{task.text}}</span>
               <span class="pull-right">
