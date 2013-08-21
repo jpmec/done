@@ -103,8 +103,6 @@ tasksModule.service 'tasksCrudService',
 
   @destroyAll = (where) ->
     if where
-      console.log(where)
-
       keys = obscureLocalStorageService.keys()
       for i of keys
         key = keys[i]
@@ -166,6 +164,54 @@ tasksModule.service 'tasksService',
 
   @destroyTask = (task) ->
     tasksCrudService.destroy(task)
+    i = _.indexOf(@tasks, task)
+    @tasks.splice i, 1  unless i is -1
+
+]
+
+
+
+
+tasksModule.service 'tasksTypeaheadService',
+['obscureLocalStorageService',
+(obscureLocalStorageService) ->
+
+  @prefix = 'tasks.typeaheads'
+  @maxLength = 10
+  @typeaheads = null
+
+  @keyFor = () ->
+    @prefix
+
+  @getTypeaheads = () ->
+    if @typeaheads == null
+      @retrieve()
+    @typeaheads
+
+  @add = (str) ->
+    ary = _.filter(@typeaheads, (value) ->
+      value != str
+    ).slice(0, @maxLength - 1)
+
+    @typeaheads.push(str)
+    obscureLocalStorageService.add @keyFor(), @typeaheads
+    @typeaheads
+
+  @remove = (str) ->
+    @typeaheads = _.filter(@typeaheads, (value) ->
+      value != str
+    )
+    obscureLocalStorageService.add @keyFor(), @typeaheads
+    @typeaheads
+
+  @retrieve = () ->
+    @typeaheads = obscureLocalStorageService.get(@keyFor()) || []
+    @typeaheads
+
+  @destroyAll = () ->
+    @typeaheads = []
+    obscureLocalStorageService.remove @keyFor()
+    @typeaheads
 ]
 
 
@@ -206,11 +252,13 @@ tasksModule.directive 'taskListView', ->
 
 tasksModule.controller 'TasksCtrl',
 ['$scope', '$location', 'activeUserService', 'taskFactory', 'taskStepFactory',
-'tasksService',
+'tasksService', 'tasksTypeaheadService'
 ($scope, $location, activeUserService, taskFactory, taskStepFactory,
-tasksService) ->
+tasksService, tasksTypeaheadService) ->
 
   $scope.tasks = []
+  $scope.typeaheads = []
+
   $scope.positiveMessage = 'You did it!'
   $scope.tasksListFilter = 'all'
 
@@ -219,6 +267,19 @@ tasksService) ->
       $location.path '/'
       return
     $scope.tasks = tasksService.retrieveAll({createdBy: activeUserService.id()})
+    $scope.syncTypeaheads()
+
+  $scope.tasksTextArray = ->
+    ary = []
+    angular.forEach $scope.tasks, (task) ->
+      if (!task.done)
+        ary.push(task.text)
+    ary
+
+  $scope.syncTypeaheads = ->
+    typeaheads = tasksTypeaheadService.getTypeaheads()
+    tasks = $scope.tasksTextArray()
+    $scope.typeaheads = _.difference(typeaheads, tasks)
 
   $scope.isUser = ->
     activeUserService.name()
@@ -253,12 +314,17 @@ tasksService) ->
     task = tasksService.create({ text: $scope.newTaskText,
     createdBy: activeUserService.id() })
 
+    if task
+      tasksTypeaheadService.add($scope.newTaskText)
+      $scope.syncTypeaheads()
+
     $scope.newTaskText = ''
+
+    task
 
   $scope.deleteTask = (task) ->
     tasksService.destroyTask task
-    i = _.indexOf($scope.tasks, task)
-    $scope.tasks.splice i, 1  unless i is -1
+    $scope.syncTypeaheads()
 
   $scope.saveTask = (task) ->
     tasksService.saveTask task
@@ -295,6 +361,8 @@ tasksService) ->
       task.finishedDate = null
       task.done = false
       tasksService.saveTask task
+
+    $scope.syncTypeaheads()
 
   $scope.hasNotes = (task) ->
     task.notes and task.notes.length isnt 0
@@ -348,7 +416,7 @@ tasksService) ->
     task.steps.length > 0
 
   $scope.createTaskStep = (task, text) ->
-    return unless text.length > 0
+    return if text.length == 0
 
     step = taskStepFactory.create(text)
     task.steps.push(step)
@@ -429,7 +497,6 @@ tasksModule.controller 'TasksViewCtrl',
 
   $scope.viewPrintTasks = (filter)->
     $location.path '/print/tasks/' + filter
-
 
 ]
 

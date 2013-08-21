@@ -1,4 +1,11 @@
 <form class="form-inline" ng-submit="addTask()">
     <button class="btn-primary btn-large" type="submit"><i class="icon-fixed-width icon-plus-sign"></i> Add </button>
-    <input class="input-new-task-text input-xxlarge" type="text" ng-model="newTaskText" size="80" placeholder="new task" autofocus="true"></input>
+    <input
+      class="input-new-task-text input-xxlarge"
+      type="text" ng-model="newTaskText"
+      size="80"
+      placeholder="new task"
+      autofocus="true"
+      typeahead="typeahead for typeahead in typeaheads | filter:$viewValue | limitTo:3">
+    </input>
 </form>
