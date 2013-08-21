@@ -6,9 +6,13 @@
     <div class="hero-unit">
 
       <div ng-show="hasTaskMustDo()">
-        <h2>You must do this task:</h2>
-        <h2>{{getTaskMustDo().text}}</h2>
+        <h2><span style="color:#b94a48"><i class="icon-fixed-width icon-fire"></i></span><span style="text-decoration:underline">You must do this task</span></h2>
+        <div class="well well-small">
+        <h3><span style="color:#b94a48">{{getTaskMustDo().text}}</span></h3>
+        </div>
       </div>
+
+      <hr>
 
       <progress percent="tasksDonePercent()"></progress>
       <p>You have done <strong>{{tasksCountDone()}}</strong> tasks.</p>
