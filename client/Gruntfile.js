@@ -422,12 +422,12 @@ module.exports = function (grunt) {
     'jshint',
 //    'compass',
 //    'connect:test',
-    'karma'
+    'karma:unit'
   ]);
 
   grunt.registerTask('e2e', [
     'karma:e2e'
-  ])
+  ]);
 
   grunt.registerTask('build', [
     'clean:dist',
