@@ -184,12 +184,13 @@ tasksModule.service 'tasksTypeaheadService',
     @prefix
 
   @getTypeaheads = () ->
-    if @typeaheads == null
-      @retrieve()
+    @retrieve() if @typeaheads == null
     @typeaheads
 
   @add = (str) ->
-    ary = _.filter(@typeaheads, (value) ->
+    @retrieve() if @typeaheads == null
+
+    @typeaheads = _.filter(@typeaheads, (value) ->
       value != str
     ).slice(0, @maxLength - 1)
 
@@ -198,6 +199,8 @@ tasksModule.service 'tasksTypeaheadService',
     @typeaheads
 
   @remove = (str) ->
+    @retrieve() if @typeaheads == null
+
     @typeaheads = _.filter(@typeaheads, (value) ->
       value != str
     )
@@ -205,13 +208,18 @@ tasksModule.service 'tasksTypeaheadService',
     @typeaheads
 
   @retrieve = () ->
-    @typeaheads = obscureLocalStorageService.get(@keyFor()) || []
+    @typeaheads = obscureLocalStorageService.get(@keyFor())
+    if @typeaheads == null
+      @typeaheads = []
     @typeaheads
 
   @destroyAll = () ->
+    @retrieve() if @typeaheads == null
+
+    ary = @typeaheads.slice()
     @typeaheads = []
     obscureLocalStorageService.remove @keyFor()
-    @typeaheads
+    ary
 ]
 
 
@@ -247,6 +255,24 @@ tasksModule.directive 'taskListView', ->
   templateUrl: 'tasks/task_list_view.html'
 
 
+tasksModule.directive 'tasksList', ->
+  restrict: 'A'
+  templateUrl: 'tasks/tasks_list.html'
+
+
+tasksModule.directive 'tasksDashboard', ->
+  restrict: 'A'
+  templateUrl: 'tasks/tasks_dashboard.html'
+
+
+tasksModule.directive 'printTasksList', ->
+  restrict: 'A'
+  templateUrl: 'tasks/tasks_list_print.html'
+
+
+tasksModule.directive 'taskEdit', ->
+  restrict: 'A'
+  templateUrl: 'tasks/task_edit.html'
 
 
 
@@ -264,6 +290,7 @@ tasksService, tasksTypeaheadService) ->
 
   $scope.init = ->
     if activeUserService.userIsNull()
+      console.log('activeUserService.userIsNull')
       $location.path '/'
       return
     $scope.tasks = tasksService.retrieveAll({createdBy: activeUserService.id()})
@@ -333,7 +360,7 @@ tasksService, tasksTypeaheadService) ->
     $location.path '/task/' + task.id.toString()
 
   $scope.viewPrintTasks = (filter)->
-    $location.path '/print/tasks/' + filter
+    $location.path '/tasks/print/' + filter
 
   $scope.viewTasks = ->
     $location.path '/tasks/list'
@@ -499,7 +526,7 @@ tasksService, tasksTypeaheadService) ->
 
 
 
-tasksModule.controller 'TasksViewCtrl',
+tasksModule.controller 'TasksLocationCtrl',
 ['$scope', '$location'
 ($scope, $location) ->
 
@@ -513,7 +540,7 @@ tasksModule.controller 'TasksViewCtrl',
     $location.path '/task/' + task.id.toString()
 
   $scope.viewPrintTasks = (filter)->
-    $location.path '/print/tasks/' + filter
+    $location.path '/tasks/print/' + filter
 
 ]
 
@@ -524,27 +551,40 @@ tasksModule.controller 'TasksStatsCtrl',
 ['$scope'
 ($scope) ->
 
-  $scope.findOldestCreatedDate = ->
+
+  $scope.findOldestNotDoneCreatedDate = ->
     if $scope.tasksCount() == 0
       return null
 
     result = $scope.tasks[0].createdDate
 
     angular.forEach $scope.tasks, (task) ->
-      if task.createdDate < result
+      if !task.done and task.createdDate < result
         result = task.createdDate
 
     result
 
+  $scope.findOldestNotDoneTask = ->
+    if $scope.tasksCount() == 0
+      return null
 
-  $scope.findNewestCreatedDate = ->
+    result = $scope.tasks[0]
+
+    angular.forEach $scope.tasks, (task) ->
+      if !task.done and task.createdDate < result
+        result = task
+
+    result
+
+
+  $scope.findNewestNotDoneCreatedDate = ->
     if $scope.tasksCount() == 0
       return null
 
     result = $scope.tasks[0].createdDate
 
     angular.forEach $scope.tasks, (task) ->
-      if task.createdDate > result
+      if !task.done and task.createdDate > result
         result = task.createdDate
 
     result
@@ -572,8 +612,8 @@ tasksModule.controller 'TasksPrintCtrl',
   $scope.count = ->
     tasksService.count()
 
-  $scope.viewPrintTasks = ->
-    $location.path '/print/tasks'
+  $scope.viewPrintTasks = (filter) ->
+    $location.path '/tasks/print/' + filter
 
   $scope.viewTasks = () ->
     $location.path '/tasks/list'

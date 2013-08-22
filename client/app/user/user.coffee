@@ -182,7 +182,9 @@ userModule.directive 'activeUserNavbarSignout', ->
   restrict: 'A'
   templateUrl: 'user/active_user_navbar_signout.html'
 
-
+userModule.directive 'userSignin', ->
+  restrict: 'A'
+  templateUrl: 'user/user_signin.html'
 
 
 userModule.directive 'userProfile', ->

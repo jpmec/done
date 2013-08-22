@@ -69,6 +69,13 @@ module.exports = function (grunt) {
         },
         {
           expand: true,
+          cwd: '<%= yeoman.app %>/quotes',
+          src: '{,*/}*.coffee',
+          dest: '<%= yeoman.tmp %>/scripts',
+          ext: '.js'
+        },
+        {
+          expand: true,
           cwd: '<%= yeoman.app %>/tasks',
           src: '{,*/}*.coffee',
           dest: '<%= yeoman.tmp %>/scripts',
@@ -94,10 +101,11 @@ module.exports = function (grunt) {
     },
     coffeelint: {
       app: [
-        'app/help/*.coffee',
-        'app/main/*.coffee',
-        'app/tasks/*.coffee',
-        'app/user/*.coffee'
+        '<%= yeoman.app %>/help/*.coffee',
+        '<%= yeoman.app %>/main/*.coffee',
+        '<%= yeoman.app %>/quotes/*.coffee',
+        '<%= yeoman.app %>/tasks/*.coffee',
+        '<%= yeoman.app %>/user/*.coffee'
       ]
     },
     compass: {
@@ -236,6 +244,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/help/*.html',
           '<%= yeoman.app %>/main/*.html',
           '<%= yeoman.app %>/navbar/*.html',
+          '<%= yeoman.app %>/quotes/*.html',
           '<%= yeoman.app %>/tasks/*.html',
           '<%= yeoman.app %>/user/*.html'
         ],
@@ -285,6 +294,10 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'karma.conf.js',
+        singleRun: true
+      },
+      e2e: {
+        frameworks: ['ng-scenario'],
         singleRun: true
       }
     },
@@ -348,6 +361,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/help/{,*/}*.coffee',
           '<%= yeoman.app %>/main/{,*/}*.coffee',
+          '<%= yeoman.app %>/quotes/{,*/}*.coffee',
           '<%= yeoman.app %>/scripts/{,*/}*.coffee',
           '<%= yeoman.app %>/tasks/{,*/}*.coffee',
           '<%= yeoman.app %>/user/{,*/}*.coffee',
@@ -406,10 +420,14 @@ module.exports = function (grunt) {
     'coffee',
     'html2js',
     'jshint',
-    'compass',
-    'connect:test',
+//    'compass',
+//    'connect:test',
     'karma'
   ]);
+
+  grunt.registerTask('e2e', [
+    'karma:e2e'
+  ])
 
   grunt.registerTask('build', [
     'clean:dist',
