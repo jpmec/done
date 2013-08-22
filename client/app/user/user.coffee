@@ -301,6 +301,9 @@ userModule.controller 'ActiveUserCtrl',
   $scope.userIsNull = ->
     activeUserService.userIsNull()
 
+  $scope.userIsNotNull = ->
+    !activeUserService.userIsNull()
+
   $scope.showUser = ->
     $location.path '/user'
 

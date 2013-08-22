@@ -37,7 +37,7 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: false,
 
-    reportSlowerThan: 500,
+    reportSlowerThan: 1000,
 
     // It is important to set this to the port of the web server
     proxies: {
