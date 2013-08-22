@@ -297,7 +297,7 @@ module.exports = function (grunt) {
         singleRun: true
       },
       e2e: {
-        frameworks: ['ng-scenario'],
+        configFile: 'karma-e2e.conf.js',
         singleRun: true
       }
     },
