@@ -5,7 +5,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/e2e/**/*.js'
+      'test/e2e/**/*.coffee'
     ],
 
     urlRoot: '/__karma/',
@@ -28,7 +28,7 @@ module.exports = function(config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 20000,
@@ -37,7 +37,12 @@ module.exports = function(config) {
     // if true, it capture browsers, run tests and exit
     singleRun: false,
 
-    reportSlowerThan: 1000,
+    reportSlowerThan: 2000,
+
+    preprocessors: {
+      '**/*.coffee': 'coffee'
+    },
+
 
     // It is important to set this to the port of the web server
     proxies: {
@@ -45,9 +50,11 @@ module.exports = function(config) {
     },
 
     plugins: [
+      'karma-coffee-preprocessor',
       'karma-ng-scenario',
       'karma-chrome-launcher',
       'karma-firefox-launcher',
+      'karma-phantomjs-launcher',
       'karma-junit-reporter'
     ]
   });
