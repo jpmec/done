@@ -96,3 +96,7 @@ grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.jpmec.don
 grails.plugins.springsecurity.authority.className = 'com.jpmec.done.SecureRole'
 grails.plugins.springsecurity.requestMap.className = 'com.jpmec.done.SecureUserSecureRole'
 grails.plugins.springsecurity.securityConfigType = 'Requestmap'
+grails.plugins.springsecurity.rememberMe.persistent = true
+grails.plugins.springsecurity.rememberMe.persistentToken.domainClassName = 'com.jpmec.done.PersistentLogin'
+
+grails.plugins.springsecurity.openid.domainClass = 'com.jpmec.done.OpenID'
