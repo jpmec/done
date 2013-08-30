@@ -9,23 +9,23 @@
 
   <div class="well" ng-show="0 < tasks.length">
     <div class="pull-left">
-      <span class="btn-group" tooltip="Printer-friendly view">
-        <button class="btn" ng-click="viewPrintTasks('all')">
+      <span class="btn-group" tooltip="Printer-friendly view" data-ng-controller="TasksLocationCtrl">
+        <button class="btn" ng-click="gotoPrintTasks('all')">
           <i class="icon-print"></i>
         </button>
         <button class="btn dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-          <li><a ng-click="viewPrintTasks('done')">Print completed tasks</a></li>
-          <li><a ng-click="viewPrintTasks('not_done')">Print remaining tasks</a></li>
+          <li><a ng-click="gotoPrintTasks('done')">Print completed tasks</a></li>
+          <li><a ng-click="gotoPrintTasks('not_done')">Print remaining tasks</a></li>
         </ul>
       </span>
       <span tooltip="Archive completed tasks"><button class="btn" ng-click="archive()" ng-show="remaining() < tasks.length"><i class="icon-archive"></i></button></span>
     </div>
 
     <div class="pull-right">
-      <span tooltip="Delete all"><button class="btn btn-warning" ng-click="clearTasks()"><i class="icon-trash icon-white"></i></button></span>
+      <span tooltip="Delete all"><button id="tasks-list-destroy-all-tasks-for-active-user" class="btn btn-warning" ng-click="destroyAllTasksForActiveUser()"><i class="icon-trash icon-white"></i></button></span>
     </div>
 
     <div class="form-inline" style="display: table; margin: 0 auto">

@@ -356,18 +356,6 @@ tasksService, tasksTypeaheadService) ->
   $scope.saveTask = (task) ->
     tasksService.saveTask task
 
-  $scope.editTask = (task) ->
-    $location.path '/task/' + task.id.toString()
-
-  $scope.viewPrintTasks = (filter)->
-    $location.path '/tasks/print/' + filter
-
-  $scope.viewTasks = ->
-    $location.path '/tasks/list'
-
-  $scope.viewTasksDashboard = () ->
-    $location.path '/tasks/dashboard'
-
   $scope.createdBy = (task) ->
     task.createdBy
 
@@ -394,7 +382,7 @@ tasksService, tasksTypeaheadService) ->
   $scope.hasNotes = (task) ->
     task.notes and task.notes.length isnt 0
 
-  $scope.clearTasks = ->
+  $scope.destroyAllTasksForActiveUser = ->
     $scope.tasks = tasksService.destroyAll({createdBy: activeUserService.id()})
 
   $scope.remaining = ->
@@ -530,16 +518,16 @@ tasksModule.controller 'TasksLocationCtrl',
 ['$scope', '$location'
 ($scope, $location) ->
 
-  $scope.viewTasksList = ->
+  $scope.gotoTasksList = ->
     $location.path '/tasks/list'
 
-  $scope.viewTasksDashboard = () ->
+  $scope.gotoTasksDashboard = () ->
     $location.path '/tasks/dashboard'
 
-  $scope.viewTaskEdit = (task) ->
+  $scope.gotoTaskEdit = (task) ->
     $location.path '/task/' + task.id.toString()
 
-  $scope.viewPrintTasks = (filter)->
+  $scope.gotoPrintTasks = (filter)->
     $location.path '/tasks/print/' + filter
 
 ]
@@ -611,12 +599,6 @@ tasksModule.controller 'TasksPrintCtrl',
 
   $scope.count = ->
     tasksService.count()
-
-  $scope.viewPrintTasks = (filter) ->
-    $location.path '/tasks/print/' + filter
-
-  $scope.viewTasks = () ->
-    $location.path '/tasks/list'
 
   $scope.createdBy = (task) ->
     task.createdBy

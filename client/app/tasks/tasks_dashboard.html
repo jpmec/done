@@ -23,7 +23,7 @@
       <div data-ng-controller="TasksStatsCtrl" ng-show="tasksCount() > 0">
         <div data-ng-controller="TasksLocationCtrl">
           <p>The oldest task was created on {{findOldestNotDoneCreatedDate()}}</p>
-          <p class="lead"><a href="" ng-click="viewTaskEdit(findOldestNotDoneTask())">{{findOldestNotDoneTask().text}}</a></p>
+          <p class="lead"><a href="" ng-click="gotoTaskEdit(findOldestNotDoneTask())">{{findOldestNotDoneTask().text}}</a></p>
           <p>The newest task was created on {{findNewestNotDoneCreatedDate()}}</p>
         </div>
       </div>
