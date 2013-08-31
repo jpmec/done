@@ -11,7 +11,11 @@ import org.junit.*
 @TestFor(UserPreferences)
 class UserPreferencesTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testConstructor() {
+
+       def instance = new UserPreferences()
+
+       assert instance.emailIsPrivate == true
+       assert instance.useGravatar == false
     }
 }

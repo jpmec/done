@@ -9,6 +9,11 @@ class BootStrap {
     def springSecurityService
 
     def init = { servletContext ->
+
+        User.registerObjectMarshaller()
+        UserPreferences.registerObjectMarshaller()
+
+
         // encode the password only if you're using an older version of the // spring-security-core plugin and you don't have encoding logic in
         // your "User" domain class:
         // String password = springSecurityService.encodePassword('password')
