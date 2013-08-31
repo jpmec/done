@@ -11,7 +11,13 @@ import org.junit.*
 @TestFor(UserController)
 class UserControllerTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testShow() {
+
+//       def params = getParams()
+
+//       params.id = 1
+//       def result = controller.show()
+
+//       assertNotNull result
     }
 }

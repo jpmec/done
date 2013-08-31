@@ -11,7 +11,9 @@ import org.junit.*
 @TestFor(Task)
 class TaskTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testConstructor() {
+       def instance = new Task(text: "do something");
+
+       assert instance.text == "do something"
     }
 }

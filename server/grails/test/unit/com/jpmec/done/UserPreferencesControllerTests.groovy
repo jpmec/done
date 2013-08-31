@@ -11,7 +11,7 @@ import org.junit.*
 @TestFor(UserPreferencesController)
 class UserPreferencesControllerTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testShow() {
+      controller.show()
     }
 }
