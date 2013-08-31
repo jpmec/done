@@ -11,7 +11,21 @@ import org.junit.*
 @TestFor(User)
 class UserTests {
 
-    void testSomething() {
-       fail "Implement me"
+    void testConstructor() {
+      def preferencesUser = new UserPreferences()
+      def user = new User(username: 'user',
+                          password: 'password',
+                          preferences: preferencesUser,
+                          enabled: true)
+
+      assert user.username == 'user'
+      assert user.password == 'password'
+      assertNotNull user.preferences
+
+      preferencesUser.user = user
+
+      preferencesUser.save()
+      user.save()
+
     }
 }

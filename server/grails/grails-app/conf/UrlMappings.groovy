@@ -10,7 +10,7 @@ class UrlMappings {
          action = 'createAccount'
       }
 
-		"/$controller/$action?/$id?"{
+		"/api/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here
 			}
