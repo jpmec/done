@@ -1,6 +1,7 @@
 import com.jpmec.done.SecureRole
 import com.jpmec.done.SecureUser
 import com.jpmec.done.SecureUserSecureRole
+import com.jpmec.done.User
 
 class BootStrap {
 
@@ -15,8 +16,8 @@ class BootStrap {
         def roleAdmin = new SecureRole(authority: 'ROLE_ADMIN').save()
         def roleUser = new SecureRole(authority: 'ROLE_USER').save()
 
-        def user = new SecureUser(username: 'user', password: password, enabled: true).save()
-        def admin = new SecureUser(username: 'admin', password: password, enabled: true).save()
+        def user = new User(username: 'user', password: password, enabled: true).save()
+        def admin = new User(username: 'admin', password: password, enabled: true).save()
 
         SecureUserSecureRole.create user, roleUser
         SecureUserSecureRole.create admin, roleUser
