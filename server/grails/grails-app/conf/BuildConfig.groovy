@@ -40,26 +40,32 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.22'
-				compile('com.google.inject:guice:2.0')
+
+				compile "com.google.inject:guice:2.0"
+
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
+        compile ':cache:1.0.1'
+				compile(':spring-security-openid:1.0.4') {
+					  excludes 'guice'
+			  }
+
+        build ":tomcat:$grailsVersion"
+
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.3"
         runtime ":resources:1.2"
+        runtime ":database-migration:1.3.2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.5"
 
-        build ":tomcat:$grailsVersion"
-
-        runtime ":database-migration:1.3.2"
-
-        compile ':cache:1.0.1'
-				compile(':spring-security-openid:1.0.4') {
-					  excludes 'guice'
-			  }
+        test(":spock:0.7") {
+          exclude "spock-grails-support"
+        }
     }
 }
