@@ -2,6 +2,9 @@ package com.jpmec.done
 
 import grails.converters.JSON
 
+
+
+
 class User extends SecureUser {
 
     static hasOne = [preferences: UserPreferences, profile: UserProfile]
@@ -12,7 +15,7 @@ class User extends SecureUser {
     }
 
     static jsonAttributes() {
-      ["preferences"]
+      ["preferences", "profile"]
     }
 
     static registerObjectMarshaller() {

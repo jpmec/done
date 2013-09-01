@@ -11,10 +11,22 @@ import org.junit.*
 @TestFor(UserProfile)
 class UserProfileTests {
 
-    void testConstructor() {
+    void testDefaultConstructor() {
        def instance = new UserProfile()
 
        assert instance.name == ""
        assert instance.email == ""
+    }
+
+
+    void testConstructor() {
+
+       def instance = new UserProfile(name: "john",
+                                      email: "my@email.com",
+                                      website_url: "domain.com")
+
+       assert instance.name == "john"
+       assert instance.email == "my@email.com"
+       assert instance.website_url == "domain.com"
     }
 }
