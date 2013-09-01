@@ -88,8 +88,9 @@ class LoginController {
 	 */
 	def authfail = {
 
-		def username = session[UsernamePasswordAuthenticationFilter.SPRING_SECURITY_LAST_USERNAME_KEY]
-		String msg = ''
+		//def username = session[UsernamePasswordAuthenticationFilter.SPRING_SECURITY_LAST_USERNAME_KEY]
+
+    String msg = ''
 		def exception = session[WebAttributes.AUTHENTICATION_EXCEPTION]
 		if (exception) {
 			if (exception instanceof AccountExpiredException) {

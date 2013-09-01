@@ -8,7 +8,7 @@ import grails.converters.JSON
 
 class UserProfileController {
 
-    def show() {
+    def show = {
 
       if (params.id)
       {
