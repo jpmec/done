@@ -15,6 +15,7 @@ class UserTests {
       def user = new User(username: 'user',
                           password: 'password',
                           preferences: new UserPreferences(),
+                          profile: new UserProfile(),
                           enabled: true)
 
       assert user.username == 'user'

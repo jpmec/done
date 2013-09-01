@@ -4,9 +4,7 @@ import grails.converters.JSON
 
 class User extends SecureUser {
 
-    String email = "";
-
-    static hasOne = [preferences: UserPreferences]
+    static hasOne = [preferences: UserPreferences, profile: UserProfile]
     static hasMany = [tasks: Task]
 
     static constraints = {
@@ -14,7 +12,7 @@ class User extends SecureUser {
     }
 
     static jsonAttributes() {
-      ["email", "preferences"]
+      ["preferences"]
     }
 
     static registerObjectMarshaller() {

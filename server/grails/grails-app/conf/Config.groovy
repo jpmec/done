@@ -77,6 +77,13 @@ log4j = {
             development {
                 console name: 'stdout', layout: pattern(conversionPattern: "%c{2} %m%n")
             }
+            test {
+                console name: 'stdout', layout: pattern(conversionPattern: "%c{2} %m%n")
+            }
+            production {
+                // TODO CHANGE THIS TO USE A FILE
+                console name: 'stdout', layout: pattern(conversionPattern: "%c{2} %m%n")
+            }
         }
     }
 
@@ -105,6 +112,14 @@ log4j = {
         development {
           trace 'grails.app'
           trace 'com.jpmec.done.TaskController'
+        }
+        test {
+          trace 'grails.app'
+          trace 'com.jpmec.done'
+        }
+        production {
+          warn 'grails.app'
+          warn 'com.jpmec.done'
         }
     }
 }

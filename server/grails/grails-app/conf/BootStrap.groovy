@@ -22,25 +22,29 @@ class BootStrap {
         def roleAdmin = new SecureRole(authority: 'ROLE_ADMIN').save()
         def roleUser = new SecureRole(authority: 'ROLE_USER').save()
 
-        def preferencesUser = new UserPreferences()
         def user = new User(username: 'user',
                             password: password,
-                            preferences: preferencesUser,
+                            preferences: new UserPreferences(),
+                            profile: new UserProfile(),
                             enabled: true)
 
-        preferencesUser.user = user
+        user.preferences.user = user
+        user.profile.user = user
         user.save()
-        preferencesUser.save()
+        user.preferences.save()
+        user.profile.save()
 
-        def preferencesAdmin = new UserPreferences()
         def admin = new User(username: 'admin',
                              password: password,
-                             preferences: preferencesAdmin,
+                             preferences: new UserPreferences(),
+                             profile: new UserProfile(),
                              enabled: true)
 
-        preferencesAdmin.user = admin
+        admin.preferences.user = admin
+        admin.profile.user = admin
         admin.save()
-        preferencesAdmin.save()
+        admin.preferences.save()
+        admin.profile.save()
 
         SecureUserSecureRole.create user, roleUser
         SecureUserSecureRole.create admin, roleUser
