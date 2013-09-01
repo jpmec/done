@@ -1,7 +1,7 @@
 package com.jpmec.done
 
 
-
+import grails.converters.JSON
 import grails.test.mixin.*
 import org.junit.*
 
@@ -9,15 +9,61 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(UserController)
+@Mock([User, UserPreferences, SecureUser, SecureRole])
 class UserControllerTests {
 
     void testShow() {
 
-//       def params = getParams()
+       // setup
+       User.registerObjectMarshaller()
+       UserPreferences.registerObjectMarshaller()
 
-//       params.id = 1
-//       def result = controller.show()
+       def user = new User(username: 'user',
+                           password: 'password',
+                           email: 'my@email.com',
+                           preferences: new UserPreferences(),
+                           enabled: true)
+       user.save()
 
-//       assertNotNull result
+       controller.params.id = user.id
+
+       // exercise
+       controller.show()
+
+       // verify
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.get('email') == 'my@email.com'
+    }
+
+
+    void testShowForInvalidParamsId() {
+
+       // setup
+       User.registerObjectMarshaller()
+       UserPreferences.registerObjectMarshaller()
+
+       controller.params.id = 47
+
+       // exercise
+       controller.show()
+
+       // verify
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() == 0
+    }
+
+
+    void testShowForNullParamsId() {
+
+       // setup
+       User.registerObjectMarshaller()
+       UserPreferences.registerObjectMarshaller()
+
+       // exercise
+       controller.show()
+
+       // verify
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() == 0
     }
 }
