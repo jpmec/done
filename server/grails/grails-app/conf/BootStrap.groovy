@@ -1,8 +1,7 @@
-import com.jpmec.done.SecureRole
-import com.jpmec.done.SecureUser
-import com.jpmec.done.SecureUserSecureRole
-import com.jpmec.done.User
-import com.jpmec.done.UserPreferences
+import com.jpmec.done.*
+
+
+
 
 class BootStrap {
 
@@ -10,6 +9,7 @@ class BootStrap {
 
     def init = { servletContext ->
 
+        Task.registerObjectMarshaller()
         User.registerObjectMarshaller()
         UserPreferences.registerObjectMarshaller()
 
