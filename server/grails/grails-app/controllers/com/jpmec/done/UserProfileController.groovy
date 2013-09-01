@@ -22,7 +22,8 @@ class UserProfileController {
       }
       else
       {
-        render UserProfile.list() as JSON
+        def list = UserProfile.list()
+        render list as JSON
       }
     }
 }

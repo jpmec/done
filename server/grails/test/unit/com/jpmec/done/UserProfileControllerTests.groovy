@@ -15,7 +15,7 @@ import org.junit.*
 @Mock([User, UserPreferences, UserProfile, SecureUser, SecureRole])
 class UserProfileControllerTests {
 
-    void testShowForNullId() {
+    void testShowForNullIdAndNoRecords() {
 
        // exercise
        controller.show()
@@ -23,6 +23,53 @@ class UserProfileControllerTests {
        // verify
        def responseJson = JSON.parse(response.text)
        assert responseJson.length() == 0
+    }
+
+
+    void testShowForNullIdAndSomeRecords() {
+
+       // setup
+       def springSecurityService = new Object()
+       springSecurityService.metaClass.encodePassword = {String password -> "ENCODED_PASSWORD"}
+
+       User.registerObjectMarshaller()
+       UserPreferences.registerObjectMarshaller()
+       UserProfile.registerObjectMarshaller()
+
+       def user1 = new User(username: 'user1',
+                            password: 'password',
+                            preferences: new UserPreferences(),
+                            profile: new UserProfile(name: 'user1', email: 'user1@email.com'),
+                            enabled: true)
+
+       user1.springSecurityService = springSecurityService
+
+       assert user1.save(flush: true)
+       user1.preferences.user = user1
+       assert user1.preferences.save(flush: true)
+       user1.profile.user = user1
+       assert user1.profile.save(flush: true)
+
+
+       def user2 = new User(username: 'user2',
+                            password: 'password',
+                            preferences: new UserPreferences(),
+                            profile: new UserProfile(name: 'user2', email: 'user2@email.com'),
+                            enabled: true)
+
+       user2.springSecurityService = springSecurityService
+
+       assert user2.save(flush: true)
+       assert user2.preferences.save(flush: true)
+       assert user2.profile.save(flush: true)
+
+
+       // exercise
+       controller.show()
+
+       // verify
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() == 2
     }
 
 
@@ -42,6 +89,9 @@ class UserProfileControllerTests {
     void testShowForValidId() {
 
        // setup
+       def springSecurityService = new Object()
+       springSecurityService.metaClass.encodePassword = {String password -> "ENCODED_PASSWORD"}
+
        User.registerObjectMarshaller()
        UserPreferences.registerObjectMarshaller()
        UserProfile.registerObjectMarshaller()
@@ -51,10 +101,11 @@ class UserProfileControllerTests {
                            preferences: new UserPreferences(),
                            profile: new UserProfile(email: 'my@email.com'),
                            enabled: true)
+       user.springSecurityService = springSecurityService
 
-       assert user.save()
-       assert user.preferences.save()
-       assert user.profile.save()
+       assert user.save(flush: true)
+       assert user.preferences.save(flush: true)
+       assert user.profile.save(flush: true)
 
        controller.params.id = user.profile.id
 

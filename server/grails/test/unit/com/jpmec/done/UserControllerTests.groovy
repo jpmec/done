@@ -1,6 +1,5 @@
 package com.jpmec.done
 
-
 import grails.converters.JSON
 import grails.test.mixin.*
 import org.junit.*
@@ -15,6 +14,9 @@ class UserControllerTests {
     void testShow() {
 
        // setup
+       def springSecurityService = new Object()
+       springSecurityService.metaClass.encodePassword = {String password -> "ENCODED_PASSWORD"}
+
        User.registerObjectMarshaller()
        UserPreferences.registerObjectMarshaller()
 
@@ -23,7 +25,9 @@ class UserControllerTests {
                            preferences: new UserPreferences(),
                            profile: new UserProfile(email: 'my@email.com'),
                            enabled: true)
-       user.save()
+
+       user.springSecurityService = springSecurityService
+       assert user.save(flush: true)
 
        controller.params.id = user.id
 
@@ -31,7 +35,7 @@ class UserControllerTests {
        controller.show()
 
        // verify
-//       def responseJson = JSON.parse(response.text)
+       def responseJson = JSON.parse(response.text)
 //       assert responseJson.get('email') == 'my@email.com'
     }
 
