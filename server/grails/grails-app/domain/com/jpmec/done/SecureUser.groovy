@@ -11,7 +11,7 @@ class SecureUser {
 	boolean accountLocked
 	boolean passwordExpired
 
-  static hasMany = [openIds: OpenID]
+  static hasMany = [openIds: OpenID, oAuthIds: OAuthID]
 
 	static constraints = {
 		username blank: false, unique: true

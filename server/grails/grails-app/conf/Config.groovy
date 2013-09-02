@@ -62,7 +62,25 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+
+        grails.plugins.springsecurity.mock.active = true
+        grails.plugins.springsecurity.mock.fullName = "a user"
+        grails.plugins.springsecurity.mock.email = "user@email.com"
+        grails.plugins.springsecurity.mock.username =  "user"
+        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
+        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
     }
+
+    test {
+
+        grails.plugins.springsecurity.mock.active = true
+        grails.plugins.springsecurity.mock.fullName = "a user"
+        grails.plugins.springsecurity.mock.email = "user@email.com"
+        grails.plugins.springsecurity.mock.username =  "user"
+        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
+        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
+    }
+
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
@@ -88,13 +106,9 @@ log4j = {
     }
 
     root {
-      error 'stdout'
+      warn 'stdout'
       additivity = true
     }
-
-
-
-    trace 'com.jpmec.done.TaskController'
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -132,3 +146,6 @@ grails.plugins.springsecurity.rememberMe.persistent = true
 grails.plugins.springsecurity.rememberMe.persistentToken.domainClassName = 'com.jpmec.done.PersistentLogin'
 
 grails.plugins.springsecurity.openid.domainClass = 'com.jpmec.done.OpenID'
+
+// Added by the Spring Security OAuth plugin:
+grails.plugins.springsecurity.oauth.domainClass = 'com.jpmec.done.OAuthID'

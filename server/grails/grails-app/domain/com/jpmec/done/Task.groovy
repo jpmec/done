@@ -14,8 +14,8 @@ class Task {
     Boolean isDone = false;
 
     static constraints = {
-        text blank: false
-        createdBy blank: false
+//        text blank: false
+//        createdBy blank: false
     }
 
     static jsonAttributes() {

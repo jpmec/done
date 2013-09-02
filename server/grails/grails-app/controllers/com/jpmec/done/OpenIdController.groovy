@@ -1,3 +1,5 @@
+package com.jpmec.done
+
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.openid.OpenIdAuthenticationFailureHandler as OIAFH
 
@@ -8,6 +10,9 @@ import org.springframework.security.web.savedrequest.DefaultSavedRequest
 import com.jpmec.done.SecureUser
 import com.jpmec.done.SecureRole
 import com.jpmec.done.SecureUserSecureRole
+
+
+
 
 /**
  * Manages associating OpenIDs with application users, both by creating a new local user

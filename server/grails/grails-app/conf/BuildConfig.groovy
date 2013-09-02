@@ -48,9 +48,11 @@ grails.project.dependency.resolution = {
 
     plugins {
         compile ':cache:1.0.1'
+        compile ':spring-security-core:1.2.7.3'
 				compile(':spring-security-openid:1.0.4') {
 					  excludes 'guice'
 			  }
+        compile ":spring-security-mock:1.0.2"
 
         build ":tomcat:$grailsVersion"
 

@@ -10,11 +10,14 @@ class UrlMappings {
          action = 'createAccount'
       }
 
-		"/api/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
+      "/api/task/$id?"(resource:"task")
+      "/api/user_profile/$id?"(resource:"UserProfile")
+
+		  "/api/$controller/$action?/$id?"{
+        constraints {
+				  // apply constraints here
+			  }
+      }
 
 		"/login/$action?"(controller: "login")
 		"/logout/$action?"(controller: "logout")
