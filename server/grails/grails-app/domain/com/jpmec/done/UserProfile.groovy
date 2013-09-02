@@ -8,16 +8,17 @@ import grails.converters.JSON
 class UserProfile {
 
     User user;
-    String name = "";
+    String public_id = "";
+    String name = "anonymous";
     String email = "";
     String website_url = "";
 
     static constraints = {
+      public_id length: 64, blank: false, unique: true
     }
 
-
     static jsonAttributes() {
-      ["name", "email", "website_url"]
+      ["public_id", "name", "email", "website_url"]
     }
 
     static registerObjectMarshaller() {
@@ -32,5 +33,13 @@ class UserProfile {
 
           return returnArray
         }
+    }
+
+    void setUser(User instance)
+    {
+      user = instance
+      if (instance) {
+        public_id = user.username.encodeAsSHA256()
+      }
     }
 }

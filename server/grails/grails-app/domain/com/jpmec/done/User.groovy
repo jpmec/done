@@ -11,7 +11,6 @@ class User extends SecureUser {
     static hasMany = [tasks: Task]
 
     static constraints = {
-//      preferences unique: true
     }
 
     static jsonAttributes() {
@@ -30,5 +29,19 @@ class User extends SecureUser {
 
           return returnArray
         }
+    }
+
+    void setPreferences(UserPreferences instance) {
+      preferences = instance
+      if (instance) {
+        instance.user = this
+      }
+    }
+
+    void setProfile(UserProfile instance) {
+      profile = instance
+      if (instance) {
+        instance.user = this
+      }
     }
 }

@@ -21,5 +21,24 @@ class UserTests {
       assert user.username == 'user'
       assert user.password == 'password'
       assertNotNull user.preferences
+      assertNotNull user.profile
+    }
+
+
+    void testSetPreferencesToNull() {
+      def user = new User()
+
+      user.preferences = null
+
+      assert user.preferences == null
+    }
+
+
+    void testSetProfileToNull() {
+      def user = new User()
+
+      user.profile = null
+
+      assert user.profile == null
     }
 }

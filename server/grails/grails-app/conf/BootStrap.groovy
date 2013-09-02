@@ -12,6 +12,7 @@ class BootStrap {
         Task.registerObjectMarshaller()
         User.registerObjectMarshaller()
         UserPreferences.registerObjectMarshaller()
+        UserProfile.registerObjectMarshaller()
 
 
         // encode the password only if you're using an older version of the // spring-security-core plugin and you don't have encoding logic in
@@ -25,11 +26,9 @@ class BootStrap {
         def user = new User(username: 'user',
                             password: password,
                             preferences: new UserPreferences(),
-                            profile: new UserProfile(),
+                            profile: new UserProfile(name: 'a user'),
                             enabled: true)
 
-        user.preferences.user = user
-        user.profile.user = user
         user.save()
         user.preferences.save()
         user.profile.save()
@@ -37,11 +36,9 @@ class BootStrap {
         def admin = new User(username: 'admin',
                              password: password,
                              preferences: new UserPreferences(),
-                             profile: new UserProfile(),
+                             profile: new UserProfile(name: 'an admin'),
                              enabled: true)
 
-        admin.preferences.user = admin
-        admin.profile.user = admin
         admin.save()
         admin.preferences.save()
         admin.profile.save()
