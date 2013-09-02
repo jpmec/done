@@ -11,7 +11,17 @@ import org.junit.*
 @TestFor(Task)
 class TaskTests {
 
+    void testDefaultConstructor() {
+       Task.registerObjectMarshaller()
+
+       def instance = new Task();
+
+       assert instance.text == ""
+    }
+
     void testConstructor() {
+       Task.registerObjectMarshaller()
+
        def instance = new Task(text: "do something");
 
        assert instance.text == "do something"

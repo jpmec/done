@@ -12,10 +12,28 @@ import org.junit.*
 @Mock(Task)
 class TaskControllerTests {
 
-    void testShowForNullParamsId() {
+    void testShowForNullParamsIdWithNoObjects() {
 
        // setup
        Task.registerObjectMarshaller()
+
+       // exercise
+       controller.show()
+
+       // verify
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() == 0
+    }
+
+    void testShowForNullParamsIdWithSomeTasks() {
+
+       // setup
+       Task.registerObjectMarshaller()
+
+       def task = new Task(text: "do it",
+                           created_by: "me")
+
+       task.save(flush: true);
 
        // exercise
        controller.show()
