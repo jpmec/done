@@ -15,15 +15,18 @@ class Task {
     String assignedTo = ""
     Boolean isDone = false
 
+
     static constraints = {
 //        text blank: false
 //        createdBy blank: false
         uuid unique: true
     }
 
+
     static jsonAttributes() {
         ["uuid", "text", "notes", "createdBy", "assignedTo", "isDone"]
     }
+
 
     static registerObjectMarshaller() {
         JSON.registerObjectMarshaller(Task) {
@@ -39,11 +42,13 @@ class Task {
         }
     }
 
+
     def beforeValidate() {
         if (uuid == null) {
             uuid = UUID.randomUUID().toString()
         }
     }
+
 
     def beforeInsert() {
         if (this.uuid == null) {
