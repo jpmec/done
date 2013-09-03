@@ -14,40 +14,41 @@ class TaskController {
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def show = {
-      if (params.uuid) {
-        def instance = Task.findByUuid(params.uuid)
-        if (instance) {
-          render instance as JSON
-        }
-        else {
-          render(status:404, text:'{}')
-        }
-      }
-      else {
+      if (!params.uuid) {
         render(status:400, text:'{}')
+        return
       }
+
+      def instance = Task.findByUuid(params.uuid)
+
+      if (!instance) {
+        render(status:404, text:'{}')
+        return
+      }
+
+      render instance as JSON
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def update = {
-      if (params.uuid) {
-        def instance = Task.findByUuid(params.uuid)
-        if (instance) {
-          instance.properties = params
-          if (instance.save()) {
-            render instance as JSON
-          }
-          else {
-            render(status:500, text:'{}')
-          }
-        }
-        else {
-          render(status:404, text:'{}')
-        }
-      }
-      else {
+      if (!params.uuid) {
         render(status:400, text:'{}')
+        return
       }
+
+      def instance = Task.findByUuid(params.uuid)
+      if (!instance) {
+        render(status:404, text:'{}')
+        return
+      }
+
+      instance.properties = params
+      if (!instance.save()) {
+        render(status:500, text:'{}')
+        return
+      }
+
+      render instance as JSON
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
@@ -64,31 +65,31 @@ class TaskController {
         new_instance.uuid = null
       }
 
-      if (new_instance.save()) {
-        render new_instance as JSON
-      }
-      else {
-        // return an empty object if there was an error
+      if (!new_instance.save()) {
         render(status: 500, text:'{}')
+        return
       }
+
+      render new_instance as JSON
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def delete = {
-      if (params.uuid) {
-        def instance = Task.findByUuid(params.uuid)
-        if (instance) {
-          def copy = new Task(instance.properties)
-          instance.delete()
-          render copy as JSON
-        }
-        else {
-          render(status:404, text:'{}')
-        }
-      }
-      else {
+
+      if (!params.uuid) {
         render(status:400, text:'{}')
+        return
       }
+
+      def instance = Task.findByUuid(params.uuid)
+      if (!instance) {
+        render(status:404, text:'{}')
+        return
+      }
+
+      def copy = new Task(instance.properties)
+      instance.delete()
+      render copy as JSON
     }
 
     def afterInterceptor = { model ->
