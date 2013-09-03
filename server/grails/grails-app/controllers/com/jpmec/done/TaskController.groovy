@@ -75,8 +75,20 @@ class TaskController {
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def delete = {
-      log.trace "TaskController.delete"
-      render "delete"
+      if (params.uuid) {
+        def instance = Task.findByUuid(params.uuid)
+        if (instance) {
+          def copy = new Task(instance.properties)
+          instance.delete()
+          render copy as JSON
+        }
+        else {
+          render(status:404, text:'{}')
+        }
+      }
+      else {
+        render(status:400, text:'{}')
+      }
     }
 
     def afterInterceptor = { model ->

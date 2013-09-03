@@ -276,4 +276,72 @@ class TaskFunctionalTests extends BrowserTestCase {
       assert result3.get('isDone') == true
     }
 
+
+    void testTaskDeleteWithNullUuid() {
+
+      delete("/api/task") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 400
+      assertContentContains '{}'
+    }
+
+
+    void testTaskDeleteWithInvalidUuid() {
+
+      delete("/api/task/this-is-an-invalid-uuid") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 404
+      assertContentContains '{}'
+    }
+
+
+    void testTaskDeleteWithValidUuid() {
+
+      post('/api/task') {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"text": "do it"}
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content1 = response.contentAsString
+      def result1 = JSON.parse(content1)
+      def uuid1 = result1.get('uuid')
+
+
+      delete("/api/task/$uuid1") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 200
+
+      def content2 = response.contentAsString
+      def result2 = JSON.parse(content2)
+
+      assertNotNull result2.get('uuid')
+      assert result2.get('uuid') == uuid1
+      assert result2.get('text') == 'do it'
+
+
+      get("/api/task/$uuid1") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 404
+      assertContentContains '{}'
+    }
+
 }
