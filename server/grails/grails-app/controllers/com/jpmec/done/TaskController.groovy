@@ -14,17 +14,17 @@ class TaskController {
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def show = {
-
-      if (params.id) {
-        def task = Task.get(params.id)
-        if (task) {
-          render task as JSON
+      if (params.uuid) {
+        def instance = Task.findByUuid(params.uuid)
+        if (instance) {
+          render instance as JSON
         }
         else {
           render "{}"
         }
       }
       else {
+        // render empty object by default
         render "{}"
       }
     }
@@ -32,7 +32,7 @@ class TaskController {
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def update = {
       log.trace "TaskController.update"
-      render "update"
+
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])

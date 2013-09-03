@@ -9,18 +9,49 @@ import com.grailsrocks.functionaltest.*
 
 class TaskFunctionalTests extends BrowserTestCase {
 
-    void testTaskShow() {
-      get '/api/task'
+    void testTaskShowDefault() {
+      get('/api/task') {
+        headers['Accept'] = 'application/json'
+      }
 
       assertStatus 200
       assertContentContains '{}'
     }
 
 
+    void testTaskShowWithUuid() {
+      // setup task
+      post('/api/task') {
+        headers['Content-type'] = 'application/json'
+	      body {
+		    """
+        {"text": "do it"}
+        """
+	      }
+      }
+      def content1 = response.contentAsString
+      def result1 = JSON.parse(content1)
+      def uuid1 = result1.get('uuid')
+
+
+      get("/api/task/$uuid1") {
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 200
+
+      def content2 = response.contentAsString
+      def result2 = JSON.parse(content2)
+
+      assert result2.get('text') == "do it"
+      assert result2.get('uuid') == uuid1
+    }
+
+
     void testTaskSaveDefault() {
 
       // exercise test first time
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
       }
 
@@ -33,7 +64,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
 
       // exercise again, this should create a different object
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
       }
 
@@ -51,7 +82,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
     void testTaskSaveWithJsonBody() {
 
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
 	      body {
 		    """
@@ -69,7 +100,7 @@ class TaskFunctionalTests extends BrowserTestCase {
       assert result1.get('text') == 'do it'
 
 
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
 	      body {
 		    """
@@ -93,7 +124,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
     void testTaskSaveWithDuplicateUuids() {
 
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
 	      body {
 		    """
@@ -111,7 +142,7 @@ class TaskFunctionalTests extends BrowserTestCase {
       assertNotNull uuid1
 
 
-      post('/api/task/save') {
+      post('/api/task') {
         headers['Content-type'] = 'application/json'
 	      body {
 		    """

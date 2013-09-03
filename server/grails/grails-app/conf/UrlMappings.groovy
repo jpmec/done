@@ -10,7 +10,7 @@ class UrlMappings {
          action = 'createAccount'
       }
 
-      "/api/task/$id?"(resource:"task")
+      "/api/task/$uuid?"(resource:"task")
       "/api/user_profile/$id?"(resource:"UserProfile")
 
 		  "/api/$controller/$action?/$id?"{
