@@ -7,18 +7,18 @@ import grails.converters.JSON
 
 class UserProfile {
 
-    User user;
-    String public_id = "";
-    String name = "anonymous";
-    String email = "";
-    String website_url = "";
+    User user
+    String uuid
+    String name = "anonymous"
+    String email = ""
+    String website_url = ""
 
     static constraints = {
-      public_id length: 64, blank: false, unique: true
+      uuid unique: true
     }
 
     static jsonAttributes() {
-      ["public_id", "name", "email", "website_url"]
+      ["uuid", "name", "email", "website_url"]
     }
 
     static registerObjectMarshaller() {
@@ -35,11 +35,15 @@ class UserProfile {
         }
     }
 
-    void setUser(User instance)
-    {
-      user = instance
-      if (instance) {
-        public_id = user.username.encodeAsSHA256()
-      }
+    def beforeValidate() {
+        if (this.uuid == null) {
+            this.uuid = UUID.randomUUID().toString()
+        }
+    }
+
+    def beforeInsert() {
+        if (this.uuid == null) {
+            this.uuid = UUID.randomUUID().toString()
+        }
     }
 }

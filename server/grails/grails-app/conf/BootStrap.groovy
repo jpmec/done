@@ -30,8 +30,6 @@ class BootStrap {
                             enabled: true)
 
         user.save()
-        user.preferences.save()
-        user.profile.save()
 
         def admin = new User(username: 'admin',
                              password: password,
@@ -40,8 +38,6 @@ class BootStrap {
                              enabled: true)
 
         admin.save()
-        admin.preferences.save()
-        admin.profile.save()
 
         SecureUserSecureRole.create user, roleUser
         SecureUserSecureRole.create admin, roleUser

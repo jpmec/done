@@ -61,6 +61,8 @@ grails.hibernate.cache.queries = false
 
 environments {
     development {
+        grails.gorm.failOnError=true
+
         grails.logging.jul.usebridge = true
 
         grails.plugins.springsecurity.mock.active = true
@@ -72,6 +74,7 @@ environments {
     }
 
     test {
+        grails.gorm.failOnError=true
 
         grails.plugins.springsecurity.mock.active = true
         grails.plugins.springsecurity.mock.fullName = "a user"
@@ -94,9 +97,11 @@ log4j = {
         environments {
             development {
                 console name: 'stdout', layout: pattern(conversionPattern: "%c{2} %m%n")
+                console name: 'stderr', layout: pattern(conversionPattern: "%c{2} %m%n")
             }
             test {
                 console name: 'stdout', layout: pattern(conversionPattern: "%c{2} %m%n")
+                console name: 'stderr', layout: pattern(conversionPattern: "%c{2} %m%n")
             }
             production {
                 // TODO CHANGE THIS TO USE A FILE
@@ -126,14 +131,18 @@ log4j = {
         development {
           trace 'grails.app'
           trace 'com.jpmec.done.TaskController'
+          additivity = true
         }
         test {
           trace 'grails.app'
           trace 'com.jpmec.done'
+          info 'com.jpmec.done.TaskTests'
+          additivity = true
         }
         production {
           warn 'grails.app'
           warn 'com.jpmec.done'
+          additivity = true
         }
     }
 }
