@@ -31,8 +31,25 @@ class TaskController {
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def update = {
-      log.trace "TaskController.update"
-
+      if (params.uuid) {
+        def existing_instance = Task.findByUuid(params.uuid)
+        if (existing_instance) {
+          existing_instance.properties = params
+          if (existing_instance.save()) {
+            render existing_instance as JSON
+          }
+          else {
+            render "{}"
+          }
+        }
+        else {
+          render "{}"
+        }
+      }
+      else {
+        // render empty object by default
+        render "{}"
+      }
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])

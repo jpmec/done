@@ -19,7 +19,17 @@ class TaskFunctionalTests extends BrowserTestCase {
     }
 
 
-    void testTaskShowWithUuid() {
+    void testTaskShowWithInvalidUuid() {
+      get('/api/task/this-is-an-invalid-uuid') {
+        headers['Accept'] = 'application/json'
+      }
+
+      assertStatus 200
+      assertContentContains '{}'
+    }
+
+
+    void testTaskShowWithValidUuid() {
       // setup task
       post('/api/task') {
         headers['Content-type'] = 'application/json'
@@ -53,6 +63,7 @@ class TaskFunctionalTests extends BrowserTestCase {
       // exercise test first time
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
       }
 
       assertStatus 200
@@ -66,6 +77,7 @@ class TaskFunctionalTests extends BrowserTestCase {
       // exercise again, this should create a different object
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
       }
 
       assertStatus 200
@@ -84,6 +96,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
 	      body {
 		    """
         {"text": "do it"}
@@ -102,6 +115,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
 	      body {
 		    """
         {"text": "do it"}
@@ -126,6 +140,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
 	      body {
 		    """
         {"text": "do it"}
@@ -144,6 +159,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
       post('/api/task') {
         headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
 	      body {
 		    """
         {"uuid": "$uuid1", "notes": "to it"}
@@ -161,6 +177,69 @@ class TaskFunctionalTests extends BrowserTestCase {
       assert result2.get('notes') == 'to it'
 
       assert result1.get('uuid') != result2.get('uuid')
+    }
+
+
+
+    void testTaskUpdateWithJsonBody() {
+
+      post('/api/task') {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"text": "do it"}
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content1 = response.contentAsString
+      def result1 = JSON.parse(content1)
+      def uuid1 = result1.get('uuid')
+
+
+      put("/api/task/$uuid1") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"notes": "to it"}
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content2 = response.contentAsString
+      def result2 = JSON.parse(content2)
+
+      assertNotNull result2.get('uuid')
+      assert result2.get('uuid') == uuid1
+      assert result2.get('text') == 'do it'
+      assert result2.get('notes') == 'to it'
+
+      put("/api/task/$uuid1") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"isDone": true}
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content3 = response.contentAsString
+      def result3 = JSON.parse(content3)
+
+      assertNotNull result3.get('uuid')
+      assert result3.get('uuid') == uuid1
+      assert result3.get('text') == 'do it'
+      assert result3.get('notes') == 'to it'
+      assert result3.get('isDone') == true
     }
 
 }
