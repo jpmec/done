@@ -9,12 +9,12 @@ import com.grailsrocks.functionaltest.*
 
 class TaskFunctionalTests extends BrowserTestCase {
 
-    void testTaskShowDefault() {
+    void testTaskShowWithNullUuid() {
       get('/api/task') {
         headers['Accept'] = 'application/json'
       }
 
-      assertStatus 200
+      assertStatus 400
       assertContentContains '{}'
     }
 
@@ -24,7 +24,7 @@ class TaskFunctionalTests extends BrowserTestCase {
         headers['Accept'] = 'application/json'
       }
 
-      assertStatus 200
+      assertStatus 404
       assertContentContains '{}'
     }
 
@@ -179,6 +179,40 @@ class TaskFunctionalTests extends BrowserTestCase {
       assert result1.get('uuid') != result2.get('uuid')
     }
 
+
+
+    void testTaskUpdateWithNullUuid() {
+
+      put("/api/task") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"notes": "to it"}
+        """
+	      }
+      }
+
+      assertStatus 400
+      assertContentContains '{}'
+    }
+
+
+    void testTaskUpdateWithInvalidUuid() {
+
+      put("/api/task/this-is-an-invalid-uuid") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {"notes": "to it"}
+        """
+	      }
+      }
+
+      assertStatus 404
+      assertContentContains '{}'
+    }
 
 
     void testTaskUpdateWithJsonBody() {

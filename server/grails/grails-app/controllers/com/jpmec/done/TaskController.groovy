@@ -20,35 +20,33 @@ class TaskController {
           render instance as JSON
         }
         else {
-          render "{}"
+          render(status:404, text:'{}')
         }
       }
       else {
-        // render empty object by default
-        render "{}"
+        render(status:400, text:'{}')
       }
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def update = {
       if (params.uuid) {
-        def existing_instance = Task.findByUuid(params.uuid)
-        if (existing_instance) {
-          existing_instance.properties = params
-          if (existing_instance.save()) {
-            render existing_instance as JSON
+        def instance = Task.findByUuid(params.uuid)
+        if (instance) {
+          instance.properties = params
+          if (instance.save()) {
+            render instance as JSON
           }
           else {
-            render "{}"
+            render(status:500, text:'{}')
           }
         }
         else {
-          render "{}"
+          render(status:404, text:'{}')
         }
       }
       else {
-        // render empty object by default
-        render "{}"
+        render(status:400, text:'{}')
       }
     }
 
@@ -71,7 +69,7 @@ class TaskController {
       }
       else {
         // return an empty object if there was an error
-        render "{}"
+        render(status: 500, text:'{}')
       }
     }
 
