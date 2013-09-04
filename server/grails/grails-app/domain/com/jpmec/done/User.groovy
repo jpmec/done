@@ -31,6 +31,13 @@ class User extends SecureUser {
         }
     }
 
+    static createNewUser(params) {
+      def new_instance = new User(preferences: new UserPreferences(),
+                                  profile: new UserProfile())
+      new_instance.properties = params
+      new_instance
+    }
+
     void setPreferences(UserPreferences instance) {
       preferences = instance
       if (instance) {

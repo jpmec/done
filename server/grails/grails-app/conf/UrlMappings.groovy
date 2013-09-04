@@ -11,6 +11,8 @@ class UrlMappings {
       }
 
       "/api/task/$uuid?"(resource:"task")
+      "/api/user/$uuid?"(resource:"user")
+
       "/api/user_profile/$id?"(resource:"UserProfile")
 
 		  "/api/$controller/$action?/$id?"{
