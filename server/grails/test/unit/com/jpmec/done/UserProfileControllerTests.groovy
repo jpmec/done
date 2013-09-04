@@ -15,7 +15,7 @@ import org.junit.*
 @Mock([User, UserPreferences, UserProfile, SecureUser, SecureRole])
 class UserProfileControllerTests {
 
-    void testShowForNullIdAndNoRecords() {
+    void testShowForNullUuidAndNoRecords() {
 
        // exercise
        controller.show()
@@ -26,7 +26,7 @@ class UserProfileControllerTests {
     }
 
 
-    void testShowForNullIdAndSomeRecords() {
+    void testShowForNullUuidAndSomeRecords() {
 
        // setup
        def springSecurityService = new Object()
@@ -45,9 +45,7 @@ class UserProfileControllerTests {
        user1.springSecurityService = springSecurityService
 
        assert user1.save(flush: true)
-       user1.preferences.user = user1
        assert user1.preferences.save(flush: true)
-       user1.profile.user = user1
        assert user1.profile.save(flush: true)
 
 
@@ -69,13 +67,13 @@ class UserProfileControllerTests {
 
        // verify
        def responseJson = JSON.parse(response.text)
-       assert responseJson.length() == 2
+       assert responseJson.length() == 0
     }
 
 
-    void testShowForInvalidId() {
+    void testShowForInvalidUuid() {
 
-       controller.params.id = 47
+       controller.params.uuid = 47
 
        // exercise
        controller.show()
@@ -86,7 +84,7 @@ class UserProfileControllerTests {
     }
 
 
-    void testShowForValidId() {
+    void testShowForValidUuid() {
 
        // setup
        def springSecurityService = new Object()
@@ -107,13 +105,14 @@ class UserProfileControllerTests {
        assert user.preferences.save(flush: true)
        assert user.profile.save(flush: true)
 
-       controller.params.id = user.profile.id
+       controller.params.uuid = user.profile.uuid
 
        // exercise
        controller.show()
 
        // verify
        def responseJson = JSON.parse(response.text)
+
        assert responseJson.length() != 0
        assert responseJson.get('email') == 'my@email.com'
     }

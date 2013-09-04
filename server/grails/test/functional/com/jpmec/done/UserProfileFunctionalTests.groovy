@@ -15,7 +15,7 @@ class UserProfileFunctionalTests extends BrowserTestCase {
     }
 
 
-    void testUserShowWithInvalidUuid() {
+    void testUserProfileShowWithInvalidUuid() {
       get('/api/user/profile/this-is-an-invalid-uuid') {
         headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/json'

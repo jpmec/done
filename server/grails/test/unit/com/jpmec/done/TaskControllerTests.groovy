@@ -13,7 +13,7 @@ import org.junit.*
 class TaskControllerTests {
 
 
-    void testShowForNullParamsIdWithNoObjects() {
+    void testShowForNullParamsUuidWithNoObjects() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -27,7 +27,7 @@ class TaskControllerTests {
     }
 
 
-    void testShowForNullParamsIdWithSomeTasks() {
+    void testShowForNullParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -51,7 +51,7 @@ class TaskControllerTests {
     }
 
 
-    void testShowForInvalidParamsIdWithSomeTasks() {
+    void testShowForInvalidParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -66,7 +66,7 @@ class TaskControllerTests {
 
        assert task2.save(flush: true);
 
-       controller.params.id = 47
+       controller.params.uuid = 47
 
        // exercise
        controller.show()
@@ -76,7 +76,8 @@ class TaskControllerTests {
        assert responseJson.length() == 0
     }
 
-    void testShowForValidParamsIdWithSomeTasks() {
+
+    void testShowForValidParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -91,7 +92,7 @@ class TaskControllerTests {
 
        assert task2.save(flush: true);
 
-       controller.params.id = 1
+       controller.params.uuid = task1.uuid
 
        // exercise
        controller.show()
@@ -102,9 +103,7 @@ class TaskControllerTests {
     }
 
 
-
-
-    void testUpdateForValidParamsIdWithSomeTasks() {
+    void testUpdateForValidParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -119,19 +118,20 @@ class TaskControllerTests {
 
        assert task2.save(flush: true);
 
-       controller.params.id = 1
+       controller.params.uuid = task2.uuid
 
        // exercise
        controller.update()
 
        // verify
-       //def responseJson = JSON.parse(response.text)
-       //assert responseJson.length() != 0
-       assert response.text == "update"
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() != 0
+       assert responseJson.get('uuid') == task2.uuid
+       assert responseJson.get('text') == "do it two"
     }
 
 
-    void testSaveForValidParamsIdWithSomeTasks() {
+    void testSaveForValidParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -146,19 +146,20 @@ class TaskControllerTests {
 
        assert task2.save(flush: true);
 
-       controller.params.id = 1
+       controller.params.uuid = task2.uuid
 
        // exercise
        controller.save()
 
        // verify
-       //def responseJson = JSON.parse(response.text)
-       //assert responseJson.length() != 0
-       assert response.text == "save"
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() != 0
+       assert responseJson.get('uuid') != task2.uuid
+       assert responseJson.get('text') == "do it two"
     }
 
 
-    void testDeleteForValidParamsIdWithSomeTasks() {
+    void testDeleteForValidParamsUuidWithSomeTasks() {
 
        // setup
        Task.registerObjectMarshaller()
@@ -173,14 +174,15 @@ class TaskControllerTests {
 
        assert task2.save(flush: true);
 
-       controller.params.id = 1
+       controller.params.uuid = task2.uuid
 
        // exercise
        controller.delete()
 
        // verify
-       //def responseJson = JSON.parse(response.text)
-       //assert responseJson.length() != 0
-       assert response.text == "delete"
+       def responseJson = JSON.parse(response.text)
+       assert responseJson.length() != 0
+       assert responseJson.get('uuid') == task2.uuid
+       assert responseJson.get('text') == "do it two"
     }
 }
