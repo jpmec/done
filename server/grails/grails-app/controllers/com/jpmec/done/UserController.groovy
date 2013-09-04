@@ -26,24 +26,25 @@ class UserController {
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def update = {
+
       if (!params.uuid) {
         render(status:400, text:'{}')
         return
       }
 
-      def instance = User.findByUuid(params.uuid)
-      if (!instance) {
+      def profile = UserProfile.findByUuid(params.uuid)
+      if (!profile) {
         render(status:404, text:'{}')
         return
       }
 
-      instance.properties = params
-      if (!instance.save()) {
+      profile.user.properties = params
+      if (!profile.user.save()) {
         render(status:500, text:'{}')
         return
       }
 
-      render instance as JSON
+      render profile.user as JSON
     }
 
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])

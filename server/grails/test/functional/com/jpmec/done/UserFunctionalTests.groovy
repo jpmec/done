@@ -7,6 +7,7 @@ class UserFunctionalTests extends BrowserTestCase {
 
     void testUserShowWithNullUuid() {
       get('/api/user') {
+        headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/json'
       }
 
@@ -17,6 +18,7 @@ class UserFunctionalTests extends BrowserTestCase {
 
     void testUserShowWithInvalidUuid() {
       get('/api/user/this-is-an-invalid-uuid') {
+        headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/json'
       }
 
@@ -275,6 +277,55 @@ class UserFunctionalTests extends BrowserTestCase {
 //    }
 //
 //
+
+
+
+    void testUserUpdateWithValidUuid() {
+
+      // setup
+      post('/api/user') {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+	      body {
+		    """
+        {
+          "username": "testUserUpdateWithValidUuid",
+          "password": "password",
+        }
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content1 = response.contentAsString
+      def result1 = grails.converters.JSON.parse(content1)
+      def uuid1 = result1.get('profile').get('uuid')
+      log.trace "uuid1 = " + uuid1
+
+      // exercise
+      put("/api/user/$uuid1") {
+        headers['Content-type'] = 'application/json'
+        headers['Accept'] = 'application/json'
+
+	      body {
+		    """
+        {
+          "password": "password2",
+        }
+        """
+	      }
+      }
+
+      assertStatus 200
+
+      def content2 = response.contentAsString
+      def result2 = grails.converters.JSON.parse(content2)
+      assert result2.get('profile').get('uuid') == uuid1
+
+    }
+
+
 //    void testUserUpdateWithJsonBody() {
 //
 //      post('/api/task') {
