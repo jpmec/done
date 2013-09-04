@@ -11,6 +11,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
     void testTaskShowWithNullUuid() {
       get('/api/task') {
+        headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/json'
       }
 
@@ -21,6 +22,7 @@ class TaskFunctionalTests extends BrowserTestCase {
 
     void testTaskShowWithInvalidUuid() {
       get('/api/task/this-is-an-invalid-uuid') {
+        headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/json'
       }
 

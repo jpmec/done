@@ -8,10 +8,6 @@ import grails.plugins.springsecurity.Secured
 
 class TaskController {
 
-    def beforeInterceptor = {
-        log.trace("Executing action $actionName with params $params")
-    }
-
 //    @Secured(['ROLE_USER', 'IS_AUTHENTICATED_REMEMBERED'])
     def show = {
       if (!params.uuid) {
@@ -90,9 +86,5 @@ class TaskController {
       def copy = new Task(instance.properties)
       instance.delete()
       render copy as JSON
-    }
-
-    def afterInterceptor = { model ->
-        log.trace("Executed $actionName which resulted in model: $model")
     }
 }
