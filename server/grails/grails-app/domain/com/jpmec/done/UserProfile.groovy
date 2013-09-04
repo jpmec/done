@@ -46,4 +46,5 @@ class UserProfile {
             this.uuid = UUID.randomUUID().toString()
         }
     }
+
 }
