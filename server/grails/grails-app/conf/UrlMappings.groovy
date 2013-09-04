@@ -10,10 +10,13 @@ class UrlMappings {
          action = 'createAccount'
       }
 
-      "/api/task/$uuid?"(resource:"task")
-      "/api/user/$uuid?"(resource:"user")
 
-      "/api/user_profile/$id?"(resource:"UserProfile")
+
+      "/api/task/$uuid?"(resource:"Task")
+
+      "/api/user/preferences/$uuid?"(resource:"UserPreferences", excludes:['save', 'delete'])
+      "/api/user/profile/$uuid?"(resource:"UserProfile", excludes:['save', 'delete'])
+      "/api/user/$uuid?"(resource:"User")
 
 		  "/api/$controller/$action?/$id?"{
         constraints {

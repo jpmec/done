@@ -59,7 +59,7 @@ class UserProfileFunctionalTests extends BrowserTestCase {
 
       def content2 = response.contentAsString
       def result2 = grails.converters.JSON.parse(content2)
-      assert result2.get('profile').get('uuid') == uuid1
+      assert result2.get('uuid') == uuid1
 
     }
 
