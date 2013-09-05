@@ -29,7 +29,12 @@ class BootStrap {
                             profile: new UserProfile(name: 'a user'),
                             enabled: true)
 
-        user.save()
+        if (user.save()) {
+          log.trace "created User with username: '$user.username' and password: '$password'"
+        }
+        else {
+          log.error user.errors
+        }
 
         def admin = new User(username: 'admin',
                              password: password,
@@ -37,7 +42,13 @@ class BootStrap {
                              profile: new UserProfile(name: 'an admin'),
                              enabled: true)
 
-        admin.save()
+
+        if (admin.save()) {
+          log.trace "created User with username: '$admin.username' and password: '$password'"
+        }
+        else {
+          log.error admin.errors
+        }
 
         SecureUserSecureRole.create user, roleUser
         SecureUserSecureRole.create admin, roleUser

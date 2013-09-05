@@ -22,11 +22,15 @@ class UrlMappings {
         constraints {
 				  // apply constraints here
 			  }
-      }
+    }
+
+    "/api/login/"(controller: "LoginService")
 
 		"/login/$action?"(controller: "login")
 		"/logout/$action?"(controller: "logout")
+
 		"/"(view:"/index")
+
 		"500"(view:'/error')
 
 	}

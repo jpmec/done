@@ -65,23 +65,23 @@ environments {
 
         grails.logging.jul.usebridge = true
 
-        grails.plugins.springsecurity.mock.active = true
-        grails.plugins.springsecurity.mock.fullName = "a user"
-        grails.plugins.springsecurity.mock.email = "user@email.com"
-        grails.plugins.springsecurity.mock.username =  "user"
-        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
-        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
+//        grails.plugins.springsecurity.mock.active = true
+//        grails.plugins.springsecurity.mock.fullName = "a user"
+//        grails.plugins.springsecurity.mock.email = "user@email.com"
+//        grails.plugins.springsecurity.mock.username =  "user"
+//        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
+//        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
     }
 
     test {
         grails.gorm.failOnError=true
 
-        grails.plugins.springsecurity.mock.active = true
-        grails.plugins.springsecurity.mock.fullName = "a user"
-        grails.plugins.springsecurity.mock.email = "user@email.com"
-        grails.plugins.springsecurity.mock.username =  "user"
-        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
-        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
+//        grails.plugins.springsecurity.mock.active = true
+//        grails.plugins.springsecurity.mock.fullName = "a user"
+//        grails.plugins.springsecurity.mock.email = "user@email.com"
+//        grails.plugins.springsecurity.mock.username =  "user"
+//        grails.plugins.springsecurity.mock.roles = [ 'ROLE_USER' ]
+//        grails.plugins.springsecurity.ipRestrictions = [ '/**': ['127.0.0.0/8', '::1/128'] ]
     }
 
     production {
