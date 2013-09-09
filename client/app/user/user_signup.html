@@ -1,0 +1,42 @@
+<div class="user-signup-div text-center" data-ng-controller="UserSignupCtrl" data-ng-init="init()" ng-cloak>
+
+  <legend>Sign up</legend>
+
+  <form class="form-horizontal" ng-submit="signup()" ng-collapse="!userIsNull()">
+
+    <div class="control-group">
+      <label class="control-label" for="userSignupName">Name</label>
+      <div class="controls">
+        <input type="text" id="userSignupName" ng-model="userSignupName" placeholder="Name" autofocus="true"></input>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="userSignupEmail">Email</label>
+      <div class="controls">
+        <input type="text" id="userSignupEmail" ng-model="userSignupEmail" placeholder="Email"></input>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="userSignupPassword">Enter Password</label>
+      <div class="controls">
+        <input type="password" id="userSignupPassword" ng-model="userSignupPassword" placeholder="Type Password"></input>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="userSignupPassword2">Verify Password</label>
+      <div class="controls">
+        <input type="password" ng-model="userSignupPassword2" placeholder="Type Password Again"></input>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <button type="submit" class="btn-primary btn-large" ng-disabled="!validNameAndPassword()">Sign up <i class="icon-fixed-width icon-thumbs-up"></i></button>
+    </div>
+
+    <hr>
+
+  </form>
+</div>

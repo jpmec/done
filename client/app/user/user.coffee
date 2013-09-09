@@ -186,6 +186,13 @@ userModule.directive 'userSignin', ->
   restrict: 'A'
   templateUrl: 'user/user_signin.html'
 
+userModule.directive 'userSignup', ->
+  restrict: 'A'
+  templateUrl: 'user/user_signup.html'
+
+userModule.directive 'userForgotPassword', ->
+  restrict: 'A'
+  templateUrl: 'user/user_forgot_password.html'
 
 userModule.directive 'userProfile', ->
   restrict: 'A'
@@ -264,6 +271,72 @@ userModule.controller 'ActiveUserSignoutCtrl',
 ]
 
 
+
+
+userModule.controller 'UserSignupCtrl',
+['$scope', '$location', '$cookies', 'activeUserService',
+($scope, $location, $cookies, activeUserService) ->
+
+  $scope.userSignupName = ''
+  $scope.userSignupPassword = ''
+
+  $scope.init = ->
+    activeUserService.signout() if $location.path() is '/signup'
+    userId = $cookies.userId
+    if userId
+      user = activeUserService.signupById(userId)
+      if user
+        $scope.user = user
+        $location.path('/tasks/list')
+
+
+  $scope.validNameAndPassword = ->
+    return false if $scope.userSignupName.length is 0
+    return false if $scope.userSignupPassword.length is 0
+    true
+
+  $scope.signup = (locationPath) ->
+    return if $scope.userSignupName.length is 0
+    return if $scope.userSignupPassword.length is 0
+    user = activeUserService.signup($scope.userSignupName,
+    $scope.userSignupPassword)
+
+    if user
+      $scope.user = user
+      if $scope.userSignupAutomatic
+        $cookies.userId = user.id
+      else
+        $cookies.userId = ''
+
+      activeUserService.setAutoSignup($scope.userSignupAutomatic)
+
+      $location.path locationPath  if locationPath
+
+  $scope.signout = (locationPath) ->
+    activeUserService.signout()
+    $scope.user = null
+    $location.path locationPath
+]
+
+
+
+
+userModule.controller 'UserForgotPasswordCtrl',
+['$scope', '$location', 'activeUserService',
+($scope, $location, activeUserService) ->
+
+  $scope.userEmail = ''
+
+  $scope.init = ->
+    activeUserService.signout() if $location.path() is '/forgot_password'
+
+  $scope.isValidEmail = ->
+    return false if $scope.userEmail.length is 0
+    true
+
+  $scope.changePassword = (locationPath) ->
+    return if !$scope.isValidEmail
+]
 
 
 
