@@ -8,7 +8,7 @@
         <accordion close-others="false">
           <accordion-group ng-repeat="task in tasks | orderBy:orderByTasksDone:false | filter:filterTasksDone" is-open="true">
             <accordion-heading>
-              <span class="lead done-{{task.done}}">{{task.text}}</span>
+              <span class="lead done-{{task.isDone}}">{{task.text}}</span>
               <span class="pull-right">
               <rating class="pull-right" value="task.priority" max="5" readonly="true"></rating>
               </span>
@@ -33,7 +33,7 @@
         <accordion close-others="false">
            <accordion-group ng-repeat="task in tasks | orderBy:orderByTasksNotDone:true | filter:filterTasksNotDone" is-open="true">
               <accordion-heading>
-                <span class="lead done-{{task.done}}">{{task.text}}</span>
+                <span class="lead done-{{task.isDone}}">{{task.text}}</span>
                 <span class="pull-right">
                 <rating value="task.priority" max="5" readonly="true"></rating>
                 </span>

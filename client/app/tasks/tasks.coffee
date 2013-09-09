@@ -15,7 +15,7 @@ tasksModule.factory 'taskFactory', ->
     id: id
     text: ''
     notes: ''
-    done: false
+    isDone: false
     priority: 0
     mustDo: false
     createdBy: ''
@@ -32,7 +32,7 @@ tasksModule.factory 'taskFactory', ->
 tasksModule.factory 'taskStepFactory', ->
   create: (text) ->
     text: text
-    done: false
+    isDone: false
 
 
 
@@ -138,7 +138,7 @@ tasksModule.service 'tasksService',
   @countDone = ->
     count = 0
     angular.forEach @tasks, (task) ->
-      count += (if task.done then 1 else 0)
+      count += (if task.isDone then 1 else 0)
     count
 
   @create = (obj) ->
@@ -299,7 +299,7 @@ tasksService, tasksTypeaheadService) ->
   $scope.tasksTextArray = ->
     ary = []
     angular.forEach $scope.tasks, (task) ->
-      if (!task.done)
+      if (!task.isDone)
         ary.push(task.text)
     ary
 
@@ -320,14 +320,14 @@ tasksService, tasksTypeaheadService) ->
   $scope.tasksCountDone = () ->
     count = 0
     angular.forEach $scope.tasks, (task) ->
-      if (task.done)
+      if (task.isDone)
         count++
     count
 
   $scope.tasksCountNotDone = () ->
     count = 0
     angular.forEach $scope.tasks, (task) ->
-      if (!task.done)
+      if (!task.isDone)
         count++
     count
 
@@ -367,14 +367,14 @@ tasksService, tasksTypeaheadService) ->
     task.finishedDate = new Date().toString()
     tasksService.saveTask task
 
-  $scope.setDone = (task, done) ->
-    if done
+  $scope.setDone = (task, isDone) ->
+    if isDone
       $scope.setFinishedDate task
-      task.done = true
+      task.isDone = true
       tasksService.saveTask task
     else
       task.finishedDate = null
-      task.done = false
+      task.isDone = false
       tasksService.saveTask task
 
     $scope.syncTypeaheads()
@@ -392,13 +392,13 @@ tasksService, tasksTypeaheadService) ->
     oldTasks = $scope.tasks
     $scope.tasks = []
     angular.forEach oldTasks, (task) ->
-      unless task.done
+      unless task.isDone
         $scope.tasks.push task
       else
         tasksService.destroyTask task
 
   $scope.orderByTasksNotDone = (task) ->
-    if task.done
+    if task.isDone
       return 0
 
     if task.mustDo
@@ -408,7 +408,7 @@ tasksService, tasksTypeaheadService) ->
 
 
   $scope.orderByTasksDone = (task) ->
-    if !task.done
+    if !task.isDone
       return 0
 
     return task.finishedDate
@@ -416,7 +416,7 @@ tasksService, tasksTypeaheadService) ->
 
   $scope.filterTasksNotDone = (task) ->
 
-    if task.done
+    if task.isDone
       return null
 
     if $scope.tasksListFilter == 'done'
@@ -429,7 +429,7 @@ tasksService, tasksTypeaheadService) ->
 
   $scope.filterTasksDone = (task) ->
 
-    if !task.done
+    if !task.isDone
       return null
 
     if $scope.tasksListFilter == 'notDone'
@@ -465,14 +465,14 @@ tasksService, tasksTypeaheadService) ->
         tasksService.saveTask task
         return obj
 
-  $scope.setTaskStepDone = (task, step, done) ->
-    step.done = done
+  $scope.setTaskStepDone = (task, step, isDone) ->
+    step.isDone = isDone
     tasksService.saveTask task
 
   $scope.taskStepsDoneCount = (task) ->
     count = 0
     angular.forEach task.steps, (step) ->
-      if (step.done)
+      if (step.isDone)
         count++
     count
 
@@ -547,7 +547,7 @@ tasksModule.controller 'TasksStatsCtrl',
     result = $scope.tasks[0].createdDate
 
     angular.forEach $scope.tasks, (task) ->
-      if !task.done and task.createdDate < result
+      if !task.isDone and task.createdDate < result
         result = task.createdDate
 
     result
@@ -559,7 +559,7 @@ tasksModule.controller 'TasksStatsCtrl',
     result = $scope.tasks[0]
 
     angular.forEach $scope.tasks, (task) ->
-      if !task.done and task.createdDate < result
+      if !task.isDone and task.createdDate < result
         result = task
 
     result
@@ -572,7 +572,7 @@ tasksModule.controller 'TasksStatsCtrl',
     result = $scope.tasks[0].createdDate
 
     angular.forEach $scope.tasks, (task) ->
-      if !task.done and task.createdDate > result
+      if !task.isDone and task.createdDate > result
         result = task.createdDate
 
     result
@@ -611,14 +611,14 @@ tasksModule.controller 'TasksPrintCtrl',
     task.finishedDate = new Date().toString()
     tasksService.saveTask task
 
-  $scope.setDone = (task, done) ->
-    if done
+  $scope.setDone = (task, isDone) ->
+    if isDone
       $scope.setFinishedDate task
-      task.done = true
+      task.isDone = true
       tasksService.saveTask task
     else
       task.finishedDate = null
-      task.done = false
+      task.isDone = false
       tasksService.saveTask task
 
   $scope.hasNotes = (task) ->
@@ -628,7 +628,7 @@ tasksModule.controller 'TasksPrintCtrl',
     tasksService.count() - tasksService.countDone()
 
   $scope.orderByTasksNotDone = (task) ->
-    if task.done
+    if task.isDone
       return 0
 
     if task.mustDo
@@ -638,7 +638,7 @@ tasksModule.controller 'TasksPrintCtrl',
 
 
   $scope.orderByTasksDone = (task) ->
-    if !task.done
+    if !task.isDone
       return 0
 
     return task.finishedDate
@@ -646,7 +646,7 @@ tasksModule.controller 'TasksPrintCtrl',
 
   $scope.filterTasksNotDone = (task) ->
 
-    if task.done
+    if task.isDone
       return null
 
     if $scope.tasksListFilter == 'done'
@@ -659,7 +659,7 @@ tasksModule.controller 'TasksPrintCtrl',
 
   $scope.filterTasksDone = (task) ->
 
-    if !task.done
+    if !task.isDone
       return null
 
     if $scope.tasksListFilter == 'notDone'
@@ -677,14 +677,14 @@ tasksModule.controller 'TasksPrintCtrl',
   $scope.hasTaskSteps = (task) ->
     task.steps.length > 0
 
-  $scope.setTaskStepDone = (task, step, done) ->
-    step.done = done
+  $scope.setTaskStepDone = (task, step, isDone) ->
+    step.isDone = isDone
     tasksService.saveTask task
 
   $scope.taskStepsDoneCount = (task) ->
     count = 0
     angular.forEach task.steps, (step) ->
-      if (step.done)
+      if (step.isDone)
         count++
     count
 

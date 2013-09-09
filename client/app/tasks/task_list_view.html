@@ -75,7 +75,7 @@
               style = "cursor: move;">
           <span class="text-left">
 
-          <div class="btn-group" ng-hide="step.done">
+          <div class="btn-group" ng-hide="step.isDone">
             <button class="btn btn-success" ng-click="setTaskStepDone(task, step, true)">
               <i class="icon-fixed-width icon-ok"></i>
             </button>
@@ -87,8 +87,8 @@
               <li><a ng-click="destroyTaskStep(task, step)"><span class="text-warning"><i class="icon-fixed-width icon-remove"></i>Delete step</span></a></li>
             </ul>
           </div>
-          <button class="btn" ng-show="step.done" ng-click="setTaskStepDone(task, step, false)"><i class="icon-fixed-width icon-undo"></i></button>
-          <span class="lead done-{{step.done}}">{{step.text}}</span>
+          <button class="btn" ng-show="step.isDone" ng-click="setTaskStepDone(task, step, false)"><i class="icon-fixed-width icon-undo"></i></button>
+          <span class="lead done-{{step.isDone}}">{{step.text}}</span>
           </span>
           </li>
         </ul>
