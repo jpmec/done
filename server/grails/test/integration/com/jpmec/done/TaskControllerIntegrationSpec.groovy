@@ -6,14 +6,7 @@ import grails.plugin.spock.IntegrationSpec
 
 
 
-class TaskSpec extends IntegrationSpec {
-
-	def setup() {
-	}
-
-	def cleanup() {
-	}
-
+class TaskControllerIntegrationSpec extends IntegrationSpec {
 
 	void "test show"() {
 

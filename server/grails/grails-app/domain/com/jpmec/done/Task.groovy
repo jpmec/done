@@ -8,23 +8,46 @@ import org.codehaus.groovy.grails.plugins.codecs.SHA256Codec
 
 class Task {
 
+    private static final Date NULL_DATE = new Date(0)
+
     String uuid
     String text = ""
     String notes = ""
     String createdBy = ""
     String assignedTo = ""
     Boolean isDone = false
+    Boolean mustDo = false
+    Integer priority = 0
+    Date createdDate = NULL_DATE
+    Date dueDate = null
+    Date startedDate = null
+    Date finishedDate = null
+
 
 
     static constraints = {
 //        text blank: false
 //        createdBy blank: false
         uuid unique: true
+        dueDate nullable: true
+        startedDate nullable: true
+        finishedDate nullable: true
     }
 
 
     static jsonAttributes() {
-        ["uuid", "text", "notes", "createdBy", "assignedTo", "isDone"]
+        ["uuid",
+         "text",
+         "notes",
+         "createdBy",
+         "assignedTo",
+         "isDone",
+         "mustDo",
+         "priority",
+         "createdDate",
+         "dueDate",
+         "startedDate",
+         "finishedDate"]
     }
 
 
@@ -53,6 +76,10 @@ class Task {
     def beforeInsert() {
         if (this.uuid == null) {
             this.uuid = UUID.randomUUID().toString()
+        }
+
+        if (createdDate == NULL_DATE) {
+            createdDate = new Date()
         }
     }
 }
