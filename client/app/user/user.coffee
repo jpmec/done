@@ -1,4 +1,5 @@
 ### jshint -W093 ###
+### jshint -W098 ###
 
 'use strict'
 
@@ -114,9 +115,16 @@ userModule.service 'userSignupService',
 userModule.service 'userSigninService',
 ['springSecurityService'
 (springSecurityService) ->
-  @signin = (username, password) ->
 
-    springSecurityService.check(username, password)
+  @signin = (username, password, onSuccess, onError) ->
+
+    springSecurityService.check(username, password,
+    (data, status, headers, config) ->
+      onSuccess()
+    ,
+    (data, status, headers, config) ->
+      onError()
+    )
 
 ]
 
@@ -266,6 +274,7 @@ userModule.controller 'UserSigninCtrl',
 
   $scope.userSigninName = ''
   $scope.userSigninPassword = ''
+  $scope.error = ''
 
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signin'
@@ -276,6 +285,13 @@ userModule.controller 'UserSigninCtrl',
         $scope.user = user
         $location.path('/tasks/list')
 
+  $scope.reset = ->
+    $scope.userSigninName = ''
+    $scope.userSigninPassword = ''
+    $scope.error = ''
+
+  $scope.isError = ->
+    $scope.error.length > 0
 
   $scope.validNameAndPassword = ->
     return false if $scope.userSigninName.length is 0
@@ -286,28 +302,29 @@ userModule.controller 'UserSigninCtrl',
     return if $scope.userSigninName.length is 0
     return if $scope.userSigninPassword.length is 0
 
+    $scope.error = ''
+
     username = $scope.userSigninName
     password = $scope.userSigninPassword
 
-    userSigninService.signin(username, password)
+    userSigninService.signin(username, password,
+    () ->
+      user = activeUserService.signin(username, password)
 
-    user = activeUserService.signin(username, password)
+      if user
+        $scope.user = user
+        if $scope.userSigninAutomatic
+          $cookies.userId = user.id
+        else
+          $cookies.userId = ''
 
-    if user
-      $scope.user = user
-      if $scope.userSigninAutomatic
-        $cookies.userId = user.id
-      else
-        $cookies.userId = ''
+        activeUserService.setAutoSignin($scope.userSigninAutomatic)
 
-      activeUserService.setAutoSignin($scope.userSigninAutomatic)
-
-      $location.path locationPath  if locationPath
-
-  $scope.signout = (locationPath) ->
-    activeUserService.signout()
-    $scope.user = null
-    $location.path locationPath
+        $location.path locationPath  if locationPath
+    ,
+    () ->
+      $scope.error = 'Sorry, a user with that name and password was not found.'
+    )
 ]
 
 

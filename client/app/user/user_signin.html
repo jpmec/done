@@ -4,6 +4,10 @@
 
   <form class="form-horizontal" ng-submit="signin('/tasks/list')" ng-collapse="!userIsNull()">
 
+    <div class="control-group" ng-show="isError()">
+      <alert type="'error'" close="reset()">{{error}}</alert>
+    </div>
+
     <div class="control-group">
       <input type="text" class="user-input-username input-large" ng-model="userSigninName" placeholder="Name" autofocus="true"></input>
     </div>

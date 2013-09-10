@@ -68,7 +68,7 @@ springSecurityModule.service 'springSecurityService',
 ['$http',
 ($http) ->
 
-  @check = (username, password) ->
+  @check = (username, password, onSuccess, onError) ->
 
     obj =
       j_username: username
@@ -76,17 +76,16 @@ springSecurityModule.service 'springSecurityService',
 
     $http.post('/j_spring_security_check', obj)
     .success((data, status, headers, config) ->
-      console.log('springSecurityService.check success')
-      console.log(data)
-      console.log(status)
-      console.log(headers)
-      console.log(config)
+
+      # Spring Security will return 200 on success or failure.
+      # Must look at data object to see if check succeeded.
+      if data.success
+        onSuccess(data, status, headers, config)
+
+      else if data.error
+        onError(data, status, headers, config)
     )
     .error((data, status, headers, config) ->
-      console.log('springSecurityService.check error')
-      console.log(data)
-      console.log(status)
-      console.log(headers)
-      console.log(config)
+      onError(data, status, headers, config)
     )
 ]
