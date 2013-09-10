@@ -17,7 +17,7 @@ module.exports = function(config) {
       'app/components/angular-mocks/angular-mocks.js',
       'app/components/underscore/underscore.js',
       'app/angular-local-storage-obscure/angular-local-storage-obscure.js',
-      '.tmp/scripts/*.js',
+      '.tmp/js/*.js',
       '.tmp/spec/*.js',
       'test/spec/**/*.js',
       'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js',
