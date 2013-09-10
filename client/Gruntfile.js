@@ -67,41 +67,50 @@ module.exports = function (grunt) {
     },
     coffee: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/help',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.tmp %>/js',
-          ext: '.js'
-        },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>/main',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.tmp %>/js',
-          ext: '.js'
-        },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>/quotes',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.tmp %>/js',
-          ext: '.js'
-        },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>/tasks',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.tmp %>/js',
-          ext: '.js'
-        },
-        {
-          expand: true,
-          cwd: '<%= yeoman.app %>/user',
-          src: '{,*/}*.coffee',
-          dest: '<%= yeoman.tmp %>/js',
-          ext: '.js'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/angular-spring-security',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/help',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/main',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/quotes',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/tasks',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/user',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          }
+        ]
       },
       test: {
         files: [{

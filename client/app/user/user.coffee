@@ -6,6 +6,9 @@ userModule = angular.module 'userModule',
 ['ngCookies', 'obscureLocalStorageModule']
 
 
+
+
+
 userModule.factory 'userFactory', ->
   create: (name, password) ->
     publicId = CryptoJS.SHA1(name).toString()
@@ -77,6 +80,44 @@ userModule.service 'userService',
 (userFactory, userCrudService) ->
   @retrieve = (obj) ->
     userCrudService.retrieve(obj)
+]
+
+
+
+
+userModule.service 'userSignupService',
+['userFactory', 'userCrudService', '$http'
+(userFactory, userCrudService, $http) ->
+  @signup = (obj) ->
+
+    $http.post('http://localhost:8080/done/api/user', obj)
+    .success((data, status, headers, config) ->
+      console.log('userSignupService.signup success')
+      console.log(data)
+      console.log(status)
+      console.log(headers)
+      console.log(config)
+    )
+    .error((data, status, headers, config) ->
+      console.log('userSignupService.signup error')
+      console.log(data)
+      console.log(status)
+      console.log(headers)
+      console.log(config)
+    )
+
+]
+
+
+
+
+userModule.service 'userSigninService',
+['springSecurityService'
+(springSecurityService) ->
+  @signin = (username, password) ->
+
+    springSecurityService.check(username, password)
+
 ]
 
 
@@ -166,37 +207,46 @@ userModule.directive 'activeUserName', ->
   restrict: 'A'
   templateUrl: 'user/active_user_name.html'
 
+
 userModule.directive 'activeUserGravatar', ->
   restrict: 'A'
   templateUrl: 'user/active_user_gravatar.html'
+
 
 userModule.directive 'activeUserNavbar', ->
   restrict: 'A'
   templateUrl: 'user/active_user_navbar.html'
 
+
 userModule.directive 'activeUserNavbarOptions', ->
   restrict: 'A'
   templateUrl: 'user/active_user_navbar_options.html'
+
 
 userModule.directive 'activeUserNavbarSignout', ->
   restrict: 'A'
   templateUrl: 'user/active_user_navbar_signout.html'
 
+
 userModule.directive 'userSignin', ->
   restrict: 'A'
   templateUrl: 'user/user_signin.html'
+
 
 userModule.directive 'userSignup', ->
   restrict: 'A'
   templateUrl: 'user/user_signup.html'
 
+
 userModule.directive 'userForgotPassword', ->
   restrict: 'A'
   templateUrl: 'user/user_forgot_password.html'
 
+
 userModule.directive 'userProfile', ->
   restrict: 'A'
   templateUrl: 'user/user_profile.html'
+
 
 userModule.directive 'userName', ['userService', (userService) ->
   restrict: 'A'
@@ -208,9 +258,11 @@ userModule.directive 'userName', ['userService', (userService) ->
 ]
 
 
+
+
 userModule.controller 'UserSigninCtrl',
-['$scope', '$location', '$cookies', 'activeUserService',
-($scope, $location, $cookies, activeUserService) ->
+['$scope', '$location', '$cookies', 'activeUserService', 'userSigninService'
+($scope, $location, $cookies, activeUserService, userSigninService) ->
 
   $scope.userSigninName = ''
   $scope.userSigninPassword = ''
@@ -233,8 +285,13 @@ userModule.controller 'UserSigninCtrl',
   $scope.signin = (locationPath) ->
     return if $scope.userSigninName.length is 0
     return if $scope.userSigninPassword.length is 0
-    user = activeUserService.signin($scope.userSigninName,
-    $scope.userSigninPassword)
+
+    username = $scope.userSigninName
+    password = $scope.userSigninPassword
+
+    userSigninService.signin(username, password)
+
+    user = activeUserService.signin(username, password)
 
     if user
       $scope.user = user
@@ -274,48 +331,41 @@ userModule.controller 'ActiveUserSignoutCtrl',
 
 
 userModule.controller 'UserSignupCtrl',
-['$scope', '$location', '$cookies', 'activeUserService',
-($scope, $location, $cookies, activeUserService) ->
+['$scope', '$location', '$cookies', 'activeUserService', 'userSignupService'
+($scope, $location, $cookies, activeUserService, userSignupService) ->
 
   $scope.userSignupName = ''
+  $scope.userSignupEmail = ''
   $scope.userSignupPassword = ''
+  $scope.userSignupPassword2 = ''
 
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signup'
-    userId = $cookies.userId
-    if userId
-      user = activeUserService.signupById(userId)
-      if user
-        $scope.user = user
-        $location.path('/tasks/list')
 
-
-  $scope.validNameAndPassword = ->
+  $scope.valid = ->
     return false if $scope.userSignupName.length is 0
     return false if $scope.userSignupPassword.length is 0
+    return false if $scope.userSignupPassword != $scope.userSignupPassword2
     true
 
   $scope.signup = (locationPath) ->
-    return if $scope.userSignupName.length is 0
-    return if $scope.userSignupPassword.length is 0
-    user = activeUserService.signup($scope.userSignupName,
-    $scope.userSignupPassword)
+    return if !$scope.valid()
 
-    if user
-      $scope.user = user
-      if $scope.userSignupAutomatic
-        $cookies.userId = user.id
-      else
-        $cookies.userId = ''
+    console.log('you signed up!')
 
-      activeUserService.setAutoSignup($scope.userSignupAutomatic)
+    obj =
+      username: $scope.userSignupName
+      email: $scope.userSignupEmail
+      password: $scope.userSignupPassword
 
-      $location.path locationPath  if locationPath
-
-  $scope.signout = (locationPath) ->
-    activeUserService.signout()
-    $scope.user = null
+    userSignupService.signup(obj)
     $location.path locationPath
+
+
+  $scope.reset = () ->
+    $scope.userSignupName = ''
+    $scope.userSignupEmail = ''
+    $scope.userSignupPassword = ''
 ]
 
 
@@ -334,7 +384,7 @@ userModule.controller 'UserForgotPasswordCtrl',
     return false if $scope.userEmail.length is 0
     true
 
-  $scope.changePassword = (locationPath) ->
+  $scope.changePassword = () ->
     return if !$scope.isValidEmail
 ]
 
