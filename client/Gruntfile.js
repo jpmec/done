@@ -382,8 +382,7 @@ module.exports = function (grunt) {
           dot: true,
           cwd: '<%= yeoman.dist %>',
           dest: '<%= yeoman.grails %>',
-          src: [
-          ]
+          src: [ 'css/*', 'font/*', 'js/*' ]
         }]
       },
       font: {
