@@ -293,6 +293,15 @@ userModule.controller 'UserSigninCtrl',
   $scope.isError = ->
     $scope.error.length > 0
 
+  $scope.isUsername = ->
+    $scope.userSigninName.length > 0
+
+  $scope.isPassword = ->
+    $scope.userSigninPassword.length > 0
+
+  $scope.isUsernameAndPassword = ->
+    $scope.isUsername() and $scope.isPassword()
+
   $scope.validNameAndPassword = ->
     return false if $scope.userSigninName.length is 0
     return false if $scope.userSigninPassword.length is 0
@@ -355,6 +364,14 @@ userModule.controller 'UserSignupCtrl',
   $scope.userSignupEmail = ''
   $scope.userSignupPassword = ''
   $scope.userSignupPassword2 = ''
+  $scope.userSignupPasswordStrengthPercent =
+    value: 0
+    type: 'danger'
+
+  $scope.$watch('userSignupPassword', ->
+    $scope.userSignupPasswordStrengthPercent =
+    $scope.calculatePasswordStrengthPercent($scope.userSignupPassword)
+  )
 
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signup'
@@ -363,7 +380,7 @@ userModule.controller 'UserSignupCtrl',
     return false if $scope.userSignupName.length is 0
     return false if $scope.userSignupPassword.length is 0
     return false if $scope.userSignupPassword != $scope.userSignupPassword2
-    true
+    return $scope.isStrongPassword()
 
   $scope.signup = (locationPath) ->
     return if !$scope.valid()
@@ -383,6 +400,44 @@ userModule.controller 'UserSignupCtrl',
     $scope.userSignupName = ''
     $scope.userSignupEmail = ''
     $scope.userSignupPassword = ''
+
+
+  $scope.isStrongPassword = () ->
+    $scope.userSignupPasswordStrengthPercent.value > 75
+
+
+  $scope.calculatePasswordStrengthPercent = (password) ->
+
+    result_value = 0
+
+    if password
+      result_value += 10 if password.length > 0
+      result_value += 10 if password.length > 2
+      result_value += 10 if password.length > 4
+      result_value += 10 if password.length > 6
+      result_value += 10 if password.length > 8
+      result_value += 10 if password.length > 10
+      result_value += 10 if password.length > 12
+
+      result_value += 10 if /[A-Z]+/.test(password)
+      result_value += 10 if /[a-z]+/.test(password)
+      result_value += 10 if /[0-9]+/.test(password)
+
+    result_value = 100 if result_value > 100
+
+    result_type = switch
+      when result_value < 25 then 'danger'
+      when result_value < 50 then 'warning'
+      when result_value < 75 then 'info'
+      else 'success'
+
+    result =
+      value: result_value
+      type: result_type
+
+    result
+
+
 ]
 
 

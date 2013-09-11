@@ -4,42 +4,44 @@
 
   <form class="form-horizontal" ng-submit="signin('/tasks/list')" ng-collapse="!userIsNull()">
 
-    <div class="control-group" ng-show="isError()">
-      <alert type="'error'" close="reset()">{{error}}</alert>
-    </div>
-
     <div class="control-group">
       <input type="text" class="user-input-username input-large" ng-model="userSigninName" placeholder="Name" autofocus="true"></input>
     </div>
 
-    <div class="control-group">
+    <div class="control-group" data-ng-show="isUsername()">
       <input type="password" class="user-input-userpassword input-large" ng-model="userSigninPassword" placeholder="Password"></input>
     </div>
 
-    <div class="control-group">
-      <button type="submit" class="btn-primary btn-large" ng-disabled="!validNameAndPassword()">Sign in <i class="icon-fixed-width icon-signin"></i></button>
-    </div>
-
-    <hr>
-
-    <div class="control-group">
-      Remember me
-      <div class="">
-        <label>
-          <input type="checkbox" name="autoSignIn" value="autoSignIn" ng-model="userSigninAutomatic" ng-disabled="!validNameAndPassword()"></input>
+    <div class="control-group" data-ng-show="isUsernameAndPassword()">
+      <div class="user-remember-me-div">
+      <div class="text-left">
+        <label class="checkbox">
+          <input type="checkbox" id="autoSignIn" name="autoSignIn" value="autoSignIn" ng-model="userSigninAutomatic" ng-disabled="!validNameAndPassword()"></input>Remember me
         </label>
+      </div>
       </div>
     </div>
 
-    <hr>
-
-    <div class="control-group">
-      <a href="/#/forgot_password">Did you forget your password?</a>
-    </div>
-
-    <div class="control-group">
-      <a href="/#/signup">Would you like to sign up?</a>
+    <div class="control-group" ng-show="!isError() && isUsernameAndPassword()">
+      <button type="submit" class="btn-primary btn-large" ng-disabled="!validNameAndPassword()">Sign in <i class="icon-fixed-width icon-signin"></i></button>
     </div>
 
   </form>
+
+  <div ng-show="isError() && isUsernameAndPassword()">
+    <alert type="'error'" close="reset()">{{error}}</alert>
+  </div>
+
+  <hr>
+
+  <div data-ng-show="isUsername()">
+    <p><a href="/#/forgot_password">Did you forget your password?</a></p>
+  </div>
+  <div>
+    <p>or</p>
+  </div>
+  <div>
+    <p><a href="/#/signup">Would you like to sign up?</a></p>
+  </div>
+
 </div>
