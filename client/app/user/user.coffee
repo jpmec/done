@@ -1,3 +1,5 @@
+### jshint -W015 ###
+### jshint -W018 ###
 ### jshint -W093 ###
 ### jshint -W098 ###
 
@@ -11,34 +13,69 @@ userModule = angular.module 'userModule',
 
 
 userModule.factory 'userFactory', ->
-  create: (name, password) ->
-    publicId = CryptoJS.SHA1(name).toString()
-    privateId = CryptoJS.SHA256(name + password).toString()
+  create: (username, password) ->
+#    publicId = CryptoJS.SHA1(name).toString()
+#    privateId = CryptoJS.SHA256(name + password).toString()
     user =
-      id: privateId
-      name: name
-      publicId: publicId
-      privateId: privateId
-      email: ''
+      name: username
+#      publicId: publicId
+#      privateId: privateId
       preferences:
         emailIsPrivate: false
         useGravatar: true
-        autoSignin: false
+        rememberMe: false
+      profile:
+        uuid: ''
+        name: ''
+        email: ''
+        websiteUrl: ''
 
     user
 
 
 
+userModule.service 'userApiService',
+[ '$http'
+($http) ->
+
+  @url = '/api/user/'
+
+  @get = (uuid, onSuccess, onError) ->
+
+    $http.get(@url + uuid)
+    .success((data, status, headers, config) ->
+      onSuccess(data)
+    )
+    .error((data, status, headers, config) ->
+      onError(data)
+    )
+
+  @put = (user, onSuccess, onError) ->
+
+    console.log('userApiService.put')
+    console.log(user)
+
+    $http.put(@url, user)
+    .success((data, status, headers, config) ->
+      onSuccess(data) if onSuccess
+    )
+    .error((data, status, headers, config) ->
+      onError(data) if onError
+    )
+]
+
+
+
 
 userModule.service 'userCrudService',
-['userFactory', 'obscureLocalStorageService',
-(userFactory, obscureLocalStorageService) ->
+['userFactory', 'obscureLocalStorageService', 'userApiService',
+(userFactory, obscureLocalStorageService, userApiService) ->
   @prefix = 'user.'
 
-  @keyFor = (obj) ->
-    return null unless obj
-    return null unless obj.id
-    @prefix + obj.id
+  @keyFor = (user) ->
+    return null unless user
+    return null unless user.profile.uuid
+    @prefix + user.profile.uuid
 
   @create = (obj) ->
     item = _.extend(userFactory.create(obj.name, obj.password), obj)
@@ -52,12 +89,16 @@ userModule.service 'userCrudService',
     item = obscureLocalStorageService.get(k)
     item
 
-  @update = (obj) ->
-    return null unless obj
-    item = obscureLocalStorageService.get(@keyFor(obj))
+  @update = (user) ->
+    return null unless user
+
+    userApiService.put(user)
+
+    item = obscureLocalStorageService.get(@keyFor(user))
     return null unless item
-    item = _.extend(item, obj)
+    item = _.extend(item, user)
     obscureLocalStorageService.add @keyFor(item), item
+
     item
 
   @destroy = (obj) ->
@@ -112,20 +153,31 @@ userModule.service 'userSignupService',
 
 
 
+
+
 userModule.service 'userSigninService',
-['springSecurityService'
-(springSecurityService) ->
+['springSecurityService', 'userApiService', 'userFactory', 'activeUserService'
+(springSecurityService, userApiService, userFactory, activeUserService) ->
 
-  @signin = (username, password, onSuccess, onError) ->
+  @signin = (username, password, rememberMe, onSuccess, onError) ->
 
-    springSecurityService.check(username, password,
+    springSecurityService.check(username, password, rememberMe
     (data, status, headers, config) ->
-      onSuccess()
+
+      userApiService.get(data.uuid,
+      (data) ->
+        user = _.extend(userFactory.create(username, password), data)
+        activeUserService.setUser(user)
+
+        onSuccess(user)
+      ,
+      (data) ->
+        onError()
+      )
     ,
     (data, status, headers, config) ->
       onError()
     )
-
 ]
 
 
@@ -145,26 +197,31 @@ userModule.service 'activeUserService',
     @user is null
 
   @name = ->
-    if @user and @user.name
-      @user.name
+    if @user and @user.profile and @user.profile.name
+      @user.profile.name
     else
       ''
 
+  # TODO REMOVE AND USE UUID
   @id = ->
+    @uuid()
+
+  @uuid = ->
     if @user
-      @user.id
+      @user.profile.uuid
     else
       ''
 
+  # TODO REMOVE AND USE UUID
   @publicId = ->
-    if @user
-      @user.publicId
+    if @user and @user.profile
+      @user.profile.uuid
     else
       ''
 
   @email = ->
     if @user
-      @user.email
+      @user.profile.email
     else
       ''
 
@@ -186,11 +243,11 @@ userModule.service 'activeUserService',
     else
       true
 
-  @signin = (name, password) ->
-    user = userFactory.create(name, password)
-    @user = userCrudService.retrieve(user)
-    @user = userCrudService.create(user)  unless @user
-    @user
+#  @signin = (name, password) ->
+#    user = userFactory.create(name, password)
+#    @user = userCrudService.retrieve(user)
+#    @user = userCrudService.create(user)  unless @user
+#    @user
 
   @signinById = (id) ->
     @user = userCrudService.retrieve({id: id})
@@ -256,6 +313,15 @@ userModule.directive 'userProfile', ->
   templateUrl: 'user/user_profile.html'
 
 
+userModule.directive 'userView', ->
+  restrict: 'A'
+  templateUrl: 'user/user_view.html'
+
+userModule.directive 'userEdit', ->
+  restrict: 'A'
+  templateUrl: 'user/user_edit.html'
+
+
 userModule.directive 'userName', ['userService', (userService) ->
   restrict: 'A'
   templateUrl: 'user/user_name.html'
@@ -274,6 +340,7 @@ userModule.controller 'UserSigninCtrl',
 
   $scope.userSigninName = ''
   $scope.userSigninPassword = ''
+  $scope.userRememberMe = false
   $scope.error = ''
 
   $scope.init = ->
@@ -315,15 +382,15 @@ userModule.controller 'UserSigninCtrl',
 
     username = $scope.userSigninName
     password = $scope.userSigninPassword
+    rememberMe = $scope.userRememberMe
 
-    userSigninService.signin(username, password,
-    () ->
-      user = activeUserService.signin(username, password)
+    userSigninService.signin(username, password, rememberMe
+    (user) ->
 
       if user
         $scope.user = user
-        if $scope.userSigninAutomatic
-          $cookies.userId = user.id
+        if $scope.userRememberMe
+          $cookies.userId = user.profile.uuid
         else
           $cookies.userId = ''
 
@@ -408,32 +475,32 @@ userModule.controller 'UserSignupCtrl',
 
   $scope.calculatePasswordStrengthPercent = (password) ->
 
-    result_value = 0
+    resultValue = 0
 
     if password
-      result_value += 10 if password.length > 0
-      result_value += 10 if password.length > 2
-      result_value += 10 if password.length > 4
-      result_value += 10 if password.length > 6
-      result_value += 10 if password.length > 8
-      result_value += 10 if password.length > 10
-      result_value += 10 if password.length > 12
+      resultValue += 10 if password.length > 0
+      resultValue += 10 if password.length > 2
+      resultValue += 10 if password.length > 4
+      resultValue += 10 if password.length > 6
+      resultValue += 10 if password.length > 8
+      resultValue += 10 if password.length > 10
+      resultValue += 10 if password.length > 12
 
-      result_value += 10 if /[A-Z]+/.test(password)
-      result_value += 10 if /[a-z]+/.test(password)
-      result_value += 10 if /[0-9]+/.test(password)
+      resultValue += 10 if /[A-Z]+/.test(password)
+      resultValue += 10 if /[a-z]+/.test(password)
+      resultValue += 10 if /[0-9]+/.test(password)
 
-    result_value = 100 if result_value > 100
+    resultValue = 100 if resultValue > 100
 
-    result_type = switch
-      when result_value < 25 then 'danger'
-      when result_value < 50 then 'warning'
-      when result_value < 75 then 'info'
+    resultType = switch
+      when resultValue < 25 then 'danger'
+      when resultValue < 50 then 'warning'
+      when resultValue < 75 then 'info'
       else 'success'
 
     result =
-      value: result_value
-      type: result_type
+      value: resultValue
+      type: resultType
 
     result
 
@@ -476,7 +543,7 @@ userModule.controller 'ActiveUserCtrl',
     activeUserService.name()
 
   $scope.id = ->
-    activeUserService.id()
+    activeUserService.uuid()
 
   $scope.publicId = ->
     activeUserService.publicId()
@@ -500,10 +567,10 @@ userModule.controller 'ActiveUserCtrl',
     !activeUserService.userIsNull()
 
   $scope.showUser = ->
-    $location.path '/user'
+    $location.path '/user/' + activeUserService.uuid()
 
   $scope.editUser = ->
-    $location.path '/user/edit'
+    $location.path '/user/edit/' + activeUserService.uuid()
 
   $scope.user = ->
     user = activeUserService.getUser()
@@ -524,11 +591,11 @@ userModule.controller 'UserCtrl',
   $scope.init = ->
     return
 
-  $scope.showUser = (id) ->
-    $location.path '/user/' + id
+  $scope.showUser = (uuid) ->
+    $location.path '/user/' + uuid
 
-  $scope.user = (id) ->
-    user = userService.getUser(id)
+  $scope.user = (uuid) ->
+    user = userService.getUser(uuid)
     user
 ]
 
@@ -545,8 +612,9 @@ userModule.controller 'UserEditCtrl',
   $scope.save = ->
     activeUserService.setUser $scope.user
     activeUserService.saveUser()
-    $location.path '/user'
+    $location.path '/user/' + $scope.user.profile.uuid
 
   $scope.cancel = ->
     $scope.init()
+    $location.path '/user/' + $scope.user.profile.uuid
 ]

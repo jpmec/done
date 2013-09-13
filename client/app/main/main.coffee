@@ -61,10 +61,10 @@ mainModule.config ['$routeProvider', ($routeProvider) ->
   ).when('/help/about',
     templateUrl: 'help/help_about.html'
   ).when('/user/:userId',
-    templateUrl: 'user/user_view.html'
+    templateUrl: 'app/app_user_view.html'
     controller: 'UserCtrl'
   ).when('/user/edit/:userId',
-    templateUrl: 'user/user_edit.html'
+    templateUrl: 'app/app_user_edit.html'
     controller: 'UserEditCtrl'
   ).otherwise redirectTo: '/signin'
 ]

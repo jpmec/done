@@ -1,33 +1,61 @@
 <div data-ng-controller="UserEditCtrl" data-ng-init="init()" ng-cloak>
-  <h1>User Preferences</h1>
-  <hr>
+  <h1>{{user.name}}</h1>
 
   <div class="container-fluid">
-    <div class="row-fluid">
-      <h2>{{user.name}}</h2>
-      <input type="text" name="text" ng-model="user.name" required></input>
-    </div>
 
-    <div class="row-fluid">
-      <h2>Email</h2>
-      <input type="text" name="text" ng-model="user.email"></input>
-    </div>
+    <legend>Profile</legend>
+    <form class="form-horizontal">
 
-    <div class="row-fluid">
-      <h2>Use Gravatar</h2>
-      <input type="Checkbox" name="text" ng-model="user.preferences.useGravatar"></input>
-    </div>
+      <div class="control-group">
+        <label class="control-label" for="userProfileName">Name</label>
+        <div class="controls">
+          <input type="text" id="userProfileName" name="userProfileName" ng-model="user.profile.name"></input>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="userProfileEmail">Email</label>
+        <div class="controls">
+          <input type="text" id="userProfileEmail" name="userProfileEmail" ng-model="user.profile.email"></input>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label" for="userProfileWebsiteUrl">Website</label>
+        <div class="controls">
+          <input type="text" id="userProfileWebsiteUrl" name="userProfileWebsiteUrl" ng-model="user.profile.websiteUrl"></input>
+        </div>
+      </div>
+
+    </form>
+
+    <legend>Preferences</legend>
+    <form class="form-horizontal">
+
+      <div class="control-group">
+        <label class="control-label" for="userPreferencesEmailIsPrivate">Private Profile Email</label>
+        <div class="controls">
+          <input type="Checkbox" id="userPreferencesEmailIsPrivate" name="userPreferencesEmailIsPrivate" ng-model="user.preferences.emailIsPrivate"></input>
+        </div>
+      </div>
 
 
-    <div class="row-fluid">
-      <h2>Automatic sign in</h2>
-      <input type="Checkbox" name="text" ng-model="user.preferences.autoSignin"></input>
-    </div>
+      <div class="control-group">
+        <label class="control-label" for="userPreferencesUseGravatar">Use Gravatar</label>
+        <div class="controls">
+          <input type="Checkbox" id="userPreferencesUseGravatar" name="userPreferencesUseGravatar" ng-model="user.preferences.useGravatar"></input>
+        </div>
+      </div>
 
-    <div class="row-fluid">
-      <h2>Email is private</h2>
-      <input type="Checkbox" name="text" ng-model="user.preferences.emailIsPrivate"></input>
-    </div>
+
+      <div class="control-group">
+        <label class="control-label" for="userPreferencesRememberMe">Remember Me</label>
+        <div class="controls">
+          <input type="Checkbox" id="userPreferencesRememberMe" name="userPreferencesRememberMe" ng-model="user.preferences.autoSignin"></input>
+        </div>
+      </div>
+
+    </form>
 
     <hr>
 
