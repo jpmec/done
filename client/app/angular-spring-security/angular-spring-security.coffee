@@ -16,14 +16,13 @@ springSecurityModule.service 'springSecurityService',
 ['$http',
 ($http) ->
 
-  # Override $http service's default transformRequest
-  @transformRequest = (data) ->
 
-    ###
-    The workhorse; converts an object to x-www-form-urlencoded serialization.
-    @param {Object} obj
-    @return {String}
-    ###
+  ###
+  The workhorse; converts an object to x-www-form-urlencoded serialization.
+  @param {Object} obj
+  @return {String}
+  ###
+  @transformRequest = (data) ->
     param = (obj) ->
       query = ''
       name = undefined
@@ -78,12 +77,22 @@ springSecurityModule.service 'springSecurityService',
       # Spring Security will return 200 on success or failure.
       # Must look at data object to see if check succeeded.
       if data.success
-        onSuccess(data, status, headers, config)
+        onSuccess(data, status, headers, config) if onSuccess
 
       else if data.error
-        onError(data, status, headers, config)
+        onError(data, status, headers, config) if onError
     )
     .error((data, status, headers, config) ->
       onError(data, status, headers, config)
+    )
+
+
+  @logout = (onSuccess, onError) ->
+    $http.get('/j_spring_security_logout')
+    .success((data, status, headers, config) ->
+      onSuccess(data, status, headers, config) if onSuccess
+    )
+    .error((data, status, headers, config) ->
+      onError(data, status, headers, config) if onError
     )
 ]
