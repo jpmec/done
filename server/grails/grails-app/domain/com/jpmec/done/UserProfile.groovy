@@ -11,14 +11,14 @@ class UserProfile {
     String uuid
     String name = "anonymous"
     String email = ""
-    String website_url = ""
+    String websiteUrl = ""
 
     static constraints = {
       uuid unique: true
     }
 
     static jsonAttributes() {
-      ["uuid", "name", "email", "website_url"]
+      ["uuid", "name", "email", "websiteUrl"]
     }
 
     static registerObjectMarshaller() {

@@ -23,31 +23,45 @@ class BootStrap {
         def roleAdmin = new SecureRole(authority: 'ROLE_ADMIN').save()
         def roleUser = new SecureRole(authority: 'ROLE_USER').save()
 
-        def user = new User(username: 'user',
-                            password: password,
-                            preferences: new UserPreferences(),
-                            profile: new UserProfile(name: 'a user'),
-                            enabled: true)
+        def user = User.findByUsername('user@nomail.net')
 
-        if (user.save()) {
-          log.trace "created User with username: '$user.username' and password: '$password'"
+        if (user) {
+            log.trace "found User with username: '$user.username' and password: '$password'"
         }
         else {
-          log.error user.errors
+            user = new User(username: 'user@nomail.net',
+                            password: password,
+                            preferences: new UserPreferences(),
+                            profile: new UserProfile(name: 'User'),
+                            enabled: true)
+
+            if (user.save()) {
+              log.trace "created User with username: '$user.username' and password: '$password'"
+            }
+            else {
+              log.error user.errors
+            }
         }
 
-        def admin = new User(username: 'admin',
+        def admin = User.findByUsername('admin@nomail.net')
+
+        if (admin) {
+            log.trace "found User with username: '$admin.username' and password: '$password'"
+        }
+        else {
+            admin = new User(username: 'admin@nomail.net',
                              password: password,
                              preferences: new UserPreferences(),
-                             profile: new UserProfile(name: 'an admin'),
+                             profile: new UserProfile(name: 'Admin'),
                              enabled: true)
 
 
-        if (admin.save()) {
-          log.trace "created User with username: '$admin.username' and password: '$password'"
-        }
-        else {
-          log.error admin.errors
+            if (admin.save()) {
+              log.trace "created User with username: '$admin.username' and password: '$password'"
+            }
+            else {
+              log.error admin.errors
+            }
         }
 
         SecureUserSecureRole.create user, roleUser
