@@ -156,7 +156,7 @@ userModule.service 'userSignupService',
 
 
 userModule.service 'userSigninService',
-['springSecurityService', 'userApiService', 'userFactory', 'activeUserService'
+['springSecurityService', 'userApiService', 'userFactory', 'activeUserService',
 (springSecurityService, userApiService, userFactory, activeUserService) ->
 
   @signin = (username, password, rememberMe, onSuccess, onError) ->
@@ -174,6 +174,24 @@ userModule.service 'userSigninService',
       (data) ->
         onError()
       )
+    ,
+    (data, status, headers, config) ->
+      onError()
+    )
+]
+
+
+
+userModule.service 'userSignoutService',
+['springSecurityService', 'activeUserService',
+(springSecurityService, activeUserService) ->
+
+  @signout = (onSuccess, onError) ->
+
+    springSecurityService.logout( \
+    (data, status, headers, config) ->
+      activeUserService.signout()
+      onSuccess()
     ,
     (data, status, headers, config) ->
       onError()
@@ -407,17 +425,17 @@ userModule.controller 'UserSigninCtrl',
 
 
 userModule.controller 'ActiveUserSignoutCtrl',
-['$scope', '$location', '$cookies', 'activeUserService',
-($scope, $location, $cookies, activeUserService) ->
+['$scope', '$location', '$cookies', 'userSignoutService',
+($scope, $location, $cookies, userSignoutService) ->
 
   $scope.init = ->
-    activeUserService.signout() if $location.path() is '/signin'
+    userSignoutService.signout() if $location.path() is '/signin'
 
   $scope.signout = (locationPath) ->
-    activeUserService.signout()
+    userSignoutService.signout()
     $scope.user = null
-    $location.path locationPath
     $cookies.userId = ''
+    $location.path locationPath
 ]
 
 
