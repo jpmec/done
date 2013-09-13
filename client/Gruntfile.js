@@ -54,23 +54,30 @@ module.exports = function (grunt) {
       },
       grails: {
         files: [{
-          dot: true,
+          expand: true,
           cwd: '<%= yeoman.grails %>',
           src: [
-            '<%= yeoman.grails %>/css/*.main.css',
+            '<%= yeoman.grails %>/css/*',
             '<%= yeoman.grails %>/font/*',
-            '<%= yeoman.grails %>/js/*.scripts.js',
+            '<%= yeoman.grails %>/js/*',
           ]
         }]
       },
-      server: '<%= yeoman.tmp %>/**/*'
+      tmp: '<%= yeoman.tmp %>/**/*'
     },
     coffee: {
-      dist: {
+      appToTmp: {
         files: [
           {
             expand: true,
             cwd: '<%= yeoman.app %>/angular-spring-security',
+            src: '{,*/}*.coffee',
+            dest: '<%= yeoman.tmp %>/js',
+            ext: '.js'
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/app',
             src: '{,*/}*.coffee',
             dest: '<%= yeoman.tmp %>/js',
             ext: '.js'
@@ -124,7 +131,8 @@ module.exports = function (grunt) {
     },
     coffeelint: {
       app: [
-        '<%= yeoman.app %>/{<%= yeoman.appModules %>}/*.coffee'
+        '<%= yeoman.app %>/{<%= yeoman.appModules %>}/*.coffee',
+//        '<%= yeoman.app %>/angular-spring-security/*.coffee',
       ]
     },
     compass: {
@@ -151,10 +159,8 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         files: {
-          '<%= yeoman.dist %>/js/scripts.js': [
-            '.tmp/js/{,*/}*.js',
-            '<%= yeoman.app %>/js/{,*/}*.js'
-          ]
+          '<%= yeoman.dist %>/js/scripts.js':
+            ['<%= yeoman.tmp %>/js/{,*/}*.js']
         }
       }
     },
@@ -188,7 +194,7 @@ module.exports = function (grunt) {
       }
     },
     copy: {
-      components: {
+      componentsToTmp: {
         files: [
           {
             expand: true,
@@ -282,7 +288,7 @@ module.exports = function (grunt) {
           }
         ]
       },
-      css: {
+      appCssToTmp: {
         files: [
           {
             expand: true,
@@ -307,7 +313,33 @@ module.exports = function (grunt) {
             cwd: '<%= yeoman.app %>/user',
             dest: '<%= yeoman.tmp %>/css',
             src: ['user.css']
-          },
+          }
+        ]
+      },
+      appEtcToTmp: {
+        files: [{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.tmp %>',
+          src: [
+            '*.{ico,txt}',
+            '.htaccess'
+          ]
+        }]
+      },
+      appImagesToTmp: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/images',
+            dest: '<%= yeoman.tmp %>/img',
+            src: ['*']
+          }
+        ]
+      },
+      componentsCssToTmp: {
+        files: [
           {
             expand: true,
             cwd: '<%= yeoman.components %>/bootstrap/bootstrap/css',
@@ -363,15 +395,13 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      distFontAwesome: {
+      distIndex: {
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.app %>/components/font-awesome/font',
-          dest: '<%= yeoman.dist %>/font',
-          src: [
-            '*'
-          ]
+          cwd: '<%= yeoman.tmp %>',
+          dest: '<%= yeoman.dist %>',
+          src: ['index.html']
         }]
       },
       deployHeroku: {
@@ -391,7 +421,7 @@ module.exports = function (grunt) {
           dot: true,
           cwd: '<%= yeoman.dist %>',
           dest: '<%= yeoman.grails %>',
-          src: [ 'css/*', 'font/*', 'js/*' ]
+          src: [ 'css/*', 'font/*', 'img/*', 'js/*']
         }]
       },
       font: {
@@ -402,24 +432,48 @@ module.exports = function (grunt) {
           src: ['*']
         }]
       },
-      js: {
+      html: {
         files: [{
           expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>/app',
-          dest: '<%= yeoman.tmp %>/js',
-          src: [ '*.js'
-          ]
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.tmp %>',
+          src: ['*.html']
         }]
+      },
+      tmpToDist: {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.tmp %>/font',
+            dest: '<%= yeoman.dist %>/font',
+            src: ['*']
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.tmp %>/img',
+            dest: '<%= yeoman.dist %>/img',
+            src: ['*']
+          },
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.tmp %>',
+            dest: '<%= yeoman.dist %>',
+            src: [
+              '*.{ico,txt,html}',
+              '.htaccess'
+            ]
+          },
+        ]
       }
     },
     cssmin: {
       dist: {
         files: {
-          '<%= yeoman.dist %>/css/main.css': [
-            '.tmp/css/{,*/}*.css',
-            '<%= yeoman.app %>/styles/{,*/}*.css'
-          ]
+          '<%= yeoman.dist %>/css/main.css':
+            ['<%= yeoman.tmp %>/css/*.css']
         }
       }
     },
@@ -448,9 +502,9 @@ module.exports = function (grunt) {
         module: 'templatesModule',
         quoteChar: '\''
       },
-      main: {
+      appToTmp: {
         src: [
-          '<%= yeoman.app %>/{app,help,main,navbar,quotes,tasks,user}/*.html'
+          '<%= yeoman.app %>/{<%= yeoman.appModules %>}/*.html'
         ],
         dest: '<%= yeoman.tmp %>/js/templates.js'
       }
@@ -470,19 +524,19 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: ['*.html', 'views/*.html'],
-          dest: '<%= yeoman.dist %>'
+          cwd: '<%= yeoman.tmp %>',
+          src: ['*.html'],
+          dest: '<%= yeoman.tmp %>'
         }]
       }
     },
     imagemin: {
-      dist: {
+      tmp: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images',
+          cwd: '<%= yeoman.tmp %>/img',
           src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.tmp %>/img'
         }]
       }
     },
@@ -490,10 +544,10 @@ module.exports = function (grunt) {
       options: {
         jshintrc: '.jshintrc'
       },
-      all: [
+      tmp: [
         'Gruntfile.js',
         '<%= yeoman.tmp %>/js/*.js',
-        '!<%= yeoman.tmp %>/js/*min.js',
+        '!<%= yeoman.tmp %>/js/*min.js'
       ]
     },
     karma: {
@@ -507,12 +561,12 @@ module.exports = function (grunt) {
       }
     },
     ngmin: {
-      dist: {
+      tmp: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.dist %>/js',
-          src: '*.js',
-          dest: '<%= yeoman.dist %>/js'
+          cwd: '<%= yeoman.tmp %>/js',
+          src: ['*.js', '!*min.js'],
+          dest: '<%= yeoman.tmp %>/js'
         }]
       }
     },
@@ -527,7 +581,7 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/js/{,*/}*.js',
             '<%= yeoman.dist %>/css/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.dist %>/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/font/*'
           ]
         }
@@ -567,9 +621,9 @@ module.exports = function (grunt) {
       }
     },
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '<%= yeoman.tmp %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= yeoman.dest %>'
       }
     },
     watch: {
@@ -577,7 +631,7 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/{<%= yeoman.appModules %>}/{,*/}*.coffee',
         ],
-        tasks: ['coffee:dist']
+        tasks: ['coffee:app']
       },
       coffeeTest: {
         files: ['test/spec/{,*/}*.coffee'],
@@ -608,18 +662,18 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('cleanAll', [
-    'clean:server',
+    'clean:tmp',
     'clean:dist',
     'clean:heroku'
   ]);
 
   grunt.registerTask('server', [
-    'clean:server',
+    'clean:tmp',
     'coffeelint',
-    'coffee:dist',
-    'copy:components',
-    'copy:js',
-    'html2js',
+    'coffee:appToTmp',
+    'copy:componentsToTmp',
+    'copy:appJsToTmp',
+    'html2js:appToTmp',
     'copy:css',
     'copy:font',
 //    'compass:server',
@@ -644,49 +698,102 @@ module.exports = function (grunt) {
     'karma:e2e'
   ]);
 
-  grunt.registerTask('build', [
-    'clean:server',
-    'clean:dist',
-    'coffeelint',
-    'coffee',
-    'html2js',
-    'copy:js',
-    'copy:components',
-    'jshint',
-    'copy:css',
-    'karma:unit',
-    'compass:dist',
+
+  grunt.registerTask('buildStepClean', [
+    'clean:tmp',
+    'clean:dist'
+  ]);
+
+
+  grunt.registerTask('buildStepCoffee', [
+    'coffeelint:app',
+    'coffee:appToTmp',
+  ]);
+
+
+  grunt.registerTask('buildStepJs', [
+    'html2js:appToTmp',
+    'jshint:tmp',
+    'copy:componentsToTmp',
+    'ngmin:tmp'
+  ]);
+
+
+  grunt.registerTask('buildStepCss', [
+    'copy:appCssToTmp',
+    'copy:componentsCssToTmp'
+  ]);
+
+
+  grunt.registerTask('buildStepFont', [
+    'copy:font'
+  ]);
+
+
+  grunt.registerTask('buildStepImages', [
+    'copy:appImagesToTmp',
+    'imagemin:tmp'
+  ]);
+
+
+  grunt.registerTask('buildStepHtml', [
+    'copy:html'
+  ]);
+
+
+  grunt.registerTask('buildStepEtc', [
+    'copy:appEtcToTmp'
+  ]);
+
+
+  grunt.registerTask('buildStepDist', [
+    'copy:tmpToDist'
+  ]);
+
+
+  grunt.registerTask('buildStepUseMin', [
     'useminPrepare',
-    'imagemin',
-    'cssmin',
-    'htmlmin',
-    'concat',
-    'copy:dist',
-    'copy:distFontAwesome',
-    'cdnify',
-    'ngmin',
-    'uglify',
-    'rev',
+    'cssmin:dist',
+    'concat:dist',
+    'uglify:dist',
+    'rev:dist',
     'usemin'
   ]);
 
 
-  grunt.registerTask('buildDebug', [
-    'clean:dist',
-    'uglify:angularLocalStorage',
-    'coffeelint',
-    'coffee',
-    'html2js',
-    'copy:js',
-    'copy:components',
-    'jshint',
-    'copy:css',
-    'copy:font',
-//    'test',
-//    'compass:dist',
-    'copy:dist',
+  grunt.registerTask('buildStepDistDebug', [
     'copy:debug'
   ]);
+
+
+  grunt.registerTask('build', [
+    'buildStepClean',
+    'buildStepCoffee',
+    'buildStepJs',
+    'buildStepCss',
+    'buildStepFont',
+    'buildStepImages',
+    'buildStepHtml',
+    'buildStepEtc',
+    'buildStepDist',
+    'buildStepUseMin'
+  ]);
+
+
+  grunt.registerTask('buildDebug', [
+    'buildStepClean',
+    'uglify:angularLocalStorage',
+    'buildStepCoffee',
+    'buildStepJs',
+    'buildStepCss',
+    'buildStepFont',
+    'buildStepImages',
+    'buildStepHtml',
+    'buildStepEtc',
+    'buildStepDist',
+    'buildStepDistDebug'
+  ]);
+
 
   grunt.registerTask('deployHeroku', [
     'clean:heroku',
@@ -694,25 +801,32 @@ module.exports = function (grunt) {
     'copy:deployHeroku'
   ]);
 
+
   grunt.registerTask('deployHerokuDebug', [
     'clean:heroku',
     'buildDebug',
     'copy:deployHeroku'
   ]);
 
+
   grunt.registerTask('deployGrails', [
+    'clean:grails',
     'build',
     'copy:deployGrails'
   ]);
 
+
   grunt.registerTask('deployGrailsDebug', [
+    'clean:grails',
     'buildDebug',
     'copy:deployGrails'
   ]);
 
+
   grunt.registerTask('deploy', [
-    'deployHeroku'
+    'deployGrailsDebug'
   ]);
+
 
   grunt.registerTask('default', ['build']);
 };
