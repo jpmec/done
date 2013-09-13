@@ -12,14 +12,12 @@ springSecurityModule = angular.module 'springSecurityModule',
 
 
 
-springSecurityModule.config ['$httpProvider', ($httpProvider) ->
-
-  # Use x-www-form-urlencoded Content-Type
-  $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-
+springSecurityModule.service 'springSecurityService',
+['$http',
+($http) ->
 
   # Override $http service's default transformRequest
-  $httpProvider.defaults.transformRequest = [(data) ->
+  @transformRequest = (data) ->
 
     ###
     The workhorse; converts an object to x-www-form-urlencoded serialization.
@@ -57,24 +55,24 @@ springSecurityModule.config ['$httpProvider', ($httpProvider) ->
       (if query.length then query.substr(0, query.length - 1) else query)
 
     (if angular.isObject(data) and String(data) isnt '[object File]' then param(data) else data)
-  ]
-
-]
 
 
+  @config =
+    transformRequest: @transformRequest
+    headers:
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 
 
-springSecurityModule.service 'springSecurityService',
-['$http',
-($http) ->
-
-  @check = (username, password, onSuccess, onError) ->
+  @check = (username, password, rememberMe, onSuccess, onError) ->
 
     obj =
       j_username: username
       j_password: password
 
-    $http.post('/j_spring_security_check', obj)
+    if (rememberMe)
+      obj._spring_security_remember_me = true
+
+    $http.post('/j_spring_security_check', obj, @config)
     .success((data, status, headers, config) ->
 
       # Spring Security will return 200 on success or failure.
