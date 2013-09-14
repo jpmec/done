@@ -359,6 +359,15 @@ userModule.controller 'UserSigninCtrl',
   $scope.userRememberMe = false
   $scope.error = ''
 
+  $scope.$watch('userSigninName', ->
+    $scope.error = ''
+    $scope.userSigninPassword = '' if $scope.userSigninName.length == 0
+  )
+
+  $scope.$watch('userSigninPassword', ->
+    $scope.error = ''
+  )
+
   $scope.init = ->
     activeUserService.signout() if $location.path() is '/signin'
     userId = $cookies.userId
