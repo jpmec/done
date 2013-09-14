@@ -44,16 +44,14 @@ userModule.service 'userApiService',
 
     $http.get(@url + uuid)
     .success((data, status, headers, config) ->
-      onSuccess(data)
+      onSuccess(data) if onSuccess
     )
     .error((data, status, headers, config) ->
-      onError(data)
+      onError(data) if onError
     )
 
-  @put = (user, onSuccess, onError) ->
 
-    console.log('userApiService.put')
-    console.log(user)
+  @put = (user, onSuccess, onError) ->
 
     $http.put(@url, user)
     .success((data, status, headers, config) ->
@@ -169,14 +167,14 @@ userModule.service 'userSigninService',
         user = _.extend(userFactory.create(username, password), data)
         activeUserService.setUser(user)
 
-        onSuccess(user)
+        onSuccess(user) if onSuccess
       ,
       (data) ->
-        onError()
+        onError() if onError
       )
     ,
     (data, status, headers, config) ->
-      onError()
+      onError() if onError
     )
 ]
 
@@ -191,10 +189,10 @@ userModule.service 'userSignoutService',
     springSecurityService.logout( \
     (data, status, headers, config) ->
       activeUserService.signout()
-      onSuccess()
+      onSuccess() if onSuccess
     ,
     (data, status, headers, config) ->
-      onError()
+      onError() if onError
     )
 ]
 

@@ -1,31 +1,30 @@
-<div data-ng-controller="ActiveUserCtrl" data-ng-init="init()" ng-cloak>
-  <h1>User Profile</h1>
-  <button class="btn" ng-click="editUser()"><i class="icon-fixed-width icon-pencil"></i>Edit</button>
-  <hr>
-
-  <div>
-    <h2>{{name()}}</h2>
-    <p>User Id: <code>{{uuid()}}</code></p>
-  </div>
+<div class="user-view-div text-center" data-ng-controller="ActiveUserCtrl" data-ng-init="init()" ng-cloak>
 
   <div class="container-fluid">
+
     <div class="row-fluid">
-      <figure class="well pull-left text-center" ng-show="email()">
-        <gravatar-image data-css-class="img-rounded" data-email="email()" data-size="256" data-default="identicon"></gravatar-image>
+      <figure class="well text-center">
+        <div ng-show="useGravatar() && email()">
+          <gravatar-image data-css-class="img-rounded" data-email="email()" data-size="256" data-default="identicon"></gravatar-image>
+        </div>
+        <div ng-show="!useGravatar() || !email()">
+        <h1 class="icon-fixed-width icon-user icon-4x"></h1>
+        </div>
         <hr>
+        <figcaption>{{name()}}</figcaption>
         <figcaption>{{email()}}</figcaption>
+        <figcaption>{{websiteUrl()}}</figcaption>
       </figure>
 
-      <div class="pull-right">
+      <div>
           <div id='qrcode'></div>
       </div>
     </div>
-  </div>
 
-  <div class="container-fluid">
     <div class="row-fluid">
-      <pre>{{prettyPrintUser()}}</pre>
+      <button class="btn" ng-click="editUser()"><i class="icon-fixed-width icon-pencil"></i>Edit</button>
     </div>
+
   </div>
 
 </div>
