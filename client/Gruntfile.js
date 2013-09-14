@@ -156,14 +156,6 @@ module.exports = function (grunt) {
         }
       }
     },
-    concat: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/js/scripts.js':
-            ['<%= yeoman.tmp %>/js/{,*/}*.js']
-        }
-      }
-    },
     connect: {
       options: {
         port: 9000,
@@ -416,13 +408,19 @@ module.exports = function (grunt) {
         }]
       },
       deployGrails: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.dist %>',
-          dest: '<%= yeoman.grails %>',
-          src: [ 'css/*', 'font/*', 'img/*', 'js/*']
-        }]
+        files:[
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.dist %>',
+            dest: '<%= yeoman.grails %>',
+            src: [ 'css/*', 'font/*', 'img/*', 'js/*']
+          },
+          {
+            '../server/grails/grails-app/views/index.gsp' :
+              '<%= yeoman.dist %>/index.html'
+          }
+        ]
       },
       font: {
         files: [{
@@ -467,14 +465,22 @@ module.exports = function (grunt) {
             ]
           },
         ]
-      }
-    },
-    cssmin: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/css/main.css':
-            ['<%= yeoman.tmp %>/css/*.css']
-        }
+      },
+      tmpMinCssToDist: {
+        files: [
+          {
+            '<%= yeoman.dist %>/css/styles.min.css':
+              '<%= yeoman.tmp %>/css/styles.min.css'
+          }
+        ]
+      },
+      tmpMinJsToDist: {
+        files: [
+          {
+            '<%= yeoman.dist %>/js/scripts.min.js':
+              '<%= yeoman.tmp %>/js/scripts.min.js'
+          }
+        ]
       }
     },
     exec: {
@@ -588,13 +594,6 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
-      dist: {
-        files: {
-          '<%= yeoman.dist %>/js/scripts.js': [
-            '<%= yeoman.dist %>/js/scripts.js'
-          ]
-        }
-      },
       angularjsGravatarDirective: {
         files: {
           '<%= yeoman.app %>/components/angularjs-gravatardirective/src/gravatar-directive.min.js': [
@@ -617,6 +616,7 @@ module.exports = function (grunt) {
       html: ['<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/css/{,*/}*.css'],
       options: {
+        basedir: '<%= yeoman.dist %>',
         dirs: ['<%= yeoman.dist %>']
       }
     },
@@ -665,37 +665,6 @@ module.exports = function (grunt) {
     'clean:tmp',
     'clean:dist',
     'clean:heroku'
-  ]);
-
-  grunt.registerTask('server', [
-    'clean:tmp',
-    'coffeelint',
-    'coffee:appToTmp',
-    'copy:componentsToTmp',
-    'copy:appJsToTmp',
-    'html2js:appToTmp',
-    'copy:css',
-    'copy:font',
-//    'compass:server',
-    'livereload-start',
-    'connect:livereload',
-    'open',
-    'watch'
-  ]);
-
-  grunt.registerTask('test', [
-//    'clean:server',
-//    'coffeelint',
-//    'coffee',
-//    'html2js',
-//    'jshint',
-//    'compass',
-//    'connect:test',
-    'karma:unit'
-  ]);
-
-  grunt.registerTask('e2e', [
-    'karma:e2e'
   ]);
 
 
@@ -753,9 +722,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('buildStepUseMin', [
     'useminPrepare',
-    'cssmin:dist',
-    'concat:dist',
-    'uglify:dist',
+    'concat',
+    'cssmin',
+//    'uglify',
+    'copy:tmpMinCssToDist',
+    'copy:tmpMinJsToDist',
     'rev:dist',
     'usemin'
   ]);
@@ -792,6 +763,27 @@ module.exports = function (grunt) {
     'buildStepEtc',
     'buildStepDist',
     'buildStepDistDebug'
+  ]);
+
+
+
+  grunt.registerTask('server', [
+    'buildDebug',
+    'livereload-start',
+    'connect:livereload',
+    'open',
+    'watch'
+  ]);
+
+
+  grunt.registerTask('testDebug', [
+    'buildDebug',
+    'karma:unit'
+  ]);
+
+
+  grunt.registerTask('e2e', [
+    'karma:e2e'
   ]);
 
 
