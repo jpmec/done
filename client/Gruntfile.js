@@ -422,6 +422,21 @@ module.exports = function (grunt) {
           }
         ]
       },
+      deployGrailsJs: {
+        files:[
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.dist %>',
+            dest: '<%= yeoman.grails %>',
+            src: [ 'js/*']
+          },
+          {
+            '../server/grails/grails-app/views/index.gsp' :
+              '<%= yeoman.dist %>/index.html'
+          }
+        ]
+      },
       font: {
         files: [{
           expand: true,
@@ -806,12 +821,25 @@ module.exports = function (grunt) {
   ]);
 
 
+  grunt.registerTask('deployGrailsJs', [
+    'clean:grails',
+    'build',
+    'copy:deployGrailsJs'
+  ]);
+
+
   grunt.registerTask('deployGrailsDebug', [
     'clean:grails',
     'buildDebug',
     'copy:deployGrails'
   ]);
 
+
+  grunt.registerTask('deployGrailsDebugJs', [
+    'clean:grails',
+    'buildDebug',
+    'copy:deployGrailsJs'
+  ]);
 
   grunt.registerTask('deploy', [
     'deployGrailsDebug'
